@@ -1,0 +1,342 @@
+{
+    "consumables": [
+      {
+        "name": "Health Potion",
+        "char": "!",
+        "effect": "heal",
+        "value": 20
+      },
+      {
+        "name": "Greater Health Potion",
+        "char": "!",
+        "effect": "heal",
+        "value": 50
+      },
+      {
+        "name": "Mana Potion",
+        "char": "!",
+        "effect": "restore_mana",
+        "value": 20
+      },
+      {
+        "name": "Greater Mana Potion",
+        "char": "!",
+        "effect": "restore_mana",
+        "value": 50
+      },
+      {
+        "name": "Strength Elixir",
+        "char": "!",
+        "effect": "boost_strength",
+        "value": 2
+      },
+      {
+        "name": "Dexterity Elixir",
+        "char": "!",
+        "effect": "boost_dexterity",
+        "value": 2
+      }
+    ],
+    "equipment": [
+      {
+        "name": "Dagger",
+        "char": "/",
+        "slot": "weapon",
+        "stat_boost": 2
+      },
+      {
+        "name": "Short Sword",
+        "char": "/",
+        "slot": "weapon",
+        "stat_boost": 4
+      },
+      {
+        "name": "Long Sword",
+        "char": "/",
+        "slot": "weapon",
+        "stat_boost": 6
+      },
+      {
+        "name": "Great Sword",
+        "char": "/",
+        "slot": "weapon",
+        "stat_boost": 8
+      },
+      {
+        "name": "Legendary Blade",
+        "char": "/",
+        "slot": "weapon",
+        "stat_boost": 10
+      },
+      {
+        "name": "Shortbow",
+        "char": "}",
+        "slot": "missile weapon",
+        "stat_boost": 3
+      },
+      {
+        "name": "Longbow",
+        "char": "}",
+        "slot": "missile weapon",
+        "stat_boost": 5
+      },
+      {
+        "name": "Crossbow",
+        "char": "}",
+        "slot": "missile weapon",
+        "stat_boost": 7
+      },
+      {
+        "name": "Leather Cap",
+        "char": "^",
+        "slot": "helmet",
+        "stat_boost": 1
+      },
+      {
+        "name": "Iron Helm",
+        "char": "^",
+        "slot": "helmet",
+        "stat_boost": 2
+      },
+      {
+        "name": "Steel Helm",
+        "char": "^",
+        "slot": "helmet",
+        "stat_boost": 3
+      },
+      {
+        "name": "Mithril Helm",
+        "char": "^",
+        "slot": "helmet",
+        "stat_boost": 4
+      },
+      {
+        "name": "Lucky Charm",
+        "char": "\"",
+        "slot": "amulet",
+        "stat_boost": 1
+      },
+      {
+        "name": "Amulet of Health",
+        "char": "\"",
+        "slot": "amulet",
+        "stat_boost": 2
+      },
+      {
+        "name": "Amulet of Protection",
+        "char": "\"",
+        "slot": "amulet",
+        "stat_boost": 3
+      },
+      {
+        "name": "Amulet of Power",
+        "char": "\"",
+        "slot": "amulet",
+        "stat_boost": 4
+      },
+      {
+        "name": "Wooden Shield",
+        "char": ")",
+        "slot": "shield",
+        "stat_boost": 1
+      },
+      {
+        "name": "Iron Shield",
+        "char": ")",
+        "slot": "shield",
+        "stat_boost": 2
+      },
+      {
+        "name": "Steel Shield",
+        "char": ")",
+        "slot": "shield",
+        "stat_boost": 3
+      },
+      {
+        "name": "Tower Shield",
+        "char": ")",
+        "slot": "shield",
+        "stat_boost": 4
+      },
+      {
+        "name": "Leather Armor",
+        "char": "[",
+        "slot": "armor",
+        "stat_boost": 1
+      },
+      {
+        "name": "Studded Leather",
+        "char": "[",
+        "slot": "armor",
+        "stat_boost": 2
+      },
+      {
+        "name": "Chain Mail",
+        "char": "[",
+        "slot": "armor",
+        "stat_boost": 3
+      },
+      {
+        "name": "Plate Armor",
+        "char": "[",
+        "slot": "armor",
+        "stat_boost": 5
+      },
+      {
+        "name": "Mithril Armor",
+        "char": "[",
+        "slot": "armor",
+        "stat_boost": 7
+      },
+      {
+        "name": "Cloth Cloak",
+        "char": "B",
+        "slot": "cloak",
+        "stat_boost": 1
+      },
+      {
+        "name": "Elven Cloak",
+        "char": "B",
+        "slot": "cloak",
+        "stat_boost": 2
+      },
+      {
+        "name": "Cloak of Protection",
+        "char": "B",
+        "slot": "cloak",
+        "stat_boost": 3
+      },
+      {
+        "name": "Cloak of Invisibility",
+        "char": "B",
+        "slot": "cloak",
+        "stat_boost": 4
+      },
+      {
+        "name": "Leather Belt",
+        "char": ":",
+        "slot": "girdle",
+        "stat_boost": 1
+      },
+      {
+        "name": "Strength Belt",
+        "char": ":",
+        "slot": "girdle",
+        "stat_boost": 2
+      },
+      {
+        "name": "Giant's Belt",
+        "char": ":",
+        "slot": "girdle",
+        "stat_boost": 3
+      },
+      {
+        "name": "Leather Gloves",
+        "char": "]",
+        "slot": "gauntlets",
+        "stat_boost": 1
+      },
+      {
+        "name": "Iron Gauntlets",
+        "char": "]",
+        "slot": "gauntlets",
+        "stat_boost": 2
+      },
+      {
+        "name": "Gauntlets of Strength",
+        "char": "]",
+        "slot": "gauntlets",
+        "stat_boost": 3
+      },
+      {
+        "name": "Mithril Gauntlets",
+        "char": "]",
+        "slot": "gauntlets",
+        "stat_boost": 4
+      },
+      {
+        "name": "Leather Boots",
+        "char": "(",
+        "slot": "boots",
+        "stat_boost": 1
+      },
+      {
+        "name": "Iron Boots",
+        "char": "(",
+        "slot": "boots",
+        "stat_boost": 2
+      },
+      {
+        "name": "Boots of Speed",
+        "char": "(",
+        "slot": "boots",
+        "stat_boost": 3
+      },
+      {
+        "name": "Winged Boots",
+        "char": "(",
+        "slot": "boots",
+        "stat_boost": 4
+      },
+      {
+        "name": "Ring of Protection",
+        "char": "=",
+        "slot": "ring (right)",
+        "stat_boost": 1
+      },
+      {
+        "name": "Ring of Strength",
+        "char": "=",
+        "slot": "ring (left)",
+        "stat_boost": 1
+      },
+      {
+        "name": "Ring of Dexterity",
+        "char": "=",
+        "slot": "ring (right)",
+        "stat_boost": 2
+      },
+      {
+        "name": "Ring of Constitution",
+        "char": "=",
+        "slot": "ring (left)",
+        "stat_boost": 2
+      },
+      {
+        "name": "Ring of Power",
+        "char": "=",
+        "slot": "ring (right)",
+        "stat_boost": 3
+      },
+      {
+        "name": "Ring of the Magi",
+        "char": "=",
+        "slot": "ring (left)",
+        "stat_boost": 3
+      },
+      {
+        "name": "Leather Bracers",
+        "char": "|",
+        "slot": "bracers",
+        "stat_boost": 1
+      },
+      {
+        "name": "Iron Bracers",
+        "char": "|",
+        "slot": "bracers",
+        "stat_boost": 2
+      },
+      {
+        "name": "Bracers of Archery",
+        "char": "|",
+        "slot": "bracers",
+        "stat_boost": 3
+      },
+      {
+        "name": "Bracers of Defense",
+        "char": "|",
+        "slot": "bracers",
+        "stat_boost": 4
+      }
+    ]
+  }
