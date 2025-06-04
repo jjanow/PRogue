@@ -262,6 +262,8 @@ def main(stdscr, char_data):
     while True:
         if game.character_stats_mode:
             game.renderer.draw_character_stats_screen(stdscr)
+        elif game.item_info_mode:
+            game.renderer.draw_item_info(stdscr)
         elif game.inventory_mode:
             game.renderer.draw_inventory(stdscr)
         elif game.backpack_mode:
@@ -283,6 +285,9 @@ def main(stdscr, char_data):
         key = stdscr.getch()
         if game.debug_mode and key == 27:  # ESC key
             game.debug_mode = False
+        elif game.item_info_mode:
+            if game.handle_input(key):
+                break
         elif game.inventory_mode:
             if key in (ord('+'), ord('.'), KEY_NPAGE):  # Next page (+ key, . key, or PgDn)
                 game.inventory_page = min(game.inventory_page + 1, (len(game.player.inventory) - 1) // game.items_per_page)
