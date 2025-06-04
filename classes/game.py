@@ -51,6 +51,7 @@ class Game:
         self.time = 0
         self.selected_slot = None
         self.debug_mode = False
+        self.quit = False
 
     def open_character_stats_screen(self):
         self.character_stats_mode = True
@@ -325,6 +326,17 @@ class Game:
         # This method should be implemented to get a key press from the user
         # For now, we'll just return a placeholder value
         return ord('A')
+
+    def display_messages(self):
+        """Output queued messages to the standard screen and clear them."""
+        if self.stdscr:
+            for i, message in enumerate(self.messages[-3:]):
+                self.stdscr.addstr(self.screen_height - 3 + i, 0, str(message)[:self.screen_width - 1])
+            self.stdscr.refresh()
+        else:
+            for message in self.messages:
+                print(message)
+        self.messages.clear()
     
     def use_or_equip_item(self, key):
         inventory_items = self.player.get_inventory_items()
@@ -519,6 +531,10 @@ class Game:
     def game_loop(self):
         while not self.quit:
             key = self.get_key()
-            self.handle_input(key)
-            self.render()
-            self.display_messages()  # Ensure this method is called to display messages
+            if self.handle_input(key):
+                self.quit = True
+                break
+            if hasattr(self, 'render'):
+                self.render()
+            self.display_messages()
+
