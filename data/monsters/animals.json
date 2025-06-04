@@ -1,0 +1,82 @@
+[
+  {
+    "name": "Giant Rat",
+    "xp": 10,
+    "gold": 2,
+    "items": ["Rat Tail"],
+    "challenge_rating": 0.1,
+    "archetype": "animal"
+  },
+  {
+    "name": "Wolf",
+    "xp": 20,
+    "gold": 5,
+    "items": ["Wolf Pelt"],
+    "challenge_rating": 0.25,
+    "archetype": "animal"
+  },
+  {
+    "name": "Giant Spider",
+    "xp": 35,
+    "gold": 8,
+    "items": ["Spider Silk"],
+    "challenge_rating": 0.5,
+    "archetype": "animal"
+  },
+  {
+    "name": "Giant Bat",
+    "xp": 40,
+    "gold": 10,
+    "items": ["Bat Wing"],
+    "challenge_rating": 0.75,
+    "archetype": "animal"
+  },
+  {
+    "name": "Bear",
+    "xp": 60,
+    "gold": 15,
+    "items": ["Bear Claw"],
+    "challenge_rating": 1.0,
+    "archetype": "animal"
+  },
+  {
+    "name": "Panther",
+    "xp": 80,
+    "gold": 20,
+    "items": ["Panther Fang"],
+    "challenge_rating": 1.5,
+    "archetype": "animal"
+  },
+  {
+    "name": "Dire Boar",
+    "xp": 90,
+    "gold": 25,
+    "items": ["Boar Tusk"],
+    "challenge_rating": 2.0,
+    "archetype": "animal"
+  },
+  {
+    "name": "Sabertooth Tiger",
+    "xp": 120,
+    "gold": 35,
+    "items": ["Sabertooth"],
+    "challenge_rating": 2.5,
+    "archetype": "animal"
+  },
+  {
+    "name": "Giant Toad",
+    "xp": 150,
+    "gold": 40,
+    "items": ["Toad Tongue"],
+    "challenge_rating": 3.0,
+    "archetype": "animal"
+  },
+  {
+    "name": "Giant Eagle",
+    "xp": 180,
+    "gold": 50,
+    "items": ["Eagle Feather"],
+    "challenge_rating": 3.5,
+    "archetype": "animal"
+  }
+]
