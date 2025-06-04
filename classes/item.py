@@ -6,6 +6,10 @@ class Item:
         self.x = None
         self.y = None
         self.quantity = 1
+        # Track whether the player has seen this item on the ground. Items should
+        # only be visible outside the current field of view after they have been
+        # discovered once.
+        self.seen = False
 
     def __eq__(self, other):
         if isinstance(other, Item):
