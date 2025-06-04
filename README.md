@@ -8,6 +8,7 @@ PRogue is a traditional roguelike game. This project is in its very early stages
 
 - Procedurally generated dungeons
 - Basic movement and combat mechanics
+- Diagonal movement using the number pad (1,3,7,9)
 - Randomly generated enemies and items
 
 ## Getting Started
@@ -19,4 +20,6 @@ python pRoguelike.py
 ```
 
 Make sure to run the game in a terminal that supports `curses`.
-Press `Q` during play to begin the quit process.
+Use the arrow keys or the number pad for movement. Diagonal steps are mapped to
+`1`, `3`, `7`, and `9` on the number pad. Press `Q` during play to begin the
+quit process.
