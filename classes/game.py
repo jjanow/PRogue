@@ -105,7 +105,7 @@ class Game:
                     self.items.append(dropped_item)
                     self.messages.append(f"{defender.name} dropped a {dropped_item.name}!")
             elif defender == self.player:
-                self.messages.append("Game Over!")
+                self.handle_player_death()
 
         return defeated
 
@@ -468,6 +468,12 @@ class Game:
         # This method should be implemented to wait for a key press
         # For now, we'll just pass
         pass
+
+    def handle_player_death(self):
+        """Handle player death by setting the quit flag and truncating health."""
+        self.player.health = max(0, self.player.health)
+        self.messages.append("Game Over!")
+        self.quit = True
     
     def previous_level(self):
         self.dungeon_level -= 1
