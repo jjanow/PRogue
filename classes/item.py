@@ -30,7 +30,7 @@ class Equipment(Item):
         self.slot = slot
         self.body_part = body_part
         self.damage = damage
-        self.ac = ac
+        self.ac = ac if ac is not None else 0
         self.stat_boost = stat_boost
 
         # Separate bonuses allow items to affect different stats
