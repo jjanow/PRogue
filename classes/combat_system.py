@@ -9,8 +9,13 @@ class CombatSystem:
             None,
         )
         accuracy_bonus = weapon.accuracy_bonus if weapon else 0
-        attack_roll = random.randint(1, 20) + max(0, (attacker.strength - 10) // 2) + accuracy_bonus
-        defense_value = 10 + defender.defense + max(0, (defender.dexterity - 10) // 2)
+        attack_bonus = max(0, (attacker.strength - 10) // 2)
+        attack_bonus += max(0, (attacker.dexterity - 10) // 2)
+        attack_roll = random.randint(1, 20) + attack_bonus + accuracy_bonus
+
+        defense_bonus = max(0, (defender.dexterity - 10) // 2)
+        defense_bonus += max(0, (defender.constitution - 10) // 2)
+        defense_value = 10 + defender.defense + defense_bonus
 
         if attack_roll >= defense_value:
             damage = max(1, base_damage + random.randint(-2, 2))
