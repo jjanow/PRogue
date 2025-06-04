@@ -13,5 +13,20 @@
     "name": "Talisman",
     "char": "\"",
     "slot": "amulet"
+  },
+  {
+    "name": "Charm",
+    "char": "\"",
+    "slot": "amulet"
+  },
+  {
+    "name": "Medallion",
+    "char": "\"",
+    "slot": "amulet"
+  },
+  {
+    "name": "Torque",
+    "char": "\"",
+    "slot": "amulet"
   }
 ]
