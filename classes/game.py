@@ -79,15 +79,21 @@ class Game:
 
     def combat(self, attacker, defender):
         defeated = self.combat_system.combat(attacker, defender, self.messages)
+
         if defeated:
             if defender in self.enemies:
                 self.enemies.remove(defender)
-                dropped_item = self.combat_system.player_attack_enemy(attacker, defender, self.messages)
+
+                dropped_item = None
+                if attacker == self.player:
+                    dropped_item = self.combat_system.player_attack_enemy(attacker, defender, self.messages)
+
                 if dropped_item:
                     self.items.append(dropped_item)
                     self.messages.append(f"{defender.name} dropped a {dropped_item.name}!")
             elif defender == self.player:
                 self.messages.append("Game Over!")
+
         return defeated
 
     def handle_input(self, key):
