@@ -28,5 +28,25 @@
     "name": "Breastplate",
     "char": "[",
     "slot": "armor"
+  },
+  {
+    "name": "Lamellar Armor",
+    "char": "[",
+    "slot": "armor"
+  },
+  {
+    "name": "Quilted Armor",
+    "char": "[",
+    "slot": "armor"
+  },
+  {
+    "name": "Ring Mail",
+    "char": "[",
+    "slot": "armor"
+  },
+  {
+    "name": "Banded Mail",
+    "char": "[",
+    "slot": "armor"
   }
 ]

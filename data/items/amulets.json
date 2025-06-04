@@ -28,5 +28,25 @@
     "name": "Torque",
     "char": "\"",
     "slot": "amulet"
+  },
+  {
+    "name": "Locket",
+    "char": "\"",
+    "slot": "amulet"
+  },
+  {
+    "name": "Phylactery",
+    "char": "\"",
+    "slot": "amulet"
+  },
+  {
+    "name": "Gorget",
+    "char": "\"",
+    "slot": "amulet"
+  },
+  {
+    "name": "Collar",
+    "char": "\"",
+    "slot": "amulet"
   }
 ]

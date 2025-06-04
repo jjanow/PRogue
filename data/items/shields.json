@@ -13,5 +13,40 @@
     "name": "Tower Shield",
     "char": ")",
     "slot": "shield"
+  },
+  {
+    "name": "Round Shield",
+    "char": ")",
+    "slot": "shield"
+  },
+  {
+    "name": "Heater Shield",
+    "char": ")",
+    "slot": "shield"
+  },
+  {
+    "name": "Pavise",
+    "char": ")",
+    "slot": "shield"
+  },
+  {
+    "name": "Aegis",
+    "char": ")",
+    "slot": "shield"
+  },
+  {
+    "name": "Wall Shield",
+    "char": ")",
+    "slot": "shield"
+  },
+  {
+    "name": "Barrel Lid",
+    "char": ")",
+    "slot": "shield"
+  },
+  {
+    "name": "Spiked Shield",
+    "char": ")",
+    "slot": "shield"
   }
 ]

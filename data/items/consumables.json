@@ -34,5 +34,29 @@
     "char": "!",
     "effect": "boost_dexterity",
     "value": 2
+  },
+  {
+    "name": "Minor Health Potion",
+    "char": "!",
+    "effect": "heal",
+    "value": 10
+  },
+  {
+    "name": "Major Mana Potion",
+    "char": "!",
+    "effect": "restore_mana",
+    "value": 75
+  },
+  {
+    "name": "Strength Draught",
+    "char": "!",
+    "effect": "boost_strength",
+    "value": 3
+  },
+  {
+    "name": "Dexterity Draught",
+    "char": "!",
+    "effect": "boost_dexterity",
+    "value": 3
   }
 ]

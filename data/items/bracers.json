@@ -13,5 +13,40 @@
     "name": "Armguards",
     "char": "|",
     "slot": "bracers"
+  },
+  {
+    "name": "Cuffs",
+    "char": "|",
+    "slot": "bracers"
+  },
+  {
+    "name": "Armlets",
+    "char": "|",
+    "slot": "bracers"
+  },
+  {
+    "name": "Leather Bracers",
+    "char": "|",
+    "slot": "bracers"
+  },
+  {
+    "name": "Plate Bracers",
+    "char": "|",
+    "slot": "bracers"
+  },
+  {
+    "name": "Studded Bracers",
+    "char": "|",
+    "slot": "bracers"
+  },
+  {
+    "name": "Forearm Guards",
+    "char": "|",
+    "slot": "bracers"
+  },
+  {
+    "name": "Enchanted Bracers",
+    "char": "|",
+    "slot": "bracers"
   }
 ]
