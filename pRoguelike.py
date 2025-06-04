@@ -3,6 +3,8 @@ from curses import wrapper
 import sys
 import os
 import random
+import tty
+import termios
 
 # Reduce the delay for detecting an isolated ESC key press. The default delay
 # can make exiting menus feel sluggish.
@@ -16,23 +18,71 @@ from classes.item import Equipment
 from classes.race_loader import all_races
 from curses import KEY_NPAGE, KEY_PPAGE
 
+
+def get_single_key():
+    """Wait for a single keypress and return the pressed character."""
+    fd = sys.stdin.fileno()
+    old_settings = termios.tcgetattr(fd)
+    try:
+        tty.setraw(fd)
+        ch = sys.stdin.read(1)
+    finally:
+        termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)
+    return ch
+
+
+def choose_option_single_click(prompt, options):
+    """Display options and return the selected one using a single key press."""
+    print(prompt)
+    for idx, opt in enumerate(options, 1):
+        print(f"  {idx}) {opt}")
+    while True:
+        ch = get_single_key()
+        if ch.isdigit():
+            sel = int(ch) - 1
+            if 0 <= sel < len(options):
+                print(options[sel])
+                return options[sel]
+
+
+def point_buy_curses(stdscr, stats, total_points=20):
+    curses.curs_set(0)
+    attributes = list(stats.keys())
+    selected = 0
+    remaining = total_points
+    while True:
+        stdscr.clear()
+        stdscr.addstr(0, 0, "Point Buy - Arrows adjust, Enter to accept")
+        for idx, attr in enumerate(attributes):
+            marker = "->" if idx == selected else "  "
+            stdscr.addstr(idx + 2, 0, f"{marker} {attr.title():<12}: {stats[attr]:2d}")
+        stdscr.addstr(len(attributes) + 3, 0, f"Remaining Points: {remaining:2d}")
+        stdscr.refresh()
+        key = stdscr.getch()
+        if key == curses.KEY_UP:
+            selected = (selected - 1) % len(attributes)
+        elif key == curses.KEY_DOWN:
+            selected = (selected + 1) % len(attributes)
+        elif key == curses.KEY_RIGHT:
+            if remaining > 0 and stats[attributes[selected]] < 20:
+                stats[attributes[selected]] += 1
+                remaining -= 1
+        elif key == curses.KEY_LEFT:
+            if stats[attributes[selected]] > 10:
+                stats[attributes[selected]] -= 1
+                remaining += 1
+        elif key in (10, 13):
+            break
+    return stats
+
 def character_creation_cli():
     """Simple command line character creation before launching curses."""
     print("=== Character Creation ===")
     name = input("Name: ")
     gender = input("Gender: ")
-    # Choose sex
-    sex_options = ["male", "female", "other"]
-    while True:
-        print("Choose Sex:")
-        for idx, opt in enumerate(sex_options, 1):
-            print(f"  {idx}) {opt.title()}")
-        choice = input("Sex selection: ").strip()
-        if choice.isdigit() and 1 <= int(choice) <= len(sex_options):
-            sex = sex_options[int(choice) - 1]
-            break
-        else:
-            print("Invalid choice. Try again.")
+    # Choose sex using single key input
+    sex_options = ["Male", "Female", "Other"]
+    sex = choose_option_single_click("Choose Sex:", sex_options)
 
     # Choose race from data file
     while True:
@@ -72,25 +122,8 @@ def character_creation_cli():
             if choice != "r":
                 break
     else:
-        remaining = 20
         stats = {attr: 10 for attr in attributes}
-        for attr in attributes:
-            while True:
-                max_add = min(20 - stats[attr], remaining)
-                prompt = f"Add points to {attr.title()} (0-{max_add}, remaining {remaining}): "
-                try:
-                    add = int(input(prompt))
-                except ValueError:
-                    print("Please enter a number.")
-                    continue
-                if 0 <= add <= max_add:
-                    stats[attr] += add
-                    remaining -= add
-                    break
-                else:
-                    print("Invalid amount.")
-        if remaining:
-            print(f"{remaining} unspent points will be ignored.")
+        stats = wrapper(point_buy_curses, stats, 20)
 
     # Apply race bonuses to stats
     for attr, bonus in race.bonuses.items():
