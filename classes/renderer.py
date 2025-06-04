@@ -254,10 +254,13 @@ class Renderer:
         height, width = stdscr.getmaxyx()
 
         menu_text = [
-            "Debug Menu (press escape to exit):",
-            "i) Spawn an item",
-            "x) Gain 100 XP",
-            "m) Gain 100 gold"
+            "Cheat Menu (press escape to exit):",
+            "a) Create weapon",
+            "b) Create armor",
+            "c) Create accessory",
+            "d) Create potion",
+            "e) Map level",
+            "f) Level up",
         ]
 
         for i, line in enumerate(menu_text):

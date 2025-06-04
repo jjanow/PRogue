@@ -178,10 +178,38 @@ class InputHandler:
             self.game.use_backpack_item(chr(key))
 
     def handle_debug_input(self, key):
+        # If the menu isn't open yet, hitting '!' will open it
+        if not self.game.debug_mode and key == ord('!'):
+            self.game.debug_mode = True
+            return
+
         if key == 27:  # ESC key
             self.game.debug_mode = False
             return
 
-        item = self.game.create_random_item()
-        self.game.player.add_item(item)
-        self.game.messages.append(f"Spawned {item.name} in your inventory.")
+        if key == ord('a'):
+            item = self.game.create_specific_item('weapon')
+            self.game.player.add_item(item)
+            self.game.messages.append(f"Created {item.name} in your inventory.")
+            self.game.debug_mode = False
+        elif key == ord('b'):
+            item = self.game.create_specific_item('armor')
+            self.game.player.add_item(item)
+            self.game.messages.append(f"Created {item.name} in your inventory.")
+            self.game.debug_mode = False
+        elif key == ord('c'):
+            item = self.game.create_specific_item('accessory')
+            self.game.player.add_item(item)
+            self.game.messages.append(f"Created {item.name} in your inventory.")
+            self.game.debug_mode = False
+        elif key == ord('d'):
+            item = self.game.create_specific_item('potion')
+            self.game.player.add_item(item)
+            self.game.messages.append(f"Created {item.name} in your inventory.")
+            self.game.debug_mode = False
+        elif key == ord('e'):
+            self.game.map_current_level()
+            self.game.debug_mode = False
+        elif key == ord('f'):
+            self.game.level_up_player()
+            self.game.debug_mode = False
