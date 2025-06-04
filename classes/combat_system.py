@@ -26,14 +26,15 @@ class CombatSystem:
         return random.choice(all_items)
 
     def player_attack_enemy(self, player, enemy, messages):
-        defeated = self.combat(player, enemy, messages)
-        if defeated:
-            messages.append(f"You defeated {enemy.name}!")
-            player.gain_xp(20 + enemy.level * 5)
-            
-            # 5% chance to drop a random item
-            if random.random() < 0.05:
-                dropped_item = self.create_random_item()
-                dropped_item.x, dropped_item.y = enemy.x, enemy.y
-                return dropped_item
+        """Handle rewards when the player defeats an enemy."""
+
+        messages.append(f"You defeated {enemy.name}!")
+        player.gain_xp(20 + enemy.level * 5)
+
+        # 5% chance to drop a random item
+        if random.random() < 0.05:
+            dropped_item = self.create_random_item()
+            dropped_item.x, dropped_item.y = enemy.x, enemy.y
+            return dropped_item
+
         return None
