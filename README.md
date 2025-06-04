@@ -8,6 +8,7 @@ PRogue is a traditional roguelike game. This project is in its very early stages
 
 - Procedurally generated dungeons
 - Turn-based combat with random enemies and loot
+- Monsters are selected by dungeon level using their challenge rating
 - Diagonal movement using the number pad (1,3,7,9)
 - Auto-explore and walk-to-stairs commands
 - Inventory and equipment management screens
