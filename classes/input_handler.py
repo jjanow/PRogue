@@ -125,9 +125,9 @@ class InputHandler:
     def handle_inventory_input(self, key):
         """Handle key presses while the inventory screen is open.
 
-        Pressing the letter of an item will attempt to equip it. Page
-        navigation is handled with '+' and '-'.  Press ESC to leave the
-        inventory."""
+        Pressing the letter of an item will equip it if possible or use it
+        otherwise. Page navigation is handled with '+' and '-'.  Press ESC
+        to leave the inventory."""
 
         inventory_items = self.game.player.get_inventory_items()
         max_pages = (len(inventory_items) - 1) // self.game.items_per_page
@@ -147,7 +147,7 @@ class InputHandler:
                 if isinstance(item, Equipment):
                     self.game.equip_item(item)
                 else:
-                    self.game.messages.append(f"{item.name} cannot be equipped.")
+                    self.game.use_item(item)
             else:
                 self.game.messages.append("Invalid item.")
 

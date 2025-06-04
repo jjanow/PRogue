@@ -86,6 +86,8 @@ def create_effect(effect_type, value):
         return lambda e: e.apply_temporary_boost('strength', value, 50)  # 50 turns duration
     elif effect_type == 'boost_dexterity':
         return lambda e: e.apply_temporary_boost('dexterity', value, 50)  # 50 turns duration
+    elif effect_type in ('poison', 'damage'):
+        return lambda e: e.take_damage(value)
     else:
         return lambda e: None  # Null effect if not recognized
 
