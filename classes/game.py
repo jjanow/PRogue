@@ -6,7 +6,7 @@ from classes.entity import Entity
 from classes.item import Item, Equipment
 from classes.map_generator import MapGenerator
 from classes.item_loader import all_items, all_consumables, all_equipment
-from curses import KEY_NPAGE, KEY_PPAGE  # Add this import at the top of the file
+from curses import KEY_NPAGE, KEY_PPAGE
 from classes.input_handler import InputHandler
 from classes.renderer import Renderer
 from classes.combat_system import CombatSystem
