@@ -364,24 +364,46 @@ class Game:
                 self.exit_game()
 
     def walk_to(self, x, y, animate=False):
-        """Automatically walk the player to the given coordinates using pathfinding."""
+        """Automatically walk the player to the given coordinates using pathfinding.
+
+        Returns True if the walk was interrupted by user input."""
         target = type('Target', (object,), {'x': x, 'y': y})()
         path = self.find_path(self.player, target)
         if not path:
             self.messages.append("No path to destination.")
-            return
-        for step in path[1:]:
-            dx = step[0] - self.player.x
-            dy = step[1] - self.player.y
-            prev_x, prev_y = self.player.x, self.player.y
-            self.player_move_or_attack(dx, dy)
+            return False
+
+        interrupted = False
+        if animate and self.stdscr:
+            self.stdscr.nodelay(True)
+
+        try:
+            for step in path[1:]:
+                if animate and self.stdscr:
+                    key = self.stdscr.getch()
+                    if key != -1:
+                        curses.ungetch(key)
+                        interrupted = True
+                        break
+
+                dx = step[0] - self.player.x
+                dy = step[1] - self.player.y
+                prev_x, prev_y = self.player.x, self.player.y
+                self.player_move_or_attack(dx, dy)
+
+                if animate and self.stdscr:
+                    self.renderer.draw(self.stdscr)
+                    time.sleep(0.025)
+
+                if (self.player.x, self.player.y) == (prev_x, prev_y):
+                    break
+                if (self.player.x, self.player.y) == (x, y):
+                    break
+        finally:
             if animate and self.stdscr:
-                self.renderer.draw(self.stdscr)
-                time.sleep(0.05)
-            if (self.player.x, self.player.y) == (prev_x, prev_y):
-                break
-            if (self.player.x, self.player.y) == (x, y):
-                break
+                self.stdscr.nodelay(False)
+
+        return interrupted
 
     def walk_to_stairs(self, direction):
         if direction == 'up':
@@ -422,7 +444,9 @@ class Game:
                 self.messages.append("Nothing left to explore.")
                 break
 
-            self.walk_to(target[0], target[1], animate=True)
+            interrupted = self.walk_to(target[0], target[1], animate=True)
+            if interrupted:
+                break
 
         self.auto_explore_mode = False
     
