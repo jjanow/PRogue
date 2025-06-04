@@ -74,7 +74,13 @@ class Game:
     def create_random_item(self):
         item_template = random.choice(all_items)
         if isinstance(item_template, Equipment):
-            return Equipment(item_template.name, item_template.char, item_template.slot, item_template.stat_boost)
+            return Equipment(
+                item_template.name,
+                item_template.char,
+                item_template.slot,
+                item_template.stat_boost,
+                accuracy_bonus=item_template.accuracy_bonus,
+            )
         else:
             return Item(item_template.name, item_template.char, item_template.effect)
 

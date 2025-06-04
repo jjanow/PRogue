@@ -18,7 +18,14 @@ def load_items():
         consumables.append(item)
 
     for item_data in data['equipment']:
-        item = Equipment(item_data['name'], item_data['char'], item_data['slot'], item_data['stat_boost'])
+        accuracy = item_data.get('accuracy', 0)
+        item = Equipment(
+            item_data['name'],
+            item_data['char'],
+            item_data['slot'],
+            item_data['stat_boost'],
+            accuracy_bonus=accuracy,
+        )
         equipment.append(item)
 
     all_items = consumables + equipment
