@@ -67,6 +67,7 @@ class Game:
         self.selected_slot = None
         self.debug_mode = False
         self.quit = False
+        self.game_over = False
         self.walk_mode = False
         self.auto_explore_mode = False
         self.options_mode = False
@@ -673,15 +674,21 @@ class Game:
         sys.exit()
 
     def wait_for_key(self):
-        # This method should be implemented to wait for a key press
-        # For now, we'll just pass
-        pass
+        if self.stdscr:
+            self.stdscr.nodelay(False)
+            self.stdscr.getch()
+        else:
+            try:
+                input()
+            except EOFError:
+                pass
 
     def handle_player_death(self):
         """Handle player death by setting the quit flag and truncating health."""
         self.player.health = max(0, self.player.health)
-        self.messages.append("Game Over!")
+        self.messages.append("Game Over! Press Enter to exit.")
         self.quit = True
+        self.game_over = True
     
     def previous_level(self):
         self.dungeon_level -= 1
