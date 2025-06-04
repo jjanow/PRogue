@@ -52,6 +52,7 @@ class Game:
         self.selected_slot = None
         self.debug_mode = False
         self.quit = False
+        self.walk_mode = False
 
     def open_character_stats_screen(self):
         self.character_stats_mode = True
@@ -352,6 +353,29 @@ class Game:
                 self.previous_level()
             else:
                 self.exit_game()
+
+    def walk_to(self, x, y):
+        """Automatically walk the player to the given coordinates using pathfinding."""
+        target = type('Target', (object,), {'x': x, 'y': y})()
+        path = self.find_path(self.player, target)
+        if not path:
+            self.messages.append("No path to destination.")
+            return
+        for step in path[1:]:
+            dx = step[0] - self.player.x
+            dy = step[1] - self.player.y
+            prev_x, prev_y = self.player.x, self.player.y
+            self.player_move_or_attack(dx, dy)
+            if (self.player.x, self.player.y) == (prev_x, prev_y):
+                break
+            if (self.player.x, self.player.y) == (x, y):
+                break
+
+    def walk_to_stairs(self, direction):
+        if direction == 'up':
+            self.walk_to(self.stairs_up_x, self.stairs_up_y)
+        elif direction == 'down':
+            self.walk_to(self.stairs_x, self.stairs_y)
     
     def exit_game(self):
         try:
