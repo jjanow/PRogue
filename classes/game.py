@@ -492,6 +492,34 @@ class Game:
                 y += sy
         yield x2, y2
 
+    def in_room(self, x, y):
+        """Return True if the coordinates are inside any generated room."""
+        for rx, ry, w, h in self.rooms:
+            if rx <= x < rx + w and ry <= y < ry + h:
+                return True
+        return False
+
+    def corridor_distance(self, x1, y1, x2, y2):
+        """Return the number of corridor tiles between leaving the starting
+        room and reaching (x2, y2). Only meaningful if (x1, y1) is inside a
+        room and (x2, y2) is outside of it."""
+        distance = 0
+        left_room = False
+        for px, py in self.line(x1, y1, x2, y2):
+            if (px, py) == (x1, y1):
+                continue
+            if self.in_room(px, py):
+                if left_room:
+                    # We've entered another room; stop counting
+                    break
+            else:
+                if not left_room:
+                    left_room = True
+                distance += 1
+            if (px, py) == (x2, y2):
+                break
+        return distance
+
     def has_line_of_sight(self, x1, y1, x2, y2):
         """Return True if there is a clear line of sight between two points."""
         for x, y in self.line(x1, y1, x2, y2):
@@ -499,16 +527,32 @@ class Game:
                 return False
         return True
 
-    def update_fov(self, radius=6):
-        """Update which tiles are visible using line of sight and mark them as explored."""
+    def update_fov(self, radius=None):
+        """Update which tiles are visible using line of sight and mark them as
+        explored. When the player is in a room, vision down connecting
+        corridors is limited to two tiles."""
+
+        if radius is None:
+            radius = max(self.width, self.height)
+
         self.visible = [[False for _ in range(self.width)] for _ in range(self.height)]
-        start_x, start_y = self.player.x, self.player.y
-        for y in range(max(0, start_y - radius), min(self.height, start_y + radius + 1)):
-            for x in range(max(0, start_x - radius), min(self.width, start_x + radius + 1)):
-                if max(abs(start_x - x), abs(start_y - y)) <= radius:
-                    if self.has_line_of_sight(start_x, start_y, x, y):
-                        self.visible[y][x] = True
-                        self.explored[y][x] = True
+        px, py = self.player.x, self.player.y
+        player_in_room = self.in_room(px, py)
+
+        for y in range(max(0, py - radius), min(self.height, py + radius + 1)):
+            for x in range(max(0, px - radius), min(self.width, px + radius + 1)):
+                if max(abs(px - x), abs(py - y)) > radius:
+                    continue
+
+                if not self.has_line_of_sight(px, py, x, y):
+                    continue
+
+                if player_in_room and not self.in_room(x, y):
+                    if self.corridor_distance(px, py, x, y) > 2:
+                        continue
+
+                self.visible[y][x] = True
+                self.explored[y][x] = True
     
     def open_equipment_screen(self):
         self.equipment_mode = True

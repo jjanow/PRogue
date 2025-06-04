@@ -18,12 +18,16 @@ class Renderer:
                 if not self.game.explored[y][x]:
                     stdscr.addch(y, x, ' ')
                     continue
+
+                visible = self.game.visible[y][x]
+                attr = curses.A_NORMAL if visible else curses.A_DIM
+
                 if cell == '#':
-                    stdscr.addch(y, x, cell, curses.color_pair(5))  # Walls
+                    stdscr.addch(y, x, cell, curses.color_pair(5) | attr)  # Walls
                 elif cell == '+':
-                    stdscr.addch(y, x, cell, curses.color_pair(6))  # Doors
+                    stdscr.addch(y, x, cell, curses.color_pair(6) | attr)  # Doors
                 else:
-                    stdscr.addch(y, x, cell, curses.color_pair(1))  # Default
+                    stdscr.addch(y, x, cell, curses.color_pair(1) | attr)  # Default
 
         for item in self.game.items:
             if item.y < dungeon_height and self.game.visible[item.y][item.x]:
