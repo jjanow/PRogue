@@ -2,9 +2,30 @@ import curses
 
 from classes.item import Equipment
 
+ITEM_ICONS = {
+    'weapon': '/',
+    'missile weapon': '}',
+    'helmet': '^',
+    'armor': '[',
+    'cloak': 'B',
+    'shield': ')',
+    'boots': '(',
+    'bracers': '|',
+    'gauntlets': ']',
+    'girdle': ':',
+    'amulet': '"',
+    'ring (right)': '=',
+    'ring (left)': '=',
+}
+
 class Renderer:
     def __init__(self, game):
         self.game = game
+
+    def _icon_for(self, item):
+        if isinstance(item, Equipment):
+            return ITEM_ICONS.get(item.slot, '?')
+        return '!'
 
     def draw(self, stdscr):
         stdscr.clear()
@@ -31,7 +52,8 @@ class Renderer:
 
         for item in self.game.items:
             if item.y < dungeon_height and self.game.visible[item.y][item.x]:
-                stdscr.addch(item.y, item.x, item.char, curses.color_pair(4))  # Items
+                icon = self._icon_for(item)
+                stdscr.addch(item.y, item.x, icon, curses.color_pair(4))  # Items
 
         for enemy in self.game.enemies:
             if enemy.y < dungeon_height and self.game.visible[enemy.y][enemy.x]:

@@ -1,7 +1,6 @@
 class Item:
-    def __init__(self, name, char, effect, duration=None):
+    def __init__(self, name, effect, duration=None):
         self.name = name
-        self.char = char
         self.effect = effect
         self.duration = duration
         self.x = None
@@ -17,9 +16,12 @@ class Item:
         return hash(self.name)
 
 class Equipment(Item):
-    def __init__(self, name, char, slot, stat_boost, accuracy_bonus=0):
-        super().__init__(name, char, None)
+    def __init__(self, name, slot, body_part, stat_boost, damage=None, ac=None, accuracy_bonus=0):
+        super().__init__(name, None)
         self.slot = slot
+        self.body_part = body_part
+        self.damage = damage
+        self.ac = ac
         self.stat_boost = stat_boost
 
         # Separate bonuses allow items to affect different stats

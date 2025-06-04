@@ -1,52 +1,62 @@
 [
   {
     "name": "Pendant",
-    "char": "\"",
-    "slot": "amulet"
+    "slot": "amulet",
+    "body_part": "neck",
+    "ac": 1
   },
   {
     "name": "Amulet",
-    "char": "\"",
-    "slot": "amulet"
+    "slot": "amulet",
+    "body_part": "neck",
+    "ac": 1
   },
   {
     "name": "Talisman",
-    "char": "\"",
-    "slot": "amulet"
+    "slot": "amulet",
+    "body_part": "neck",
+    "ac": 1
   },
   {
     "name": "Charm",
-    "char": "\"",
-    "slot": "amulet"
+    "slot": "amulet",
+    "body_part": "neck",
+    "ac": 1
   },
   {
     "name": "Medallion",
-    "char": "\"",
-    "slot": "amulet"
+    "slot": "amulet",
+    "body_part": "neck",
+    "ac": 1
   },
   {
     "name": "Torque",
-    "char": "\"",
-    "slot": "amulet"
+    "slot": "amulet",
+    "body_part": "neck",
+    "ac": 1
   },
   {
     "name": "Locket",
-    "char": "\"",
-    "slot": "amulet"
+    "slot": "amulet",
+    "body_part": "neck",
+    "ac": 1
   },
   {
     "name": "Phylactery",
-    "char": "\"",
-    "slot": "amulet"
+    "slot": "amulet",
+    "body_part": "neck",
+    "ac": 1
   },
   {
     "name": "Gorget",
-    "char": "\"",
-    "slot": "amulet"
+    "slot": "amulet",
+    "body_part": "neck",
+    "ac": 1
   },
   {
     "name": "Collar",
-    "char": "\"",
-    "slot": "amulet"
+    "slot": "amulet",
+    "body_part": "neck",
+    "ac": 1
   }
 ]

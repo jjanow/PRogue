@@ -1,52 +1,62 @@
 [
   {
     "name": "Belt",
-    "char": ":",
-    "slot": "girdle"
+    "slot": "girdle",
+    "body_part": "waist",
+    "ac": 1
   },
   {
     "name": "Chain Belt",
-    "char": ":",
-    "slot": "girdle"
+    "slot": "girdle",
+    "body_part": "waist",
+    "ac": 1
   },
   {
     "name": "Girdle",
-    "char": ":",
-    "slot": "girdle"
+    "slot": "girdle",
+    "body_part": "waist",
+    "ac": 1
   },
   {
     "name": "Rope Belt",
-    "char": ":",
-    "slot": "girdle"
+    "slot": "girdle",
+    "body_part": "waist",
+    "ac": 1
   },
   {
     "name": "Leather Girdle",
-    "char": ":",
-    "slot": "girdle"
+    "slot": "girdle",
+    "body_part": "waist",
+    "ac": 1
   },
   {
     "name": "Studded Belt",
-    "char": ":",
-    "slot": "girdle"
+    "slot": "girdle",
+    "body_part": "waist",
+    "ac": 1
   },
   {
     "name": "Sash",
-    "char": ":",
-    "slot": "girdle"
+    "slot": "girdle",
+    "body_part": "waist",
+    "ac": 1
   },
   {
     "name": "Corded Belt",
-    "char": ":",
-    "slot": "girdle"
+    "slot": "girdle",
+    "body_part": "waist",
+    "ac": 1
   },
   {
     "name": "Reinforced Belt",
-    "char": ":",
-    "slot": "girdle"
+    "slot": "girdle",
+    "body_part": "waist",
+    "ac": 1
   },
   {
     "name": "Heavy Girdle",
-    "char": ":",
-    "slot": "girdle"
+    "slot": "girdle",
+    "body_part": "waist",
+    "ac": 1
   }
 ]
