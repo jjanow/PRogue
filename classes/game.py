@@ -27,6 +27,9 @@ class Game:
         self.screen_height, self.screen_width = stdscr.getmaxyx()
         self.map_generator = MapGenerator(height, width, self.screen_height, self.screen_width)
         self.map, self.rooms = self.map_generator.generate()
+        # Sync game dimensions with the actual map size generated
+        self.height = self.map_generator.height
+        self.width = self.map_generator.width
         self.player = Entity(width // 2, height // 2, '@', "Player", 100, 10, 0)
         self.player.initialize_player()
         self.enemies = []
@@ -234,6 +237,9 @@ class Game:
 
     def generate_level(self):
         self.map, self.rooms, self.stairs_up_x, self.stairs_up_y, self.stairs_x, self.stairs_y = self.map_generator.generate_level(self.player)
+        # Update dimensions in case the generator adjusted them
+        self.height = len(self.map)
+        self.width = len(self.map[0]) if self.map else 0
         self.visible = [[False for _ in range(self.width)] for _ in range(self.height)]
         self.explored = [[False for _ in range(self.width)] for _ in range(self.height)]
         self.update_fov()
@@ -265,10 +271,12 @@ class Game:
 
     def compute_all_shortest_paths(self):
         """Precompute shortest paths between all walkable tiles on the map."""
+        map_height = len(self.map)
+        map_width = len(self.map[0]) if self.map else 0
         walkable = [
             (x, y)
-            for y in range(self.height)
-            for x in range(self.width)
+            for y in range(map_height)
+            for x in range(map_width)
             if self.map[y][x] in ['.', '<', '>']
         ]
 
@@ -287,7 +295,7 @@ class Game:
                 for dx, dy in directions:
                     nx, ny = x + dx, y + dy
                     if (
-                        0 <= nx < self.width and 0 <= ny < self.height and
+                        0 <= nx < map_width and 0 <= ny < map_height and
                         self.map[ny][nx] in ['.', '<', '>'] and
                         (nx, ny) not in visited
                     ):
