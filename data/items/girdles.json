@@ -13,5 +13,40 @@
     "name": "Girdle",
     "char": ":",
     "slot": "girdle"
+  },
+  {
+    "name": "Rope Belt",
+    "char": ":",
+    "slot": "girdle"
+  },
+  {
+    "name": "Leather Girdle",
+    "char": ":",
+    "slot": "girdle"
+  },
+  {
+    "name": "Studded Belt",
+    "char": ":",
+    "slot": "girdle"
+  },
+  {
+    "name": "Sash",
+    "char": ":",
+    "slot": "girdle"
+  },
+  {
+    "name": "Corded Belt",
+    "char": ":",
+    "slot": "girdle"
+  },
+  {
+    "name": "Reinforced Belt",
+    "char": ":",
+    "slot": "girdle"
+  },
+  {
+    "name": "Heavy Girdle",
+    "char": ":",
+    "slot": "girdle"
   }
 ]

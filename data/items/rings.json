@@ -15,6 +15,16 @@
     "slot": "ring (right)"
   },
   {
+    "name": "Loop",
+    "char": "=",
+    "slot": "ring (right)"
+  },
+  {
+    "name": "Seal",
+    "char": "=",
+    "slot": "ring (right)"
+  },
+  {
     "name": "Ring",
     "char": "=",
     "slot": "ring (left)"
@@ -26,6 +36,16 @@
   },
   {
     "name": "Signet",
+    "char": "=",
+    "slot": "ring (left)"
+  },
+  {
+    "name": "Loop",
+    "char": "=",
+    "slot": "ring (left)"
+  },
+  {
+    "name": "Seal",
     "char": "=",
     "slot": "ring (left)"
   }

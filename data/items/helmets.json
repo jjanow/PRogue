@@ -13,5 +13,40 @@
     "name": "Great Helm",
     "char": "^",
     "slot": "helmet"
+  },
+  {
+    "name": "Hood",
+    "char": "^",
+    "slot": "helmet"
+  },
+  {
+    "name": "Visored Helm",
+    "char": "^",
+    "slot": "helmet"
+  },
+  {
+    "name": "Sallet",
+    "char": "^",
+    "slot": "helmet"
+  },
+  {
+    "name": "Bascinet",
+    "char": "^",
+    "slot": "helmet"
+  },
+  {
+    "name": "Barbute",
+    "char": "^",
+    "slot": "helmet"
+  },
+  {
+    "name": "Kettle Helm",
+    "char": "^",
+    "slot": "helmet"
+  },
+  {
+    "name": "Morion",
+    "char": "^",
+    "slot": "helmet"
   }
 ]

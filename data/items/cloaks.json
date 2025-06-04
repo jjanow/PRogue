@@ -13,5 +13,40 @@
     "name": "Mantle",
     "char": "B",
     "slot": "cloak"
+  },
+  {
+    "name": "Hooded Cloak",
+    "char": "B",
+    "slot": "cloak"
+  },
+  {
+    "name": "Traveling Cloak",
+    "char": "B",
+    "slot": "cloak"
+  },
+  {
+    "name": "Opera Cape",
+    "char": "B",
+    "slot": "cloak"
+  },
+  {
+    "name": "Duster",
+    "char": "B",
+    "slot": "cloak"
+  },
+  {
+    "name": "Pelerine",
+    "char": "B",
+    "slot": "cloak"
+  },
+  {
+    "name": "Shroud",
+    "char": "B",
+    "slot": "cloak"
+  },
+  {
+    "name": "Poncho",
+    "char": "B",
+    "slot": "cloak"
   }
 ]

@@ -13,5 +13,40 @@
     "name": "Vambraces",
     "char": "]",
     "slot": "gauntlets"
+  },
+  {
+    "name": "Mitts",
+    "char": "]",
+    "slot": "gauntlets"
+  },
+  {
+    "name": "Plate Gauntlets",
+    "char": "]",
+    "slot": "gauntlets"
+  },
+  {
+    "name": "Chain Gauntlets",
+    "char": "]",
+    "slot": "gauntlets"
+  },
+  {
+    "name": "Leather Gloves",
+    "char": "]",
+    "slot": "gauntlets"
+  },
+  {
+    "name": "Battle Gauntlets",
+    "char": "]",
+    "slot": "gauntlets"
+  },
+  {
+    "name": "Spiked Gauntlets",
+    "char": "]",
+    "slot": "gauntlets"
+  },
+  {
+    "name": "Enchanted Gloves",
+    "char": "]",
+    "slot": "gauntlets"
   }
 ]

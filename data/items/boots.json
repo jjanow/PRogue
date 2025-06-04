@@ -28,5 +28,25 @@
     "name": "High Boots",
     "char": "(",
     "slot": "boots"
+  },
+  {
+    "name": "Moccasins",
+    "char": "(",
+    "slot": "boots"
+  },
+  {
+    "name": "Slippers",
+    "char": "(",
+    "slot": "boots"
+  },
+  {
+    "name": "Waders",
+    "char": "(",
+    "slot": "boots"
+  },
+  {
+    "name": "Riding Boots",
+    "char": "(",
+    "slot": "boots"
   }
 ]
