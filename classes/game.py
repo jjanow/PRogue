@@ -71,6 +71,8 @@ class Game:
         self.walk_speed = 5  # milliseconds between auto-move steps
         self.help_mode = False
         self.speed_input = ""
+        self.item_info_mode = False
+        self.item_info_item = None
 
     def open_character_stats_screen(self):
         self.character_stats_mode = True
@@ -168,7 +170,9 @@ class Game:
         return defeated
 
     def handle_input(self, key):
-        if self.inventory_mode:
+        if self.item_info_mode:
+            self.handle_item_info_input(key)
+        elif self.inventory_mode:
             self.input_handler.handle_inventory_input(key)
         elif self.backpack_mode:
             self.handle_backpack_input(key)
@@ -220,6 +224,9 @@ class Game:
         elif 97 <= key <= 122:  # a-z
             self.drop_backpack_item(chr(key))
 
+    def handle_item_info_input(self, key):
+        self.input_handler.handle_item_info_input(key)
+
     def draw(self, stdscr):
         self.renderer.draw(stdscr)
 
@@ -234,6 +241,9 @@ class Game:
 
     def draw_drop_interface(self, stdscr):
         self.renderer.draw_drop_interface(stdscr)
+
+    def draw_item_info(self, stdscr):
+        self.renderer.draw_item_info(stdscr)
 
     def generate_level(self):
         self.map, self.rooms, self.stairs_up_x, self.stairs_up_y, self.stairs_x, self.stairs_y = self.map_generator.generate_level(self.player)
