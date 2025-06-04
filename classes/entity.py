@@ -3,45 +3,6 @@ from collections import Counter
 from classes.item import Equipment, Item
 from classes.item_loader import all_consumables, all_equipment
 
-class Item:
-    def __init__(self, name, char, effect, duration=None):
-        self.name = name
-        self.char = char
-        self.effect = effect
-        self.duration = duration
-        self.x = None
-        self.y = None
-        self.quantity = 1
-        self.level = 1
-        self.xp = 0
-        self.xp_to_next_level = 100        
-        self.strength = 10
-        self.dexterity = 10
-        self.constitution = 10
-        self.intelligence = 10
-        self.willpower = 10
-        self.charisma = 10
-        self.appearance = 10
-        self.perception = 10
-        self.speed = 100
-        self.max_mana = 10
-        self.mana = 10
-        self.max_psi = 10
-        self.psi = 10        
-        self.money = 0
-        self.deity = "None"
-        self.birth = "Unknown"
-        self.month = "Unknown"
-        self.day = "Unknown"
-        self.age = 0
-
-    def __eq__(self, other):
-        if isinstance(other, Item):
-            return self.name == other.name
-        return False
-
-    def __hash__(self):
-        return hash(self.name)
 
 class Entity:
     def __init__(self, x, y, char, name, health, damage, defense):
