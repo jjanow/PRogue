@@ -457,8 +457,8 @@ class Game:
             self.walk_to(self.stairs_x, self.stairs_y, animate=True)
 
     def find_nearest_unexplored(self):
-        """Return coordinates of the nearest unexplored tile reachable from the
-        player using path length as the metric."""
+        """Return coordinates of the nearest tile that will reveal unexplored
+        areas when the player walks there."""
         from heapq import heappush, heappop
 
         start = (self.player.x, self.player.y)
@@ -471,8 +471,18 @@ class Game:
                 continue
             visited.add((x, y))
 
-            if not self.explored[y][x] and self.map[y][x] in ['.', '<', '>']:
+            # If this tile itself is unexplored, walking onto it will explore it
+            if not self.explored[y][x]:
                 return (x, y)
+
+            # If any adjacent tile is unexplored (including walls), moving here
+            # will reveal it via the field of view
+            for dx, dy in [(-1,0), (1,0), (0,-1), (0,1),
+                           (-1,-1), (1,-1), (-1,1), (1,1)]:
+                nx, ny = x + dx, y + dy
+                if 0 <= nx < self.width and 0 <= ny < self.height:
+                    if not self.explored[ny][nx]:
+                        return (x, y)
 
             for dx, dy in [(-1,0), (1,0), (0,-1), (0,1),
                            (-1,-1), (1,-1), (-1,1), (1,1)]:
