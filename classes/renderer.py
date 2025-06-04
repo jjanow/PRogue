@@ -246,15 +246,14 @@ class Renderer:
 
         # Miscellaneous Data
         misc_data = [
+            f"Name: {self.game.player.name}",
+            f"Gender: {getattr(self.game.player, 'gender', 'Unknown')}",
+            f"Sex: {getattr(self.game.player, 'sex', 'Unknown')}",
+            f"Race: {getattr(self.game.player, 'race', 'Unknown')}",
             f"HP: {self.game.player.health}/{self.game.player.max_health}",
             f"PP: {self.game.player.psi}/{self.game.player.max_psi}",
             f"Speed: {self.game.player.speed}",
             f"Money: {self.game.player.money} gold",
-            f"Deity: {self.game.player.deity}",
-            f"Birth: {self.game.player.birth}",
-            f"Month: {self.game.player.month}",
-            f"Day: {self.game.player.day}",
-            f"Age: {self.game.player.age} years",
         ]
 
         # Equipment Data

@@ -152,6 +152,10 @@ def main(stdscr, char_data):
         if hasattr(game.player, stat):
             setattr(game.player, stat, value)
 
+    # Recalculate derived attributes based on stats
+    game.player.max_health = 50 + game.player.constitution * 5
+    game.player.health = game.player.max_health
+
     while True:
         if game.character_stats_mode:
             game.renderer.draw_character_stats_screen(stdscr)

@@ -68,7 +68,8 @@ class Entity:
             if slot['item']
         )
         dexterity_bonus = max(0, (self.dexterity - 10) // 2)  # +1 for every 2 points above 10
-        return self.base_defense + armor_bonus + dexterity_bonus
+        constitution_bonus = max(0, (self.constitution - 10) // 2)
+        return self.base_defense + armor_bonus + dexterity_bonus + constitution_bonus
 
     def equip(self, item, slot_key):
         slot = self.equipment[slot_key]
