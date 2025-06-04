@@ -4,12 +4,37 @@ import math
 class CombatSystem:
     @staticmethod
     def combat(attacker, defender, messages):
-        base_damage = attacker.damage
         weapon = next(
-            (slot['item'] for slot in attacker.equipment.values() if slot['name'] in ['weapon', 'missile weapon']),
+            (
+                slot['item']
+                for slot in attacker.equipment.values()
+                if slot['name'] in ['weapon', 'missile weapon']
+            ),
             None,
         )
         accuracy_bonus = weapon.accuracy_bonus if weapon else 0
+
+        # Determine base weapon damage
+        if weapon and weapon.damage is not None:
+            if isinstance(weapon.damage, dict):
+                w_min = weapon.damage.get('min', 0)
+                w_max = weapon.damage.get('max', 0)
+                weapon_damage = random.randint(w_min, w_max)
+            else:
+                weapon_damage = weapon.damage
+        else:
+            weapon_damage = random.randint(1, 3)
+
+        # Strength and other bonuses directly affect raw damage
+        raw_damage = (
+            weapon_damage
+            + attacker.base_damage
+            + (weapon.damage_bonus if weapon else 0)
+            + attacker.get_stat('strength') * 0.5
+            + attacker.level * 0.5
+        )
+        raw_damage += random.randint(-2, 2)
+        raw_damage = max(1, int(raw_damage))
 
         # Calculate attack and defense scores
         attack_score = attacker.damage + accuracy_bonus
@@ -20,9 +45,13 @@ class CombatSystem:
         hit_chance = 1 / (1 + math.exp(-diff / 5))
 
         if random.random() < hit_chance:
-            damage = max(1, int(base_damage + random.randint(-2, 2)))
+            absorbed = defender.armor
+            damage = max(1, raw_damage - absorbed)
             defender.health -= damage
-            messages.append(f"{attacker.name} hits {defender.name} for {damage} damage.")
+            msg = f"{attacker.name} hits {defender.name} for {damage} damage"
+            if absorbed:
+                msg += f" ({absorbed} absorbed)"
+            messages.append(msg + ".")
 
             if defender.health <= 0:
                 messages.append(f"{defender.name} is defeated!")

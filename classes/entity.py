@@ -99,15 +99,39 @@ class Entity:
         )
         return round(total_defense, 1)
 
+    @property
+    def armor(self):
+        """Total damage absorption from equipped armor (AC)."""
+        return sum(
+            getattr(slot['item'], 'ac', 0)
+            for slot in self.equipment.values()
+            if slot['item']
+        )
+
     def damage_breakdown(self):
         """Return a list of (source, value) tuples contributing to damage."""
         components = [("Base damage", self.base_damage)]
         weapon = next(
-            (slot["item"] for slot in self.equipment.values() if slot["name"] in ["weapon", "missile weapon"]),
+            (
+                slot["item"]
+                for slot in self.equipment.values()
+                if slot["name"] in ["weapon", "missile weapon"]
+            ),
             None,
         )
-        if weapon and weapon.damage_bonus:
-            components.append((weapon.name, weapon.damage_bonus))
+
+        if weapon:
+            # Show the weapon's inherent damage range as an average
+            if weapon.damage is not None:
+                if isinstance(weapon.damage, dict):
+                    w_min = weapon.damage.get("min", 0)
+                    w_max = weapon.damage.get("max", 0)
+                    avg = (w_min + w_max) / 2
+                else:
+                    avg = weapon.damage
+                components.append((f"{weapon.name} base", avg))
+            if weapon.damage_bonus:
+                components.append((f"{weapon.name} bonus", weapon.damage_bonus))
 
         strength = self.get_stat("strength")
         components.append((f"Strength {strength}", strength * 0.5))
@@ -120,8 +144,11 @@ class Entity:
         components = [("Base defense", self.base_defense)]
         for slot in self.equipment.values():
             item = slot.get("item")
-            if item and item.defense_bonus:
-                components.append((item.name, item.defense_bonus))
+            if item:
+                if item.defense_bonus:
+                    components.append((item.name, item.defense_bonus))
+                if getattr(item, 'ac', 0):
+                    components.append((f"{item.name} AC", item.ac))
 
         dexterity = self.get_stat("dexterity")
         constitution = self.get_stat("constitution")

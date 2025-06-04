@@ -39,7 +39,7 @@ Make sure to run the game in a terminal that supports `curses`.
 - Press `0` to auto-explore the dungeon. Use `w` to walk to the nearest stairs.
 - Open the inventory with `i` and press the shown letter to equip or use an item. Drop items with `d`.
 - View your character sheet with `@`.
-- Press `Ctrl+W` to view a breakdown of your damage and defense.
+ - Press `Ctrl+W` to view detailed combat stats including weapon damage and armor.
 - Open the options menu with `=` to adjust auto-walk speed and ESC key delay.
 - Press `?` to view this command list at any time.
 - Press `Q` to quit the game.
