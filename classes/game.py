@@ -90,6 +90,44 @@ class Game:
         else:
             return Item(item_template.name, item_template.char, item_template.effect)
 
+    def create_specific_item(self, category):
+        if category == 'potion':
+            template = random.choice(all_consumables)
+        elif category == 'weapon':
+            pool = [e for e in all_equipment if e.slot in ['weapon', 'missile weapon']]
+            template = random.choice(pool)
+        elif category == 'armor':
+            pool = [e for e in all_equipment if e.slot == 'armor']
+            template = random.choice(pool)
+        elif category == 'accessory':
+            pool = [e for e in all_equipment if e.slot not in ['weapon', 'missile weapon', 'armor']]
+            template = random.choice(pool)
+        else:
+            template = random.choice(all_items)
+
+        if isinstance(template, Equipment):
+            return Equipment(
+                template.name,
+                template.char,
+                template.slot,
+                template.stat_boost,
+                accuracy_bonus=template.accuracy_bonus,
+            )
+        else:
+            return Item(template.name, template.char, template.effect)
+
+    def map_current_level(self):
+        for y in range(self.height):
+            for x in range(self.width):
+                self.explored[y][x] = True
+        self.messages.append("The layout of the area reveals itself.")
+
+    def level_up_player(self):
+        previous_level = self.player.level
+        self.player.gain_xp(self.player.xp_to_next_level)
+        if self.player.level > previous_level:
+            self.messages.append(f"You reach level {self.player.level}!")
+
     def combat(self, attacker, defender):
         defeated = self.combat_system.combat(attacker, defender, self.messages)
 
