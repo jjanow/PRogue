@@ -82,35 +82,33 @@ class InputHandler:
                 return False  # Don't quit, continue the game
 
     def handle_inventory_input(self, key):
+        """Handle key presses while the inventory screen is open.
+
+        Pressing the letter of an item will attempt to equip it. Page
+        navigation is handled with '+' and '-'.  Press ESC to leave the
+        inventory."""
+
+        inventory_items = self.game.player.get_inventory_items()
+        max_pages = (len(inventory_items) - 1) // self.game.items_per_page
+
         if key == 27:  # ESC key
-            if self.game.selected_slot is not None:
-                self.game.selected_slot = None
-            else:
-                self.game.inventory_mode = False
+            self.game.inventory_mode = False
             return
 
-        if self.game.selected_slot is None:
-            if key in range(ord('a'), ord('m') + 1):
-                self.game.selected_slot = chr(key)
-            elif key in [ord('+'), ord('='), curses.KEY_NPAGE]:
-                self.game.next_inventory_page()
-            elif key in [ord('-'), curses.KEY_PPAGE]:
-                self.game.prev_inventory_page()
-            elif key == ord('E'):
-                self.game.messages.append("Select an item to equip (a-z):")
-            elif key == ord('U'):
-                self.game.messages.append("Select a slot to unequip (a-m):")
-            elif 97 <= key <= 109:  # a-m
-                self.game.unequip_item(chr(key))
-        else:
-            equippable_items = [item for item in self.game.player.inventory if isinstance(item, Equipment) and item.slot == self.game.player.equipment[self.game.selected_slot]['name']]
-            if key == ord('-') and not equippable_items:
-                self.game.unequip_item(self.game.selected_slot)
+        if key in [ord('+'), ord('='), curses.KEY_NPAGE]:
+            self.game.inventory_page = min(self.game.inventory_page + 1, max_pages)
+        elif key in [ord('-'), curses.KEY_PPAGE]:
+            self.game.inventory_page = max(0, self.game.inventory_page - 1)
+        elif 97 <= key <= 122:  # a-z
+            index = key - ord('a') + self.game.inventory_page * self.game.items_per_page
+            if 0 <= index < len(inventory_items):
+                item, _ = inventory_items[index]
+                if isinstance(item, Equipment):
+                    self.game.equip_item(item)
+                else:
+                    self.game.messages.append(f"{item.name} cannot be equipped.")
             else:
-                index = key - ord('a')
-                if 0 <= index < len(equippable_items):
-                    self.game.equip_item(equippable_items[index])
-                self.game.selected_slot = None
+                self.game.messages.append("Invalid item.")
 
     def handle_character_screen_input(self, key):
         if key == 27:  # ESC key
