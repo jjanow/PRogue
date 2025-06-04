@@ -39,14 +39,26 @@ class CombatSystem:
 
     def player_attack_enemy(self, player, enemy, messages):
         """Handle rewards when the player defeats an enemy."""
-
         messages.append(f"You defeated {enemy.name}!")
-        player.gain_xp(20 + enemy.level * 5)
 
-        # 5% chance to drop a random item
-        if random.random() < 0.05:
-            dropped_item = self.create_random_item()
-            dropped_item.x, dropped_item.y = enemy.x, enemy.y
-            return dropped_item
+        xp = getattr(enemy, 'xp_reward', 20 + enemy.level * 5)
+        player.gain_xp(xp)
+        messages.append(f"You gain {xp} XP.")
 
-        return None
+        gold = getattr(enemy, 'gold_reward', 0)
+        if gold:
+            player.money += gold
+            messages.append(f"You collect {gold} gold.")
+
+        drops = []
+        for item in getattr(enemy, 'loot', []):
+            item.x, item.y = enemy.x, enemy.y
+            drops.append(item)
+
+        # Fallback random drop if no predefined loot
+        if not drops and random.random() < 0.05:
+            loot = self.create_random_item()
+            loot.x, loot.y = enemy.x, enemy.y
+            drops.append(loot)
+
+        return drops

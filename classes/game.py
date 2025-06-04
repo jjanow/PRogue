@@ -19,6 +19,7 @@ from classes.input_handler import InputHandler
 from classes.renderer import Renderer
 from classes.combat_system import CombatSystem
 from classes.item import Equipment
+from classes.monster_loader import all_monsters
 
 class Game:
     def __init__(self, height, width, stdscr):
@@ -182,14 +183,14 @@ class Game:
             if defender in self.enemies:
                 self.enemies.remove(defender)
 
-                dropped_item = None
+                dropped_items = []
                 if attacker == self.player:
-                    dropped_item = self.combat_system.player_attack_enemy(attacker, defender, self.messages)
+                    dropped_items = self.combat_system.player_attack_enemy(attacker, defender, self.messages)
 
-                if dropped_item:
-                    self.items.append(dropped_item)
+                for item in dropped_items:
+                    self.items.append(item)
                     self.messages.append(
-                        f"{defender.name} dropped a {dropped_item.name}!"
+                        f"{defender.name} dropped a {item.name}!"
                     )
             elif defender == self.player:
                 self.handle_player_death()
@@ -279,36 +280,35 @@ class Game:
         self.spawn_items()
         self.compute_all_shortest_paths()
 
+    def get_monster_template(self):
+        min_cr = max(0.1, (self.dungeon_level - 1) * 0.5)
+        max_cr = self.dungeon_level * 0.5 + 0.5
+        candidates = [m for m in all_monsters if min_cr <= m.challenge_rating <= max_cr]
+        if not candidates:
+            candidates = all_monsters
+        return random.choice(candidates)
+
     def spawn_enemies(self, num_enemies):
         for _ in range(num_enemies):
             pos = self.get_random_floor()
             if not pos:
                 break
             x, y = pos
-            difficulty_factor = min(2, 1 + (self.dungeon_level - 1) * 0.1)
+            template = self.get_monster_template()
+            difficulty_factor = max(1, template.challenge_rating)
             health = int((random.randint(20, 40) + self.dungeon_level * 5) * difficulty_factor)
-            base_damage = 0
-            base_defense = 0
-            enemy = Entity(x, y, 'E', f"Enemy Lv{self.dungeon_level}", health, base_damage, base_defense)
+            enemy = Entity(x, y, 'E', template.name, health, 0, 0)
 
-            # Approximate attributes based on desired difficulty
             raw_damage = int((random.randint(5, 10) + self.dungeon_level) * difficulty_factor)
             raw_defense = int((random.randint(0, 3) + self.dungeon_level // 2) * difficulty_factor)
 
             enemy.strength = raw_damage * 2
             enemy.dexterity = max(1, raw_defense * 3)
             enemy.constitution = max(1, raw_defense * 2)
-            enemy.level = self.dungeon_level
-            if random.random() < 0.3:
-                enemy.add_item(
-                    Item(
-                        "Health Potion",
-                        lambda e: setattr(e, 'health', min(e.max_health, e.health + 20)),
-                        value=20,
-                        weight=1,
-                        effect_type='heal',
-                    )
-                )
+            enemy.level = max(1, round(template.challenge_rating * 2))
+            enemy.xp_reward = template.xp
+            enemy.gold_reward = template.gold
+            enemy.loot = template.create_loot()
             self.enemies.append(enemy)
 
     def get_random_floor(self, max_attempts=1000):
