@@ -103,7 +103,7 @@ class Entity:
     def armor(self):
         """Total damage absorption from equipped armor (AC)."""
         return sum(
-            getattr(slot['item'], 'ac', 0)
+            (getattr(slot['item'], 'ac', 0) or 0)
             for slot in self.equipment.values()
             if slot['item']
         )
