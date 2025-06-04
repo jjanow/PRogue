@@ -176,9 +176,14 @@ class Game:
 
                 if dropped_item:
                     self.items.append(dropped_item)
-                    self.messages.append(f"{defender.name} dropped a {dropped_item.name}!")
+                    self.messages.append(
+                        f"{defender.name} dropped a {dropped_item.name}!"
+                    )
             elif defender == self.player:
                 self.handle_player_death()
+
+        if attacker == self.player:
+            self.process_turn()
 
         return defeated
 
@@ -885,7 +890,6 @@ class Game:
 
         if enemy_at_position:
             self.combat(self.player, enemy_at_position)
-            self.process_turn()
         elif self.is_valid_move(new_x, new_y):
             self.player.x, self.player.y = new_x, new_y
             self.process_turn()
