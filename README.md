@@ -15,7 +15,15 @@ PRogue is a traditional roguelike game. This project is in its very early stages
 
 ## Getting Started
 
-To run the game, ensure you have Python installed, then execute the following command:
+To run the game, ensure you have Python installed.
+
+On **Windows**, install the optional `windows-curses` package first. On macOS and Linux the standard `curses` module is already included:
+
+```bash
+pip install windows-curses
+```
+
+Then execute the following command to start the game:
 
 ```bash
 python pRoguelike.py
