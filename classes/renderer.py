@@ -71,8 +71,9 @@ class Renderer:
                 info.append(f"Heal {item.value}")
             elif getattr(item, 'effect_type', None) == 'restore_mana':
                 info.append(f"Mana {item.value}")
-            elif getattr(item, 'effect_type', '').startswith('boost_'):
-                stat = item.effect_type.split('_', 1)[1].title()
+            else_effect = getattr(item, 'effect_type', '') or ''
+            if else_effect.startswith('boost_'):
+                stat = else_effect.split('_', 1)[1].title()
                 info.append(f"+{item.value} {stat}")
             info.append(f"WT {item.weight}")
         return ' '.join(info)
