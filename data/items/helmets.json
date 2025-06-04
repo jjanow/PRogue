@@ -1,0 +1,17 @@
+[
+  {
+    "name": "Cap",
+    "char": "^",
+    "slot": "helmet"
+  },
+  {
+    "name": "Helm",
+    "char": "^",
+    "slot": "helmet"
+  },
+  {
+    "name": "Great Helm",
+    "char": "^",
+    "slot": "helmet"
+  }
+]

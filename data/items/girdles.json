@@ -1,0 +1,17 @@
+[
+  {
+    "name": "Belt",
+    "char": ":",
+    "slot": "girdle"
+  },
+  {
+    "name": "Chain Belt",
+    "char": ":",
+    "slot": "girdle"
+  },
+  {
+    "name": "Girdle",
+    "char": ":",
+    "slot": "girdle"
+  }
+]

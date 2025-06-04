@@ -1,0 +1,17 @@
+[
+  {
+    "name": "Wristguards",
+    "char": "|",
+    "slot": "bracers"
+  },
+  {
+    "name": "Bracers",
+    "char": "|",
+    "slot": "bracers"
+  },
+  {
+    "name": "Armguards",
+    "char": "|",
+    "slot": "bracers"
+  }
+]

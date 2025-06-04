@@ -1,0 +1,17 @@
+[
+  {
+    "name": "Pendant",
+    "char": "\"",
+    "slot": "amulet"
+  },
+  {
+    "name": "Amulet",
+    "char": "\"",
+    "slot": "amulet"
+  },
+  {
+    "name": "Talisman",
+    "char": "\"",
+    "slot": "amulet"
+  }
+]

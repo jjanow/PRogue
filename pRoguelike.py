@@ -3,6 +3,10 @@ from curses import wrapper
 import sys
 import os
 
+# Reduce the delay for detecting an isolated ESC key press. The default delay
+# can make exiting menus feel sluggish.
+os.environ.setdefault("ESCDELAY", "25")
+
 # Add the current directory to Python path to find the 'classes' package
 sys.path.append(os.path.dirname(os.path.realpath(__file__)))
 
@@ -44,6 +48,8 @@ def draw(stdscr, game):
 def main(stdscr):
     # Initialize curses
     curses.start_color()
+    # Further reduce the ESC key delay inside curses itself
+    curses.set_escdelay(25)
     curses.init_pair(1, curses.COLOR_WHITE, curses.COLOR_BLACK)  # Default
     curses.init_pair(2, curses.COLOR_RED, curses.COLOR_BLACK)    # Player
     curses.init_pair(3, curses.COLOR_GREEN, curses.COLOR_BLACK)  # Monsters
@@ -64,10 +70,15 @@ def main(stdscr):
             game.renderer.draw_backpack(stdscr)
         elif game.drop_mode:
             game.renderer.draw_drop_interface(stdscr)
+        elif game.options_mode:
+            game.renderer.draw_options_menu(stdscr)
         elif game.debug_mode:
             game.renderer.draw_debug_menu(stdscr)
         else:
             game.renderer.draw(stdscr)
+
+        if game.quit:
+            break
 
         key = stdscr.getch()
         if game.debug_mode and key == 27:  # ESC key
@@ -82,8 +93,11 @@ def main(stdscr):
         elif game.handle_input(key):
             break
 
-    curses.endwin()
-    print("Thanks for playing!")
+        if game.quit:
+            break
+
+    return
 
 if __name__ == "__main__":
     wrapper(main)
+    print("Thanks for playing!")

@@ -1,0 +1,17 @@
+[
+  {
+    "name": "Gloves",
+    "char": "]",
+    "slot": "gauntlets"
+  },
+  {
+    "name": "Gauntlets",
+    "char": "]",
+    "slot": "gauntlets"
+  },
+  {
+    "name": "Vambraces",
+    "char": "]",
+    "slot": "gauntlets"
+  }
+]

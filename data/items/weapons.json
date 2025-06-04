@@ -1,0 +1,207 @@
+[
+  {
+    "name": "Dagger",
+    "char": "/",
+    "slot": "weapon"
+  },
+  {
+    "name": "Arming Sword",
+    "char": "/",
+    "slot": "weapon"
+  },
+  {
+    "name": "Bastard Sword",
+    "char": "/",
+    "slot": "weapon"
+  },
+  {
+    "name": "Claymore",
+    "char": "/",
+    "slot": "weapon"
+  },
+  {
+    "name": "Flamberge",
+    "char": "/",
+    "slot": "weapon"
+  },
+  {
+    "name": "Katana",
+    "char": "/",
+    "slot": "weapon"
+  },
+  {
+    "name": "Gladius",
+    "char": "/",
+    "slot": "weapon"
+  },
+  {
+    "name": "Falchion",
+    "char": "/",
+    "slot": "weapon"
+  },
+  {
+    "name": "Cutlass",
+    "char": "/",
+    "slot": "weapon"
+  },
+  {
+    "name": "Sabre",
+    "char": "/",
+    "slot": "weapon"
+  },
+  {
+    "name": "Rapier",
+    "char": "/",
+    "slot": "weapon"
+  },
+  {
+    "name": "Stiletto",
+    "char": "/",
+    "slot": "weapon"
+  },
+  {
+    "name": "Dirk",
+    "char": "/",
+    "slot": "weapon"
+  },
+  {
+    "name": "Kris",
+    "char": "/",
+    "slot": "weapon"
+  },
+  {
+    "name": "Rondel",
+    "char": "/",
+    "slot": "weapon"
+  },
+  {
+    "name": "Cinquedea",
+    "char": "/",
+    "slot": "weapon"
+  },
+  {
+    "name": "Club",
+    "char": "/",
+    "slot": "weapon"
+  },
+  {
+    "name": "Morning Star",
+    "char": "/",
+    "slot": "weapon"
+  },
+  {
+    "name": "Flanged Mace",
+    "char": "/",
+    "slot": "weapon"
+  },
+  {
+    "name": "Holy Mace",
+    "char": "/",
+    "slot": "weapon"
+  },
+  {
+    "name": "War Mace",
+    "char": "/",
+    "slot": "weapon"
+  },
+  {
+    "name": "War Hammer",
+    "char": "/",
+    "slot": "weapon"
+  },
+  {
+    "name": "Maul",
+    "char": "/",
+    "slot": "weapon"
+  },
+  {
+    "name": "Sledge Hammer",
+    "char": "/",
+    "slot": "weapon"
+  },
+  {
+    "name": "Lucerne Hammer",
+    "char": "/",
+    "slot": "weapon"
+  },
+  {
+    "name": "Forge Hammer",
+    "char": "/",
+    "slot": "weapon"
+  },
+  {
+    "name": "Hand Axe",
+    "char": "/",
+    "slot": "weapon"
+  },
+  {
+    "name": "Battle Axe",
+    "char": "/",
+    "slot": "weapon"
+  },
+  {
+    "name": "Great Axe",
+    "char": "/",
+    "slot": "weapon"
+  },
+  {
+    "name": "Double Axe",
+    "char": "/",
+    "slot": "weapon"
+  },
+  {
+    "name": "Throwing Axe",
+    "char": "/",
+    "slot": "weapon"
+  },
+  {
+    "name": "Short Spear",
+    "char": "/",
+    "slot": "weapon"
+  },
+  {
+    "name": "Long Spear",
+    "char": "/",
+    "slot": "weapon"
+  },
+  {
+    "name": "Javelin",
+    "char": "/",
+    "slot": "weapon"
+  },
+  {
+    "name": "Pike",
+    "char": "/",
+    "slot": "weapon"
+  },
+  {
+    "name": "Trident",
+    "char": "/",
+    "slot": "weapon"
+  },
+  {
+    "name": "Halberd",
+    "char": "/",
+    "slot": "weapon"
+  },
+  {
+    "name": "Glaive",
+    "char": "/",
+    "slot": "weapon"
+  },
+  {
+    "name": "Naginata",
+    "char": "/",
+    "slot": "weapon"
+  },
+  {
+    "name": "Bardiche",
+    "char": "/",
+    "slot": "weapon"
+  },
+  {
+    "name": "Scythe",
+    "char": "/",
+    "slot": "weapon"
+  }
+]

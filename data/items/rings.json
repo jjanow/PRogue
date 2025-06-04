@@ -1,0 +1,32 @@
+[
+  {
+    "name": "Ring",
+    "char": "=",
+    "slot": "ring (right)"
+  },
+  {
+    "name": "Band",
+    "char": "=",
+    "slot": "ring (right)"
+  },
+  {
+    "name": "Signet",
+    "char": "=",
+    "slot": "ring (right)"
+  },
+  {
+    "name": "Ring",
+    "char": "=",
+    "slot": "ring (left)"
+  },
+  {
+    "name": "Band",
+    "char": "=",
+    "slot": "ring (left)"
+  },
+  {
+    "name": "Signet",
+    "char": "=",
+    "slot": "ring (left)"
+  }
+]

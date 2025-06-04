@@ -1,0 +1,17 @@
+[
+  {
+    "name": "Sandals",
+    "char": "(",
+    "slot": "boots"
+  },
+  {
+    "name": "Boots",
+    "char": "(",
+    "slot": "boots"
+  },
+  {
+    "name": "Greaves",
+    "char": "(",
+    "slot": "boots"
+  }
+]

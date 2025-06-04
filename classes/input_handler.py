@@ -11,6 +11,10 @@ class InputHandler:
             self.handle_debug_input(key)
             return False  # Don't exit the game
 
+        if self.game.options_mode:
+            self.handle_options_input(key)
+            return False
+
         if self.game.inventory_mode:
             self.handle_inventory_input(key)
         elif self.game.backpack_mode:
@@ -22,9 +26,6 @@ class InputHandler:
         elif key == ord('i'):
             self.game.inventory_mode = True
             self.game.inventory_page = 0
-        elif key == ord('I'):
-            self.game.backpack_mode = True
-            self.game.backpack_page = 0
         elif key == ord('@'):
             self.game.open_character_stats_screen()
         elif key == ord('Q'):
@@ -34,15 +35,50 @@ class InputHandler:
         return False  # Don't exit the game
 
     def handle_main_game_input(self, key):
+        if self.game.walk_mode:
+            if key == ord('<'):
+                if not self.game.explored[self.game.stairs_up_y][self.game.stairs_up_x]:
+                    self.game.messages.append("You don't know where the upstairs are.")
+                else:
+                    self.game.walk_to_stairs('up')
+                self.game.walk_mode = False
+                return
+            elif key == ord('>'):
+                if not self.game.explored[self.game.stairs_y][self.game.stairs_x]:
+                    self.game.messages.append("You don't know where the downstairs are.")
+                else:
+                    self.game.walk_to_stairs('down')
+                self.game.walk_mode = False
+                return
+            else:
+                self.game.walk_mode = False
+
+        if key == ord('w'):
+            if not (self.game.explored[self.game.stairs_y][self.game.stairs_x] or
+                    self.game.explored[self.game.stairs_up_y][self.game.stairs_up_x]):
+                self.game.messages.append("You haven't found any stairs yet.")
+            else:
+                self.game.walk_mode = True
+                self.game.messages.append("Walk to stairs: < or >")
+            return
+
+        if key == ord('0'):
+            self.game.auto_explore()
+            return
+
+        if key == ord('='):
+            self.game.options_mode = True
+            return
+
         movement_keys = {
             ord('8'): (0, -1), ord('k'): (0, -1), curses.KEY_UP: (0, -1),
             ord('2'): (0, 1), ord('j'): (0, 1), curses.KEY_DOWN: (0, 1),
             ord('4'): (-1, 0), ord('h'): (-1, 0), curses.KEY_LEFT: (-1, 0),
             ord('6'): (1, 0), ord('l'): (1, 0), curses.KEY_RIGHT: (1, 0),
-            ord('7'): (-1, -1), ord('y'): (-1, -1),
-            ord('9'): (1, -1), ord('u'): (1, -1),
-            ord('1'): (-1, 1), ord('b'): (-1, 1),
-            ord('3'): (1, 1), ord('n'): (1, 1),
+            ord('7'): (-1, -1), ord('y'): (-1, -1), curses.KEY_HOME: (-1, -1), curses.KEY_A1: (-1, -1),
+            ord('9'): (1, -1), ord('u'): (1, -1), curses.KEY_PPAGE: (1, -1), curses.KEY_A3: (1, -1),
+            ord('1'): (-1, 1), ord('b'): (-1, 1), curses.KEY_END: (-1, 1), curses.KEY_C1: (-1, 1),
+            ord('3'): (1, 1), ord('n'): (1, 1), curses.KEY_NPAGE: (1, 1), curses.KEY_C3: (1, 1),
         }
 
         if key in movement_keys:
@@ -50,10 +86,13 @@ class InputHandler:
             self.game.player_move_or_attack(dx, dy)
             return
 
+        if key in [ord('5'), curses.KEY_B2]:
+            # Passing a turn (numpad 5 or keypad center)
+            self.game.process_turn()
+            return
+
         if key == ord('i'):
             self.game.open_inventory()
-        elif key == ord('c'):
-            self.game.open_character_screen()
         elif key == ord(','):
             self.game.pickup_item()
         elif key == ord('>'):
@@ -77,35 +116,33 @@ class InputHandler:
                 return False  # Don't quit, continue the game
 
     def handle_inventory_input(self, key):
+        """Handle key presses while the inventory screen is open.
+
+        Pressing the letter of an item will attempt to equip it. Page
+        navigation is handled with '+' and '-'.  Press ESC to leave the
+        inventory."""
+
+        inventory_items = self.game.player.get_inventory_items()
+        max_pages = (len(inventory_items) - 1) // self.game.items_per_page
+
         if key == 27:  # ESC key
-            if self.game.selected_slot is not None:
-                self.game.selected_slot = None
-            else:
-                self.game.inventory_mode = False
+            self.game.inventory_mode = False
             return
 
-        if self.game.selected_slot is None:
-            if key in range(ord('a'), ord('m') + 1):
-                self.game.selected_slot = chr(key)
-            elif key in [ord('+'), ord('='), curses.KEY_NPAGE]:
-                self.game.next_inventory_page()
-            elif key in [ord('-'), curses.KEY_PPAGE]:
-                self.game.prev_inventory_page()
-            elif key == ord('E'):
-                self.game.messages.append("Select an item to equip (a-z):")
-            elif key == ord('U'):
-                self.game.messages.append("Select a slot to unequip (a-m):")
-            elif 97 <= key <= 109:  # a-m
-                self.game.unequip_item(chr(key))
-        else:
-            equippable_items = [item for item in self.game.player.inventory if isinstance(item, Equipment) and item.slot == self.game.player.equipment[self.game.selected_slot]['name']]
-            if key == ord('-') and not equippable_items:
-                self.game.unequip_item(self.game.selected_slot)
+        if key in [ord('+'), ord('='), curses.KEY_NPAGE]:
+            self.game.inventory_page = min(self.game.inventory_page + 1, max_pages)
+        elif key in [ord('-'), curses.KEY_PPAGE]:
+            self.game.inventory_page = max(0, self.game.inventory_page - 1)
+        elif 97 <= key <= 122:  # a-z
+            index = key - ord('a') + self.game.inventory_page * self.game.items_per_page
+            if 0 <= index < len(inventory_items):
+                item, _ = inventory_items[index]
+                if isinstance(item, Equipment):
+                    self.game.equip_item(item)
+                else:
+                    self.game.messages.append(f"{item.name} cannot be equipped.")
             else:
-                index = key - ord('a')
-                if 0 <= index < len(equippable_items):
-                    self.game.equip_item(equippable_items[index])
-                self.game.selected_slot = None
+                self.game.messages.append("Invalid item.")
 
     def handle_character_screen_input(self, key):
         if key == 27:  # ESC key
@@ -143,11 +180,53 @@ class InputHandler:
         elif 97 <= key <= 122:  # a-z
             self.game.use_backpack_item(chr(key))
 
+    def handle_options_input(self, key):
+        if key == 27:  # ESC
+            self.game.options_mode = False
+            return
+
+        if key in [ord('+'), curses.KEY_RIGHT]:
+            self.game.walk_speed = min(1000, self.game.walk_speed + 10)
+        elif key in [ord('-'), curses.KEY_LEFT]:
+            self.game.walk_speed = max(0, self.game.walk_speed - 10)
+        elif key in [10, 13]:
+            self.game.options_mode = False
+
     def handle_debug_input(self, key):
+        # If the menu isn't open yet, hitting '!' will open it
+        if not self.game.debug_mode and key == ord('!'):
+            self.game.debug_mode = True
+            return
+
         if key == 27:  # ESC key
             self.game.debug_mode = False
             return
 
-        item = self.game.create_random_item()
-        self.game.player.add_item(item)
-        self.game.messages.append(f"Spawned {item.name} in your inventory.")
+        item_keys = {
+            'a': 'weapon',
+            'b': 'missile weapon',
+            'c': 'helmet',
+            'd': 'amulet',
+            'e': 'shield',
+            'f': 'armor',
+            'g': 'cloak',
+            'h': 'girdle',
+            'i': 'gauntlets',
+            'j': 'boots',
+            'k': 'ring',
+            'l': 'bracers',
+            'm': 'potion',
+        }
+
+        if chr(key) in item_keys:
+            category = item_keys[chr(key)]
+            item = self.game.create_specific_item(category)
+            self.game.player.add_item(item)
+            self.game.messages.append(f"Created {item.name} in your inventory.")
+            self.game.debug_mode = False
+        elif key == ord('n'):
+            self.game.map_current_level()
+            self.game.debug_mode = False
+        elif key == ord('o'):
+            self.game.level_up_player()
+            self.game.debug_mode = False

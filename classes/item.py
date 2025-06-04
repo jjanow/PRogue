@@ -17,7 +17,17 @@ class Item:
         return hash(self.name)
 
 class Equipment(Item):
-    def __init__(self, name, char, slot, stat_boost):
+    def __init__(self, name, char, slot, stat_boost, accuracy_bonus=0):
         super().__init__(name, char, None)
         self.slot = slot
         self.stat_boost = stat_boost
+
+        # Separate bonuses allow items to affect different stats
+        if slot in ['weapon', 'missile weapon']:
+            self.damage_bonus = stat_boost
+            self.defense_bonus = 0
+        else:
+            self.damage_bonus = 0
+            self.defense_bonus = stat_boost
+
+        self.accuracy_bonus = accuracy_bonus

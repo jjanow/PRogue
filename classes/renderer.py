@@ -15,19 +15,26 @@ class Renderer:
         
         for y, row in enumerate(self.game.map[:dungeon_height]):
             for x, cell in enumerate(row[:width]):  # Ensure we don't exceed the screen width
+                if not self.game.explored[y][x]:
+                    stdscr.addch(y, x, ' ')
+                    continue
+
+                visible = self.game.visible[y][x]
+                attr = curses.A_NORMAL if visible else curses.A_DIM
+
                 if cell == '#':
-                    stdscr.addch(y, x, cell, curses.color_pair(5))  # Walls
+                    stdscr.addch(y, x, cell, curses.color_pair(5) | attr)  # Walls
                 elif cell == '+':
-                    stdscr.addch(y, x, cell, curses.color_pair(6))  # Doors
+                    stdscr.addch(y, x, cell, curses.color_pair(6) | attr)  # Doors
                 else:
-                    stdscr.addch(y, x, cell, curses.color_pair(1))  # Default
+                    stdscr.addch(y, x, cell, curses.color_pair(1) | attr)  # Default
 
         for item in self.game.items:
-            if item.y < dungeon_height:
+            if item.y < dungeon_height and self.game.visible[item.y][item.x]:
                 stdscr.addch(item.y, item.x, item.char, curses.color_pair(4))  # Items
 
         for enemy in self.game.enemies:
-            if enemy.y < dungeon_height:
+            if enemy.y < dungeon_height and self.game.visible[enemy.y][enemy.x]:
                 stdscr.addch(enemy.y, enemy.x, enemy.char, curses.color_pair(3))  # Monsters
 
         if self.game.player.y < dungeon_height:
@@ -228,17 +235,26 @@ class Renderer:
             f"Age: {self.game.player.age} years",
         ]
 
-        # Draw attributes
-        for i, line in enumerate(attributes, start=2):
-            if i >= height:
-                break
-            stdscr.addstr(i, 0, line[:width-1])
+        # Equipment Data
+        equipment_lines = [
+            f"{slot['name'].title()}: {slot['item'].name if slot['item'] else 'Empty'}"
+            for slot in self.game.player.equipment.values()
+        ]
 
-        # Draw miscellaneous data
-        for i, line in enumerate(misc_data, start=2):
+        left_lines = attributes + [""] + misc_data
+        left_width = width // 2 - 2
+
+        for i, line in enumerate(left_lines, start=2):
             if i >= height:
                 break
-            stdscr.addstr(i, width // 2, line[:width-1])
+            stdscr.addstr(i, 0, line[:left_width])
+
+        right_start = 1
+        stdscr.addstr(right_start, width // 2, "Equipment:")
+        for i, line in enumerate(equipment_lines, start=right_start + 1):
+            if i >= height:
+                break
+            stdscr.addstr(i, width // 2, line[:width // 2 - 1])
 
         stdscr.refresh()
 
@@ -247,13 +263,39 @@ class Renderer:
         height, width = stdscr.getmaxyx()
 
         menu_text = [
-            "Debug Menu (press escape to exit):",
-            "i) Spawn an item",
-            "x) Gain 100 XP",
-            "m) Gain 100 gold"
+            "Cheat Menu (press escape to exit):",
+            "a) Create weapon",
+            "b) Create missile weapon",
+            "c) Create helmet",
+            "d) Create amulet",
+            "e) Create shield",
+            "f) Create armor",
+            "g) Create cloak",
+            "h) Create girdle",
+            "i) Create gauntlets",
+            "j) Create boots",
+            "k) Create ring",
+            "l) Create bracers",
+            "m) Create potion",
+            "n) Map level",
+            "o) Level up",
         ]
 
         for i, line in enumerate(menu_text):
+            stdscr.addstr(i, 0, line[:width-1])
+
+        stdscr.refresh()
+
+    def draw_options_menu(self, stdscr):
+        stdscr.clear()
+        height, width = stdscr.getmaxyx()
+
+        lines = [
+            "Options (press escape to exit):",
+            f"Walking speed: {self.game.walk_speed} ms (+/- to adjust)",
+        ]
+
+        for i, line in enumerate(lines):
             stdscr.addstr(i, 0, line[:width-1])
 
         stdscr.refresh()

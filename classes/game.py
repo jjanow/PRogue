@@ -2,10 +2,16 @@ import curses
 import heapq
 import random
 import sys
+import time
 from classes.entity import Entity
 from classes.item import Item, Equipment
 from classes.map_generator import MapGenerator
-from classes.item_loader import all_items, all_consumables, all_equipment
+from classes.item_loader import (
+    all_items,
+    all_consumables,
+    all_equipment,
+    all_materials,
+)
 from curses import KEY_NPAGE, KEY_PPAGE
 from classes.input_handler import InputHandler
 from classes.renderer import Renderer
@@ -35,6 +41,9 @@ class Game:
         self.stairs_up_x = None
         self.stairs_up_y = None
         self.generate_level()
+        self.visible = [[False for _ in range(self.width)] for _ in range(self.height)]
+        self.explored = [[False for _ in range(self.width)] for _ in range(self.height)]
+        self.update_fov()
         self.inventory_page = 0
         self.inventory_mode = False
         self.character_screen_mode = False
@@ -51,6 +60,11 @@ class Game:
         self.time = 0
         self.selected_slot = None
         self.debug_mode = False
+        self.quit = False
+        self.walk_mode = False
+        self.auto_explore_mode = False
+        self.options_mode = False
+        self.walk_speed = 5  # milliseconds between auto-move steps
 
     def open_character_stats_screen(self):
         self.character_stats_mode = True
@@ -73,9 +87,56 @@ class Game:
     def create_random_item(self):
         item_template = random.choice(all_items)
         if isinstance(item_template, Equipment):
-            return Equipment(item_template.name, item_template.char, item_template.slot, item_template.stat_boost)
+            material = random.choice(all_materials)
+            name = f"{material.name} {item_template.name}"
+            stat = material.power
+            return Equipment(
+                name,
+                item_template.char,
+                item_template.slot,
+                stat,
+                accuracy_bonus=item_template.accuracy_bonus,
+            )
         else:
             return Item(item_template.name, item_template.char, item_template.effect)
+
+    def create_specific_item(self, category):
+        if category == 'potion':
+            template = random.choice(all_consumables)
+        else:
+            if category == 'ring':
+                pool = [e for e in all_equipment if e.slot.startswith('ring')]
+            else:
+                pool = [e for e in all_equipment if e.slot == category]
+            if not pool:
+                pool = all_equipment
+            template = random.choice(pool)
+
+        if isinstance(template, Equipment):
+            material = random.choice(all_materials)
+            name = f"{material.name} {template.name}"
+            stat = material.power
+            return Equipment(
+                name,
+                template.char,
+                template.slot,
+                stat,
+                accuracy_bonus=template.accuracy_bonus,
+            )
+        else:
+            return Item(template.name, template.char, template.effect)
+
+    def map_current_level(self):
+        for y in range(self.height):
+            for x in range(self.width):
+                self.explored[y][x] = True
+        self.messages.append("The layout of the area reveals itself.")
+
+    def level_up_player(self):
+        previous_level = self.player.level
+        self.player.gain_xp(self.player.xp_to_next_level)
+        if self.player.level > previous_level:
+            self.messages.append(f"You reach level {self.player.level}!")
 
     def combat(self, attacker, defender):
         defeated = self.combat_system.combat(attacker, defender, self.messages)
@@ -92,7 +153,7 @@ class Game:
                     self.items.append(dropped_item)
                     self.messages.append(f"{defender.name} dropped a {dropped_item.name}!")
             elif defender == self.player:
-                self.messages.append("Game Over!")
+                self.handle_player_death()
 
         return defeated
 
@@ -110,9 +171,6 @@ class Game:
         elif key == ord('i'):
             self.inventory_mode = True
             self.inventory_page = 0
-        elif key == ord('I'):
-            self.backpack_mode = True
-            self.backpack_page = 0
         elif key == ord('d'):
             self.drop_mode = True
             self.backpack_page = 0
@@ -152,19 +210,6 @@ class Game:
         elif 97 <= key <= 122:  # a-z
             self.drop_backpack_item(chr(key))
 
-    def handle_drop_input(self, key):
-        inventory_items = self.player.get_inventory_items()
-        max_pages = (len(inventory_items) - 1) // self.items_per_page
-
-        if key == 27:  # ESC key
-            self.drop_mode = False
-        elif key in [ord('+'), ord('='), KEY_NPAGE]:
-            self.backpack_page = min(self.backpack_page + 1, max_pages)
-        elif key in [ord('-'), KEY_PPAGE]:
-            self.backpack_page = max(0, self.backpack_page - 1)
-        elif 97 <= key <= 122:  # a-z
-            self.drop_backpack_item(chr(key))
-
     def draw(self, stdscr):
         self.renderer.draw(stdscr)
 
@@ -181,7 +226,10 @@ class Game:
         self.renderer.draw_drop_interface(stdscr)
 
     def generate_level(self):
-        self.map, self.rooms, self.stairs_up_x, self.stairs_up_y, self.stairs_x, self.stairs_y = self.map_generator.generate_level(self.player)        
+        self.map, self.rooms, self.stairs_up_x, self.stairs_up_y, self.stairs_x, self.stairs_y = self.map_generator.generate_level(self.player)
+        self.visible = [[False for _ in range(self.width)] for _ in range(self.height)]
+        self.explored = [[False for _ in range(self.width)] for _ in range(self.height)]
+        self.update_fov()
         self.spawn_enemies(len(self.rooms))
         self.spawn_items()
 
@@ -232,6 +280,7 @@ class Game:
                     self.messages.append(message)
 
         self.player.update_temporary_boosts()
+        self.update_fov()
 
     def check_collisions(self):
         for item in self.items[:]:
@@ -325,6 +374,17 @@ class Game:
         # This method should be implemented to get a key press from the user
         # For now, we'll just return a placeholder value
         return ord('A')
+
+    def display_messages(self):
+        """Output queued messages to the standard screen and clear them."""
+        if self.stdscr:
+            for i, message in enumerate(self.messages[-3:]):
+                self.stdscr.addstr(self.screen_height - 3 + i, 0, str(message)[:self.screen_width - 1])
+            self.stdscr.refresh()
+        else:
+            for message in self.messages:
+                print(message)
+        self.messages.clear()
     
     def use_or_equip_item(self, key):
         inventory_items = self.player.get_inventory_items()
@@ -347,6 +407,100 @@ class Game:
                 self.previous_level()
             else:
                 self.exit_game()
+
+    def walk_to(self, x, y, animate=False):
+        """Automatically walk the player to the given coordinates using pathfinding.
+
+        Returns True if the walk was interrupted by user input."""
+        target = type('Target', (object,), {'x': x, 'y': y})()
+        path = self.find_path(self.player, target)
+        if not path:
+            self.messages.append("No path to destination.")
+            return False
+
+        interrupted = False
+        if animate and self.stdscr:
+            self.stdscr.nodelay(True)
+
+        try:
+            for step in path[1:]:
+                if animate and self.stdscr:
+                    key = self.stdscr.getch()
+                    if key != -1:
+                        curses.ungetch(key)
+                        interrupted = True
+                        break
+
+                dx = step[0] - self.player.x
+                dy = step[1] - self.player.y
+                prev_x, prev_y = self.player.x, self.player.y
+                self.player_move_or_attack(dx, dy)
+
+                if animate and self.stdscr:
+                    self.renderer.draw(self.stdscr)
+                    time.sleep(self.walk_speed / 1000.0)
+
+                if (self.player.x, self.player.y) == (prev_x, prev_y):
+                    break
+                if (self.player.x, self.player.y) == (x, y):
+                    break
+        finally:
+            if animate and self.stdscr:
+                self.stdscr.nodelay(False)
+
+        return interrupted
+
+    def walk_to_stairs(self, direction):
+        if direction == 'up':
+            self.walk_to(self.stairs_up_x, self.stairs_up_y, animate=True)
+        elif direction == 'down':
+            self.walk_to(self.stairs_x, self.stairs_y, animate=True)
+
+    def find_nearest_unexplored(self):
+        """Return coordinates of the nearest unexplored tile reachable from the
+        player using path length as the metric."""
+        from heapq import heappush, heappop
+
+        start = (self.player.x, self.player.y)
+        heap = [(0, start)]
+        visited = set()
+
+        while heap:
+            dist, (x, y) = heappop(heap)
+            if (x, y) in visited:
+                continue
+            visited.add((x, y))
+
+            if not self.explored[y][x] and self.map[y][x] in ['.', '<', '>']:
+                return (x, y)
+
+            for dx, dy in [(-1,0), (1,0), (0,-1), (0,1),
+                           (-1,-1), (1,-1), (-1,1), (1,1)]:
+                nx, ny = x + dx, y + dy
+                if (0 <= nx < self.width and 0 <= ny < self.height and
+                        self.map[ny][nx] in ['.', '<', '>'] and
+                        (nx, ny) not in visited):
+                    heappush(heap, (dist + 1, (nx, ny)))
+        return None
+
+    def auto_explore(self):
+        """Automatically explore the dungeon until a monster is seen."""
+        self.auto_explore_mode = True
+        while self.auto_explore_mode:
+            if any(self.visible[e.y][e.x] for e in self.enemies):
+                self.messages.append("Monster spotted!")
+                break
+
+            target = self.find_nearest_unexplored()
+            if not target:
+                self.messages.append("Nothing left to explore.")
+                break
+
+            interrupted = self.walk_to(target[0], target[1], animate=True)
+            if interrupted:
+                break
+
+        self.auto_explore_mode = False
     
     def exit_game(self):
         try:
@@ -362,29 +516,17 @@ class Game:
         self.wait_for_key()
         sys.exit()
 
-    def use_stairs(self, direction):
-        if direction == 'down' and self.player.x == self.stairs_x and self.player.y == self.stairs_y:
-            self.next_level()
-        elif direction == 'up' and self.player.x == self.stairs_up_x and self.player.y == self.stairs_up_y:
-            if self.dungeon_level > 1:
-                self.previous_level()
-            else:
-                self.exit_game()
-        else:
-            self.messages.append("There are no stairs here.")
-    
     def wait_for_key(self):
         # This method should be implemented to wait for a key press
         # For now, we'll just pass
         pass
-    
-    def next_level(self):
-        self.dungeon_level += 1
-        self.messages.append(f"You descend to dungeon level {self.dungeon_level}.")
-        self.enemies.clear()
-        self.items.clear()
-        self.generate_level()
 
+    def handle_player_death(self):
+        """Handle player death by setting the quit flag and truncating health."""
+        self.player.health = max(0, self.player.health)
+        self.messages.append("Game Over!")
+        self.quit = True
+    
     def previous_level(self):
         self.dungeon_level -= 1
         self.messages.append(f"You ascend to dungeon level {self.dungeon_level}.")
@@ -445,6 +587,116 @@ class Game:
 
     def distance(self, entity1, entity2):
         return max(abs(entity1.x - entity2.x), abs(entity1.y - entity2.y))
+
+    def line(self, x1, y1, x2, y2):
+        """Yield points on a Bresenham line from (x1, y1) to (x2, y2)."""
+        dx = abs(x2 - x1)
+        dy = abs(y2 - y1)
+        x, y = x1, y1
+        sx = 1 if x2 > x1 else -1
+        sy = 1 if y2 > y1 else -1
+
+        if dx > dy:
+            err = dx / 2.0
+            while x != x2:
+                yield x, y
+                err -= dy
+                if err < 0:
+                    y += sy
+                    err += dx
+                x += sx
+        else:
+            err = dy / 2.0
+            while y != y2:
+                yield x, y
+                err -= dx
+                if err < 0:
+                    x += sx
+                    err += dy
+                y += sy
+        yield x2, y2
+
+    def in_room(self, x, y):
+        """Return True if the coordinates are inside any generated room."""
+        for rx, ry, w, h in self.rooms:
+            if rx <= x < rx + w and ry <= y < ry + h:
+                return True
+        return False
+
+    def get_room(self, x, y):
+        """Return the room tuple containing (x, y) or None if not in a room."""
+        for room in self.rooms:
+            rx, ry, w, h = room
+            if rx <= x < rx + w and ry <= y < ry + h:
+                return room
+        return None
+
+    def corridor_distance(self, x1, y1, x2, y2):
+        """Return the number of corridor tiles between leaving the starting
+        room and reaching (x2, y2). Only meaningful if (x1, y1) is inside a
+        room and (x2, y2) is outside of it."""
+        distance = 0
+        left_room = False
+        for px, py in self.line(x1, y1, x2, y2):
+            if (px, py) == (x1, y1):
+                continue
+            if self.in_room(px, py):
+                if left_room:
+                    # We've entered another room; stop counting
+                    break
+            else:
+                if not left_room:
+                    left_room = True
+                distance += 1
+            if (px, py) == (x2, y2):
+                break
+        return distance
+
+    def has_line_of_sight(self, x1, y1, x2, y2):
+        """Return True if there is a clear line of sight between two points."""
+        for x, y in self.line(x1, y1, x2, y2):
+            if (x, y) != (x1, y1) and (x, y) != (x2, y2) and self.map[y][x] == '#':
+                return False
+        return True
+
+    def update_fov(self, radius=None):
+        """Update which tiles are visible using line of sight and mark them as
+        explored. Vision down connecting corridors is limited to two tiles when
+        standing in a room, and overall sight is restricted to a 3 tile radius
+        when the player is in a hallway."""
+
+        px, py = self.player.x, self.player.y
+        player_room = self.get_room(px, py)
+        player_in_room = player_room is not None
+
+        if radius is None:
+            # Unlimited radius in rooms, but only three tiles while in corridors
+            radius = 3 if not player_in_room else max(self.width, self.height)
+        else:
+            if not player_in_room:
+                radius = min(radius, 3)
+
+        self.visible = [[False for _ in range(self.width)] for _ in range(self.height)]
+
+        for y in range(max(0, py - radius), min(self.height, py + radius + 1)):
+            for x in range(max(0, px - radius), min(self.width, px + radius + 1)):
+                if max(abs(px - x), abs(py - y)) > radius:
+                    continue
+
+                if not self.has_line_of_sight(px, py, x, y):
+                    continue
+
+                target_room = self.get_room(x, y)
+
+                if player_in_room:
+                    if target_room is None:
+                        if self.corridor_distance(px, py, x, y) > 2:
+                            continue
+                    elif target_room != player_room:
+                        continue
+
+                self.visible[y][x] = True
+                self.explored[y][x] = True
     
     def open_equipment_screen(self):
         self.equipment_mode = True
@@ -490,6 +742,7 @@ class Game:
 
         if enemy_at_position:
             self.combat(self.player, enemy_at_position)
+            self.process_turn()
         elif self.is_valid_move(new_x, new_y):
             self.player.x, self.player.y = new_x, new_y
             self.process_turn()
@@ -519,6 +772,10 @@ class Game:
     def game_loop(self):
         while not self.quit:
             key = self.get_key()
-            self.handle_input(key)
-            self.render()
-            self.display_messages()  # Ensure this method is called to display messages
+            if self.handle_input(key):
+                self.quit = True
+                break
+            if hasattr(self, 'render'):
+                self.render()
+            self.display_messages()
+

@@ -1,0 +1,17 @@
+[
+  {
+    "name": "Cloak",
+    "char": "B",
+    "slot": "cloak"
+  },
+  {
+    "name": "Cape",
+    "char": "B",
+    "slot": "cloak"
+  },
+  {
+    "name": "Mantle",
+    "char": "B",
+    "slot": "cloak"
+  }
+]

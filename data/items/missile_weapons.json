@@ -1,0 +1,102 @@
+[
+  {
+    "name": "Light Crossbow",
+    "char": "}",
+    "slot": "missile weapon"
+  },
+  {
+    "name": "Heavy Crossbow",
+    "char": "}",
+    "slot": "missile weapon"
+  },
+  {
+    "name": "Repeating Crossbow",
+    "char": "}",
+    "slot": "missile weapon"
+  },
+  {
+    "name": "Siege Crossbow",
+    "char": "}",
+    "slot": "missile weapon"
+  },
+  {
+    "name": "Arbalest",
+    "char": "}",
+    "slot": "missile weapon"
+  },
+  {
+    "name": "Simple Longbow",
+    "char": "}",
+    "slot": "missile weapon"
+  },
+  {
+    "name": "Composite Longbow",
+    "char": "}",
+    "slot": "missile weapon"
+  },
+  {
+    "name": "Recurve Longbow",
+    "char": "}",
+    "slot": "missile weapon"
+  },
+  {
+    "name": "Greatbow",
+    "char": "}",
+    "slot": "missile weapon"
+  },
+  {
+    "name": "Elven Longbow",
+    "char": "}",
+    "slot": "missile weapon"
+  },
+  {
+    "name": "Simple Shortbow",
+    "char": "}",
+    "slot": "missile weapon"
+  },
+  {
+    "name": "Composite Shortbow",
+    "char": "}",
+    "slot": "missile weapon"
+  },
+  {
+    "name": "Recurve Shortbow",
+    "char": "}",
+    "slot": "missile weapon"
+  },
+  {
+    "name": "Hunting Bow",
+    "char": "}",
+    "slot": "missile weapon"
+  },
+  {
+    "name": "Elven Shortbow",
+    "char": "}",
+    "slot": "missile weapon"
+  },
+  {
+    "name": "Simple Sling",
+    "char": "}",
+    "slot": "missile weapon"
+  },
+  {
+    "name": "Staff Sling",
+    "char": "}",
+    "slot": "missile weapon"
+  },
+  {
+    "name": "Heavy Sling",
+    "char": "}",
+    "slot": "missile weapon"
+  },
+  {
+    "name": "Whip Sling",
+    "char": "}",
+    "slot": "missile weapon"
+  },
+  {
+    "name": "Precision Sling",
+    "char": "}",
+    "slot": "missile weapon"
+  }
+]

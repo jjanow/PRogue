@@ -1,47 +1,8 @@
 import random
 from collections import Counter
 from classes.item import Equipment, Item
-from classes.item_loader import all_consumables, all_equipment
+from classes.item_loader import all_consumables, all_equipment, all_materials
 
-class Item:
-    def __init__(self, name, char, effect, duration=None):
-        self.name = name
-        self.char = char
-        self.effect = effect
-        self.duration = duration
-        self.x = None
-        self.y = None
-        self.quantity = 1
-        self.level = 1
-        self.xp = 0
-        self.xp_to_next_level = 100        
-        self.strength = 10
-        self.dexterity = 10
-        self.constitution = 10
-        self.intelligence = 10
-        self.willpower = 10
-        self.charisma = 10
-        self.appearance = 10
-        self.perception = 10
-        self.speed = 100
-        self.max_mana = 10
-        self.mana = 10
-        self.max_psi = 10
-        self.psi = 10        
-        self.money = 0
-        self.deity = "None"
-        self.birth = "Unknown"
-        self.month = "Unknown"
-        self.day = "Unknown"
-        self.age = 0
-
-    def __eq__(self, other):
-        if isinstance(other, Item):
-            return self.name == other.name
-        return False
-
-    def __hash__(self):
-        return hash(self.name)
 
 class Entity:
     def __init__(self, x, y, char, name, health, damage, defense):
@@ -94,14 +55,18 @@ class Entity:
     
     @property
     def damage(self):
-        weapon = next((slot['item'] for slot in self.equipment.values() if slot['name'] == 'weapon'), None)
-        weapon_bonus = weapon.stat_boost if weapon else 0
+        weapon = next((slot['item'] for slot in self.equipment.values() if slot['name'] in ['weapon', 'missile weapon']), None)
+        weapon_bonus = weapon.damage_bonus if weapon else 0
         strength_bonus = max(0, (self.strength - 10) // 2)  # +1 for every 2 points above 10
         return self.base_damage + weapon_bonus + strength_bonus
 
     @property
     def defense(self):
-        armor_bonus = sum(slot['item'].stat_boost for slot in self.equipment.values() if slot['item'] and slot['name'] != 'weapon')
+        armor_bonus = sum(
+            slot['item'].defense_bonus
+            for slot in self.equipment.values()
+            if slot['item']
+        )
         dexterity_bonus = max(0, (self.dexterity - 10) // 2)  # +1 for every 2 points above 10
         return self.base_defense + armor_bonus + dexterity_bonus
 
@@ -190,15 +155,30 @@ class Entity:
             self.add_item(health_potion)
             self.add_item(health_potion)
 
-        # Equip the player with a dagger
-        dagger = next((item for item in all_equipment if item.name == "Dagger"), None)
-        if dagger:
-            self.equip(dagger, 'a')  # 'a' is the slot for weapon
+        # Equip the player with a basic dagger and robe
+        dagger_base = next((item for item in all_equipment if item.name == "Dagger"), None)
+        robe_base = next((item for item in all_equipment if item.name == "Robe"), None)
+        bronze = next((m for m in all_materials if m.name == "Bronze"), None)
+        cloth = next((m for m in all_materials if m.name == "Cloth"), None)
 
-        # Equip the player with leather armor
-        leather_armor = next((item for item in all_equipment if item.name == "Leather Armor"), None)
-        if leather_armor:
-            self.equip(leather_armor, 'f')  # 'f' is the slot for armor
+        if dagger_base and bronze:
+            dagger = Equipment(
+                f"{bronze.name} {dagger_base.name}",
+                dagger_base.char,
+                dagger_base.slot,
+                bronze.power,
+                accuracy_bonus=dagger_base.accuracy_bonus,
+            )
+            self.equip(dagger, 'a')  # 'a' is the weapon slot
+
+        if robe_base and cloth:
+            robe = Equipment(
+                f"{cloth.name} {robe_base.name}",
+                robe_base.char,
+                robe_base.slot,
+                cloth.power,
+            )
+            self.equip(robe, 'f')  # 'f' is the armor slot
 
     def heal(self, amount):
         self.health = min(self.max_health, self.health + amount)
