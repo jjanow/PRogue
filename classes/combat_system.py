@@ -4,7 +4,12 @@ class CombatSystem:
     @staticmethod
     def combat(attacker, defender, messages):
         base_damage = attacker.damage
-        attack_roll = random.randint(1, 20) + max(0, (attacker.strength - 10) // 2)
+        weapon = next(
+            (slot['item'] for slot in attacker.equipment.values() if slot['name'] in ['weapon', 'missile weapon']),
+            None,
+        )
+        accuracy_bonus = weapon.accuracy_bonus if weapon else 0
+        attack_roll = random.randint(1, 20) + max(0, (attacker.strength - 10) // 2) + accuracy_bonus
         defense_value = 10 + defender.defense + max(0, (defender.dexterity - 10) // 2)
 
         if attack_roll >= defense_value:

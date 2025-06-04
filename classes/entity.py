@@ -55,14 +55,18 @@ class Entity:
     
     @property
     def damage(self):
-        weapon = next((slot['item'] for slot in self.equipment.values() if slot['name'] == 'weapon'), None)
-        weapon_bonus = weapon.stat_boost if weapon else 0
+        weapon = next((slot['item'] for slot in self.equipment.values() if slot['name'] in ['weapon', 'missile weapon']), None)
+        weapon_bonus = weapon.damage_bonus if weapon else 0
         strength_bonus = max(0, (self.strength - 10) // 2)  # +1 for every 2 points above 10
         return self.base_damage + weapon_bonus + strength_bonus
 
     @property
     def defense(self):
-        armor_bonus = sum(slot['item'].stat_boost for slot in self.equipment.values() if slot['item'] and slot['name'] != 'weapon')
+        armor_bonus = sum(
+            slot['item'].defense_bonus
+            for slot in self.equipment.values()
+            if slot['item']
+        )
         dexterity_bonus = max(0, (self.dexterity - 10) // 2)  # +1 for every 2 points above 10
         return self.base_defense + armor_bonus + dexterity_bonus
 
