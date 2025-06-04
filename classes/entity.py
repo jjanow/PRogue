@@ -174,6 +174,7 @@ class Entity:
                 damage=dagger_base.damage,
                 ac=dagger_base.ac,
                 accuracy_bonus=dagger_base.accuracy_bonus,
+                weight=dagger_base.weight,
             )
             self.equip(dagger, 'a')  # 'a' is the weapon slot
 
@@ -185,6 +186,7 @@ class Entity:
                 cloth.power,
                 damage=robe_base.damage,
                 ac=robe_base.ac,
+                weight=robe_base.weight,
             )
             self.equip(robe, 'f')  # 'f' is the armor slot
 

@@ -150,14 +150,6 @@ class InputHandler:
                     self.game.messages.append(f"{item.name} cannot be equipped.")
             else:
                 self.game.messages.append("Invalid item.")
-        elif 65 <= key <= 90:  # A-Z for item info
-            index = key - ord('A') + self.game.inventory_page * self.game.items_per_page
-            if 0 <= index < len(inventory_items):
-                item, _ = inventory_items[index]
-                self.game.item_info_item = item
-                self.game.item_info_mode = True
-            else:
-                self.game.messages.append("Invalid item.")
 
     def handle_character_screen_input(self, key):
         if key == 27:  # ESC key
@@ -222,10 +214,6 @@ class InputHandler:
         if key in (27, ord('q')):
             self.game.help_mode = False
 
-    def handle_item_info_input(self, key):
-        if key == 27:  # ESC key
-            self.game.item_info_mode = False
-            self.game.item_info_item = None
 
     def handle_debug_input(self, key):
         # If the menu isn't open yet, hitting '!' will open it
