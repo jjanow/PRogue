@@ -58,21 +58,34 @@ class Entity:
     
     @property
     def damage(self):
-        weapon = next((slot['item'] for slot in self.equipment.values() if slot['name'] in ['weapon', 'missile weapon']), None)
+        """Total damage output including stat and level bonuses."""
+        weapon = next(
+            (slot['item'] for slot in self.equipment.values() if slot['name'] in ['weapon', 'missile weapon']),
+            None,
+        )
         weapon_bonus = weapon.damage_bonus if weapon else 0
-        strength_bonus = max(0, (self.strength - 10) // 2)  # +1 for every 2 points above 10
-        return self.base_damage + weapon_bonus + strength_bonus
+
+        # Every point of strength increases damage. Levels give a small bonus
+        strength_bonus = self.strength * 0.5
+        level_bonus = self.level * 0.5
+
+        return self.base_damage + weapon_bonus + strength_bonus + level_bonus
 
     @property
     def defense(self):
+        """Total defense score including stat and level bonuses."""
         armor_bonus = sum(
             slot['item'].defense_bonus
             for slot in self.equipment.values()
             if slot['item']
         )
-        dexterity_bonus = max(0, (self.dexterity - 10) // 2)  # +1 for every 2 points above 10
-        constitution_bonus = max(0, (self.constitution - 10) // 2)
-        return self.base_defense + armor_bonus + dexterity_bonus + constitution_bonus
+
+        # Every point of dexterity/constitution increases defense
+        dexterity_bonus = self.dexterity * 0.3
+        constitution_bonus = self.constitution * 0.2
+        level_bonus = self.level * 0.5
+
+        return self.base_defense + armor_bonus + dexterity_bonus + constitution_bonus + level_bonus
 
     def equip(self, item, slot_key):
         slot = self.equipment[slot_key]
@@ -142,8 +155,6 @@ class Entity:
         self.xp_to_next_level = int(self.xp_to_next_level * 1.5)
         self.max_health += 10
         self.health = self.max_health
-        self.base_damage += 2
-        self.base_defense += 1
         
         # Increase stats randomly
         stats = ['strength', 'dexterity', 'constitution', 'intelligence', 'willpower', 'charisma', 'appearance', 'perception']

@@ -1,4 +1,5 @@
 import random
+import math
 
 class CombatSystem:
     @staticmethod
@@ -9,19 +10,20 @@ class CombatSystem:
             None,
         )
         accuracy_bonus = weapon.accuracy_bonus if weapon else 0
-        attack_bonus = max(0, (attacker.strength - 10) // 2)
-        attack_bonus += max(0, (attacker.dexterity - 10) // 2)
-        attack_roll = random.randint(1, 20) + attack_bonus + accuracy_bonus
 
-        defense_bonus = max(0, (defender.dexterity - 10) // 2)
-        defense_bonus += max(0, (defender.constitution - 10) // 2)
-        defense_value = 10 + defender.defense + defense_bonus
+        # Calculate attack and defense scores
+        attack_score = attacker.damage + accuracy_bonus
+        defense_score = defender.defense
 
-        if attack_roll >= defense_value:
-            damage = max(1, base_damage + random.randint(-2, 2))
+        # Logistic function converts score difference into win probability
+        diff = attack_score - defense_score
+        hit_chance = 1 / (1 + math.exp(-diff / 5))
+
+        if random.random() < hit_chance:
+            damage = max(1, int(base_damage + random.randint(-2, 2)))
             defender.health -= damage
             messages.append(f"{attacker.name} hits {defender.name} for {damage} damage.")
-            
+
             if defender.health <= 0:
                 messages.append(f"{defender.name} is defeated!")
                 return True  # Enemy defeated
