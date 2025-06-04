@@ -164,9 +164,11 @@ class Entity:
         if dagger_base and bronze:
             dagger = Equipment(
                 f"{bronze.name} {dagger_base.name}",
-                dagger_base.char,
                 dagger_base.slot,
+                dagger_base.body_part,
                 bronze.power,
+                damage=dagger_base.damage,
+                ac=dagger_base.ac,
                 accuracy_bonus=dagger_base.accuracy_bonus,
             )
             self.equip(dagger, 'a')  # 'a' is the weapon slot
@@ -174,9 +176,11 @@ class Entity:
         if robe_base and cloth:
             robe = Equipment(
                 f"{cloth.name} {robe_base.name}",
-                robe_base.char,
                 robe_base.slot,
+                robe_base.body_part,
                 cloth.power,
+                damage=robe_base.damage,
+                ac=robe_base.ac,
             )
             self.equip(robe, 'f')  # 'f' is the armor slot
 

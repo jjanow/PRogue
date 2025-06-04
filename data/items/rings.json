@@ -1,52 +1,62 @@
 [
   {
     "name": "Ring",
-    "char": "=",
-    "slot": "ring (right)"
+    "slot": "ring (right)",
+    "body_part": "finger",
+    "ac": 1
   },
   {
     "name": "Band",
-    "char": "=",
-    "slot": "ring (right)"
+    "slot": "ring (right)",
+    "body_part": "finger",
+    "ac": 1
   },
   {
     "name": "Signet",
-    "char": "=",
-    "slot": "ring (right)"
+    "slot": "ring (right)",
+    "body_part": "finger",
+    "ac": 1
   },
   {
     "name": "Loop",
-    "char": "=",
-    "slot": "ring (right)"
+    "slot": "ring (right)",
+    "body_part": "finger",
+    "ac": 1
   },
   {
     "name": "Seal",
-    "char": "=",
-    "slot": "ring (right)"
+    "slot": "ring (right)",
+    "body_part": "finger",
+    "ac": 1
   },
   {
     "name": "Ring",
-    "char": "=",
-    "slot": "ring (left)"
+    "slot": "ring (left)",
+    "body_part": "finger",
+    "ac": 1
   },
   {
     "name": "Band",
-    "char": "=",
-    "slot": "ring (left)"
+    "slot": "ring (left)",
+    "body_part": "finger",
+    "ac": 1
   },
   {
     "name": "Signet",
-    "char": "=",
-    "slot": "ring (left)"
+    "slot": "ring (left)",
+    "body_part": "finger",
+    "ac": 1
   },
   {
     "name": "Loop",
-    "char": "=",
-    "slot": "ring (left)"
+    "slot": "ring (left)",
+    "body_part": "finger",
+    "ac": 1
   },
   {
     "name": "Seal",
-    "char": "=",
-    "slot": "ring (left)"
+    "slot": "ring (left)",
+    "body_part": "finger",
+    "ac": 1
   }
 ]

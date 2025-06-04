@@ -1,102 +1,182 @@
 [
   {
     "name": "Light Crossbow",
-    "char": "}",
-    "slot": "missile weapon"
+    "slot": "missile weapon",
+    "body_part": "hands",
+    "damage": {
+      "min": 2,
+      "max": 8
+    }
   },
   {
     "name": "Heavy Crossbow",
-    "char": "}",
-    "slot": "missile weapon"
+    "slot": "missile weapon",
+    "body_part": "hands",
+    "damage": {
+      "min": 2,
+      "max": 8
+    }
   },
   {
     "name": "Repeating Crossbow",
-    "char": "}",
-    "slot": "missile weapon"
+    "slot": "missile weapon",
+    "body_part": "hands",
+    "damage": {
+      "min": 2,
+      "max": 8
+    }
   },
   {
     "name": "Siege Crossbow",
-    "char": "}",
-    "slot": "missile weapon"
+    "slot": "missile weapon",
+    "body_part": "hands",
+    "damage": {
+      "min": 2,
+      "max": 8
+    }
   },
   {
     "name": "Arbalest",
-    "char": "}",
-    "slot": "missile weapon"
+    "slot": "missile weapon",
+    "body_part": "hands",
+    "damage": {
+      "min": 2,
+      "max": 8
+    }
   },
   {
     "name": "Simple Longbow",
-    "char": "}",
-    "slot": "missile weapon"
+    "slot": "missile weapon",
+    "body_part": "hands",
+    "damage": {
+      "min": 1,
+      "max": 6
+    }
   },
   {
     "name": "Composite Longbow",
-    "char": "}",
-    "slot": "missile weapon"
+    "slot": "missile weapon",
+    "body_part": "hands",
+    "damage": {
+      "min": 1,
+      "max": 6
+    }
   },
   {
     "name": "Recurve Longbow",
-    "char": "}",
-    "slot": "missile weapon"
+    "slot": "missile weapon",
+    "body_part": "hands",
+    "damage": {
+      "min": 1,
+      "max": 6
+    }
   },
   {
     "name": "Greatbow",
-    "char": "}",
-    "slot": "missile weapon"
+    "slot": "missile weapon",
+    "body_part": "hands",
+    "damage": {
+      "min": 1,
+      "max": 6
+    }
   },
   {
     "name": "Elven Longbow",
-    "char": "}",
-    "slot": "missile weapon"
+    "slot": "missile weapon",
+    "body_part": "hands",
+    "damage": {
+      "min": 1,
+      "max": 6
+    }
   },
   {
     "name": "Simple Shortbow",
-    "char": "}",
-    "slot": "missile weapon"
+    "slot": "missile weapon",
+    "body_part": "hands",
+    "damage": {
+      "min": 1,
+      "max": 6
+    }
   },
   {
     "name": "Composite Shortbow",
-    "char": "}",
-    "slot": "missile weapon"
+    "slot": "missile weapon",
+    "body_part": "hands",
+    "damage": {
+      "min": 1,
+      "max": 6
+    }
   },
   {
     "name": "Recurve Shortbow",
-    "char": "}",
-    "slot": "missile weapon"
+    "slot": "missile weapon",
+    "body_part": "hands",
+    "damage": {
+      "min": 1,
+      "max": 6
+    }
   },
   {
     "name": "Hunting Bow",
-    "char": "}",
-    "slot": "missile weapon"
+    "slot": "missile weapon",
+    "body_part": "hands",
+    "damage": {
+      "min": 1,
+      "max": 6
+    }
   },
   {
     "name": "Elven Shortbow",
-    "char": "}",
-    "slot": "missile weapon"
+    "slot": "missile weapon",
+    "body_part": "hands",
+    "damage": {
+      "min": 1,
+      "max": 6
+    }
   },
   {
     "name": "Simple Sling",
-    "char": "}",
-    "slot": "missile weapon"
+    "slot": "missile weapon",
+    "body_part": "hands",
+    "damage": {
+      "min": 1,
+      "max": 4
+    }
   },
   {
     "name": "Staff Sling",
-    "char": "}",
-    "slot": "missile weapon"
+    "slot": "missile weapon",
+    "body_part": "hands",
+    "damage": {
+      "min": 1,
+      "max": 4
+    }
   },
   {
     "name": "Heavy Sling",
-    "char": "}",
-    "slot": "missile weapon"
+    "slot": "missile weapon",
+    "body_part": "hands",
+    "damage": {
+      "min": 1,
+      "max": 4
+    }
   },
   {
     "name": "Whip Sling",
-    "char": "}",
-    "slot": "missile weapon"
+    "slot": "missile weapon",
+    "body_part": "hands",
+    "damage": {
+      "min": 1,
+      "max": 4
+    }
   },
   {
     "name": "Precision Sling",
-    "char": "}",
-    "slot": "missile weapon"
+    "slot": "missile weapon",
+    "body_part": "hands",
+    "damage": {
+      "min": 1,
+      "max": 4
+    }
   }
 ]

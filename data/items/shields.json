@@ -1,52 +1,62 @@
 [
   {
     "name": "Buckler",
-    "char": ")",
-    "slot": "shield"
+    "slot": "shield",
+    "body_part": "hand",
+    "ac": 2
   },
   {
     "name": "Kite Shield",
-    "char": ")",
-    "slot": "shield"
+    "slot": "shield",
+    "body_part": "hand",
+    "ac": 2
   },
   {
     "name": "Tower Shield",
-    "char": ")",
-    "slot": "shield"
+    "slot": "shield",
+    "body_part": "hand",
+    "ac": 2
   },
   {
     "name": "Round Shield",
-    "char": ")",
-    "slot": "shield"
+    "slot": "shield",
+    "body_part": "hand",
+    "ac": 2
   },
   {
     "name": "Heater Shield",
-    "char": ")",
-    "slot": "shield"
+    "slot": "shield",
+    "body_part": "hand",
+    "ac": 2
   },
   {
     "name": "Pavise",
-    "char": ")",
-    "slot": "shield"
+    "slot": "shield",
+    "body_part": "hand",
+    "ac": 2
   },
   {
     "name": "Aegis",
-    "char": ")",
-    "slot": "shield"
+    "slot": "shield",
+    "body_part": "hand",
+    "ac": 2
   },
   {
     "name": "Wall Shield",
-    "char": ")",
-    "slot": "shield"
+    "slot": "shield",
+    "body_part": "hand",
+    "ac": 2
   },
   {
     "name": "Barrel Lid",
-    "char": ")",
-    "slot": "shield"
+    "slot": "shield",
+    "body_part": "hand",
+    "ac": 2
   },
   {
     "name": "Spiked Shield",
-    "char": ")",
-    "slot": "shield"
+    "slot": "shield",
+    "body_part": "hand",
+    "ac": 2
   }
 ]

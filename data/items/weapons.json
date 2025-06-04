@@ -1,207 +1,371 @@
 [
   {
     "name": "Dagger",
-    "char": "/",
-    "slot": "weapon"
+    "slot": "weapon",
+    "body_part": "hands",
+    "damage": {
+      "min": 1,
+      "max": 4
+    }
   },
   {
     "name": "Arming Sword",
-    "char": "/",
-    "slot": "weapon"
+    "slot": "weapon",
+    "body_part": "hands",
+    "damage": {
+      "min": 1,
+      "max": 6
+    }
   },
   {
     "name": "Bastard Sword",
-    "char": "/",
-    "slot": "weapon"
+    "slot": "weapon",
+    "body_part": "hands",
+    "damage": {
+      "min": 1,
+      "max": 8
+    }
   },
   {
     "name": "Claymore",
-    "char": "/",
-    "slot": "weapon"
+    "slot": "weapon",
+    "body_part": "hands",
+    "damage": {
+      "min": 1,
+      "max": 8
+    }
   },
   {
     "name": "Flamberge",
-    "char": "/",
-    "slot": "weapon"
+    "slot": "weapon",
+    "body_part": "hands",
+    "damage": {
+      "min": 1,
+      "max": 8
+    }
   },
   {
     "name": "Katana",
-    "char": "/",
-    "slot": "weapon"
+    "slot": "weapon",
+    "body_part": "hands",
+    "damage": {
+      "min": 1,
+      "max": 8
+    }
   },
   {
     "name": "Gladius",
-    "char": "/",
-    "slot": "weapon"
+    "slot": "weapon",
+    "body_part": "hands",
+    "damage": {
+      "min": 1,
+      "max": 6
+    }
   },
   {
     "name": "Falchion",
-    "char": "/",
-    "slot": "weapon"
+    "slot": "weapon",
+    "body_part": "hands",
+    "damage": {
+      "min": 1,
+      "max": 6
+    }
   },
   {
     "name": "Cutlass",
-    "char": "/",
-    "slot": "weapon"
+    "slot": "weapon",
+    "body_part": "hands",
+    "damage": {
+      "min": 1,
+      "max": 6
+    }
   },
   {
     "name": "Sabre",
-    "char": "/",
-    "slot": "weapon"
+    "slot": "weapon",
+    "body_part": "hands",
+    "damage": {
+      "min": 1,
+      "max": 6
+    }
   },
   {
     "name": "Rapier",
-    "char": "/",
-    "slot": "weapon"
+    "slot": "weapon",
+    "body_part": "hands",
+    "damage": {
+      "min": 1,
+      "max": 6
+    }
   },
   {
     "name": "Stiletto",
-    "char": "/",
-    "slot": "weapon"
+    "slot": "weapon",
+    "body_part": "hands",
+    "damage": {
+      "min": 1,
+      "max": 4
+    }
   },
   {
     "name": "Dirk",
-    "char": "/",
-    "slot": "weapon"
+    "slot": "weapon",
+    "body_part": "hands",
+    "damage": {
+      "min": 1,
+      "max": 4
+    }
   },
   {
     "name": "Kris",
-    "char": "/",
-    "slot": "weapon"
+    "slot": "weapon",
+    "body_part": "hands",
+    "damage": {
+      "min": 1,
+      "max": 4
+    }
   },
   {
     "name": "Rondel",
-    "char": "/",
-    "slot": "weapon"
+    "slot": "weapon",
+    "body_part": "hands",
+    "damage": {
+      "min": 1,
+      "max": 4
+    }
   },
   {
     "name": "Cinquedea",
-    "char": "/",
-    "slot": "weapon"
+    "slot": "weapon",
+    "body_part": "hands",
+    "damage": {
+      "min": 1,
+      "max": 4
+    }
   },
   {
     "name": "Club",
-    "char": "/",
-    "slot": "weapon"
+    "slot": "weapon",
+    "body_part": "hands",
+    "damage": {
+      "min": 1,
+      "max": 4
+    }
   },
   {
     "name": "Morning Star",
-    "char": "/",
-    "slot": "weapon"
+    "slot": "weapon",
+    "body_part": "hands",
+    "damage": {
+      "min": 1,
+      "max": 6
+    }
   },
   {
     "name": "Flanged Mace",
-    "char": "/",
-    "slot": "weapon"
+    "slot": "weapon",
+    "body_part": "hands",
+    "damage": {
+      "min": 1,
+      "max": 6
+    }
   },
   {
     "name": "Holy Mace",
-    "char": "/",
-    "slot": "weapon"
+    "slot": "weapon",
+    "body_part": "hands",
+    "damage": {
+      "min": 1,
+      "max": 6
+    }
   },
   {
     "name": "War Mace",
-    "char": "/",
-    "slot": "weapon"
+    "slot": "weapon",
+    "body_part": "hands",
+    "damage": {
+      "min": 1,
+      "max": 6
+    }
   },
   {
     "name": "War Hammer",
-    "char": "/",
-    "slot": "weapon"
+    "slot": "weapon",
+    "body_part": "hands",
+    "damage": {
+      "min": 1,
+      "max": 8
+    }
   },
   {
     "name": "Maul",
-    "char": "/",
-    "slot": "weapon"
+    "slot": "weapon",
+    "body_part": "hands",
+    "damage": {
+      "min": 1,
+      "max": 8
+    }
   },
   {
     "name": "Sledge Hammer",
-    "char": "/",
-    "slot": "weapon"
+    "slot": "weapon",
+    "body_part": "hands",
+    "damage": {
+      "min": 1,
+      "max": 8
+    }
   },
   {
     "name": "Lucerne Hammer",
-    "char": "/",
-    "slot": "weapon"
+    "slot": "weapon",
+    "body_part": "hands",
+    "damage": {
+      "min": 1,
+      "max": 8
+    }
   },
   {
     "name": "Forge Hammer",
-    "char": "/",
-    "slot": "weapon"
+    "slot": "weapon",
+    "body_part": "hands",
+    "damage": {
+      "min": 1,
+      "max": 8
+    }
   },
   {
     "name": "Hand Axe",
-    "char": "/",
-    "slot": "weapon"
+    "slot": "weapon",
+    "body_part": "hands",
+    "damage": {
+      "min": 1,
+      "max": 6
+    }
   },
   {
     "name": "Battle Axe",
-    "char": "/",
-    "slot": "weapon"
+    "slot": "weapon",
+    "body_part": "hands",
+    "damage": {
+      "min": 1,
+      "max": 8
+    }
   },
   {
     "name": "Great Axe",
-    "char": "/",
-    "slot": "weapon"
+    "slot": "weapon",
+    "body_part": "hands",
+    "damage": {
+      "min": 1,
+      "max": 8
+    }
   },
   {
     "name": "Double Axe",
-    "char": "/",
-    "slot": "weapon"
+    "slot": "weapon",
+    "body_part": "hands",
+    "damage": {
+      "min": 1,
+      "max": 8
+    }
   },
   {
     "name": "Throwing Axe",
-    "char": "/",
-    "slot": "weapon"
+    "slot": "weapon",
+    "body_part": "hands",
+    "damage": {
+      "min": 1,
+      "max": 4
+    }
   },
   {
     "name": "Short Spear",
-    "char": "/",
-    "slot": "weapon"
+    "slot": "weapon",
+    "body_part": "hands",
+    "damage": {
+      "min": 1,
+      "max": 6
+    }
   },
   {
     "name": "Long Spear",
-    "char": "/",
-    "slot": "weapon"
+    "slot": "weapon",
+    "body_part": "hands",
+    "damage": {
+      "min": 1,
+      "max": 8
+    }
   },
   {
     "name": "Javelin",
-    "char": "/",
-    "slot": "weapon"
+    "slot": "weapon",
+    "body_part": "hands",
+    "damage": {
+      "min": 1,
+      "max": 4
+    }
   },
   {
     "name": "Pike",
-    "char": "/",
-    "slot": "weapon"
+    "slot": "weapon",
+    "body_part": "hands",
+    "damage": {
+      "min": 1,
+      "max": 8
+    }
   },
   {
     "name": "Trident",
-    "char": "/",
-    "slot": "weapon"
+    "slot": "weapon",
+    "body_part": "hands",
+    "damage": {
+      "min": 1,
+      "max": 6
+    }
   },
   {
     "name": "Halberd",
-    "char": "/",
-    "slot": "weapon"
+    "slot": "weapon",
+    "body_part": "hands",
+    "damage": {
+      "min": 1,
+      "max": 8
+    }
   },
   {
     "name": "Glaive",
-    "char": "/",
-    "slot": "weapon"
+    "slot": "weapon",
+    "body_part": "hands",
+    "damage": {
+      "min": 1,
+      "max": 8
+    }
   },
   {
     "name": "Naginata",
-    "char": "/",
-    "slot": "weapon"
+    "slot": "weapon",
+    "body_part": "hands",
+    "damage": {
+      "min": 1,
+      "max": 8
+    }
   },
   {
     "name": "Bardiche",
-    "char": "/",
-    "slot": "weapon"
+    "slot": "weapon",
+    "body_part": "hands",
+    "damage": {
+      "min": 1,
+      "max": 8
+    }
   },
   {
     "name": "Scythe",
-    "char": "/",
-    "slot": "weapon"
+    "slot": "weapon",
+    "body_part": "hands",
+    "damage": {
+      "min": 1,
+      "max": 8
+    }
   }
 ]

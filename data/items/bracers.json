@@ -1,52 +1,62 @@
 [
   {
     "name": "Wristguards",
-    "char": "|",
-    "slot": "bracers"
+    "slot": "bracers",
+    "body_part": "arms",
+    "ac": 1
   },
   {
     "name": "Bracers",
-    "char": "|",
-    "slot": "bracers"
+    "slot": "bracers",
+    "body_part": "arms",
+    "ac": 1
   },
   {
     "name": "Armguards",
-    "char": "|",
-    "slot": "bracers"
+    "slot": "bracers",
+    "body_part": "arms",
+    "ac": 1
   },
   {
     "name": "Cuffs",
-    "char": "|",
-    "slot": "bracers"
+    "slot": "bracers",
+    "body_part": "arms",
+    "ac": 1
   },
   {
     "name": "Armlets",
-    "char": "|",
-    "slot": "bracers"
+    "slot": "bracers",
+    "body_part": "arms",
+    "ac": 1
   },
   {
     "name": "Leather Bracers",
-    "char": "|",
-    "slot": "bracers"
+    "slot": "bracers",
+    "body_part": "arms",
+    "ac": 1
   },
   {
     "name": "Plate Bracers",
-    "char": "|",
-    "slot": "bracers"
+    "slot": "bracers",
+    "body_part": "arms",
+    "ac": 1
   },
   {
     "name": "Studded Bracers",
-    "char": "|",
-    "slot": "bracers"
+    "slot": "bracers",
+    "body_part": "arms",
+    "ac": 1
   },
   {
     "name": "Forearm Guards",
-    "char": "|",
-    "slot": "bracers"
+    "slot": "bracers",
+    "body_part": "arms",
+    "ac": 1
   },
   {
     "name": "Enchanted Bracers",
-    "char": "|",
-    "slot": "bracers"
+    "slot": "bracers",
+    "body_part": "arms",
+    "ac": 1
   }
 ]

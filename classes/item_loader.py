@@ -22,7 +22,7 @@ def load_items():
     consumables = []
     for item_data in consumable_data:
         effect = create_effect(item_data['effect'], item_data['value'])
-        item = Item(item_data['name'], item_data['char'], effect, item_data.get('duration', None))
+        item = Item(item_data['name'], effect, item_data.get('duration', None))
         consumables.append(item)
 
     materials = [Material(m['name'], m['power']) for m in material_data]
@@ -38,9 +38,11 @@ def load_items():
             accuracy = item_data.get('accuracy', 0)
             item = Equipment(
                 item_data['name'],
-                item_data['char'],
                 item_data['slot'],
+                item_data.get('body_part', 'unknown'),
                 0,
+                damage=item_data.get('damage'),
+                ac=item_data.get('ac'),
                 accuracy_bonus=accuracy,
             )
             equipment.append(item)

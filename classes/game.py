@@ -95,13 +95,15 @@ class Game:
             stat = material.power
             return Equipment(
                 name,
-                item_template.char,
                 item_template.slot,
+                item_template.body_part,
                 stat,
+                damage=item_template.damage,
+                ac=item_template.ac,
                 accuracy_bonus=item_template.accuracy_bonus,
             )
         else:
-            return Item(item_template.name, item_template.char, item_template.effect)
+            return Item(item_template.name, item_template.effect)
 
     def create_specific_item(self, category):
         if category == 'potion':
@@ -121,13 +123,15 @@ class Game:
             stat = material.power
             return Equipment(
                 name,
-                template.char,
                 template.slot,
+                template.body_part,
                 stat,
+                damage=template.damage,
+                ac=template.ac,
                 accuracy_bonus=template.accuracy_bonus,
             )
         else:
-            return Item(template.name, template.char, template.effect)
+            return Item(template.name, template.effect)
 
     def map_current_level(self):
         for y in range(self.height):
@@ -246,7 +250,7 @@ class Game:
             defense = int((random.randint(0, 3) + self.dungeon_level // 2) * difficulty_factor)
             enemy = Entity(x, y, 'E', f"Enemy Lv{self.dungeon_level}", health, damage, defense)
             if random.random() < 0.3:
-                enemy.add_item(Item("Health Potion", '!', lambda e: setattr(e, 'health', min(e.max_health, e.health + 20))))
+                enemy.add_item(Item("Health Potion", lambda e: setattr(e, 'health', min(e.max_health, e.health + 20))))
             self.enemies.append(enemy)
 
     def get_random_floor(self):

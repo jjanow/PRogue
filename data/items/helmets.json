@@ -1,52 +1,62 @@
 [
   {
     "name": "Cap",
-    "char": "^",
-    "slot": "helmet"
+    "slot": "helmet",
+    "body_part": "head",
+    "ac": 1
   },
   {
     "name": "Helm",
-    "char": "^",
-    "slot": "helmet"
+    "slot": "helmet",
+    "body_part": "head",
+    "ac": 1
   },
   {
     "name": "Great Helm",
-    "char": "^",
-    "slot": "helmet"
+    "slot": "helmet",
+    "body_part": "head",
+    "ac": 1
   },
   {
     "name": "Hood",
-    "char": "^",
-    "slot": "helmet"
+    "slot": "helmet",
+    "body_part": "head",
+    "ac": 1
   },
   {
     "name": "Visored Helm",
-    "char": "^",
-    "slot": "helmet"
+    "slot": "helmet",
+    "body_part": "head",
+    "ac": 1
   },
   {
     "name": "Sallet",
-    "char": "^",
-    "slot": "helmet"
+    "slot": "helmet",
+    "body_part": "head",
+    "ac": 1
   },
   {
     "name": "Bascinet",
-    "char": "^",
-    "slot": "helmet"
+    "slot": "helmet",
+    "body_part": "head",
+    "ac": 1
   },
   {
     "name": "Barbute",
-    "char": "^",
-    "slot": "helmet"
+    "slot": "helmet",
+    "body_part": "head",
+    "ac": 1
   },
   {
     "name": "Kettle Helm",
-    "char": "^",
-    "slot": "helmet"
+    "slot": "helmet",
+    "body_part": "head",
+    "ac": 1
   },
   {
     "name": "Morion",
-    "char": "^",
-    "slot": "helmet"
+    "slot": "helmet",
+    "body_part": "head",
+    "ac": 1
   }
 ]

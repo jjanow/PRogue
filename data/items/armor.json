@@ -1,52 +1,62 @@
 [
   {
     "name": "Robe",
-    "char": "[",
-    "slot": "armor"
+    "slot": "armor",
+    "body_part": "torso",
+    "ac": 3
   },
   {
     "name": "Chain Mail",
-    "char": "[",
-    "slot": "armor"
+    "slot": "armor",
+    "body_part": "torso",
+    "ac": 3
   },
   {
     "name": "Plate Armor",
-    "char": "[",
-    "slot": "armor"
+    "slot": "armor",
+    "body_part": "torso",
+    "ac": 3
   },
   {
     "name": "Leather Armor",
-    "char": "[",
-    "slot": "armor"
+    "slot": "armor",
+    "body_part": "torso",
+    "ac": 3
   },
   {
     "name": "Scale Mail",
-    "char": "[",
-    "slot": "armor"
+    "slot": "armor",
+    "body_part": "torso",
+    "ac": 3
   },
   {
     "name": "Breastplate",
-    "char": "[",
-    "slot": "armor"
+    "slot": "armor",
+    "body_part": "torso",
+    "ac": 3
   },
   {
     "name": "Lamellar Armor",
-    "char": "[",
-    "slot": "armor"
+    "slot": "armor",
+    "body_part": "torso",
+    "ac": 3
   },
   {
     "name": "Quilted Armor",
-    "char": "[",
-    "slot": "armor"
+    "slot": "armor",
+    "body_part": "torso",
+    "ac": 3
   },
   {
     "name": "Ring Mail",
-    "char": "[",
-    "slot": "armor"
+    "slot": "armor",
+    "body_part": "torso",
+    "ac": 3
   },
   {
     "name": "Banded Mail",
-    "char": "[",
-    "slot": "armor"
+    "slot": "armor",
+    "body_part": "torso",
+    "ac": 3
   }
 ]

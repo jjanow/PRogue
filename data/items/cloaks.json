@@ -1,52 +1,62 @@
 [
   {
     "name": "Cloak",
-    "char": "B",
-    "slot": "cloak"
+    "slot": "cloak",
+    "body_part": "back",
+    "ac": 1
   },
   {
     "name": "Cape",
-    "char": "B",
-    "slot": "cloak"
+    "slot": "cloak",
+    "body_part": "back",
+    "ac": 1
   },
   {
     "name": "Mantle",
-    "char": "B",
-    "slot": "cloak"
+    "slot": "cloak",
+    "body_part": "back",
+    "ac": 1
   },
   {
     "name": "Hooded Cloak",
-    "char": "B",
-    "slot": "cloak"
+    "slot": "cloak",
+    "body_part": "back",
+    "ac": 1
   },
   {
     "name": "Traveling Cloak",
-    "char": "B",
-    "slot": "cloak"
+    "slot": "cloak",
+    "body_part": "back",
+    "ac": 1
   },
   {
     "name": "Opera Cape",
-    "char": "B",
-    "slot": "cloak"
+    "slot": "cloak",
+    "body_part": "back",
+    "ac": 1
   },
   {
     "name": "Duster",
-    "char": "B",
-    "slot": "cloak"
+    "slot": "cloak",
+    "body_part": "back",
+    "ac": 1
   },
   {
     "name": "Pelerine",
-    "char": "B",
-    "slot": "cloak"
+    "slot": "cloak",
+    "body_part": "back",
+    "ac": 1
   },
   {
     "name": "Shroud",
-    "char": "B",
-    "slot": "cloak"
+    "slot": "cloak",
+    "body_part": "back",
+    "ac": 1
   },
   {
     "name": "Poncho",
-    "char": "B",
-    "slot": "cloak"
+    "slot": "cloak",
+    "body_part": "back",
+    "ac": 1
   }
 ]

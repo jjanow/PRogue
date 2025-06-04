@@ -1,52 +1,62 @@
 [
   {
     "name": "Gloves",
-    "char": "]",
-    "slot": "gauntlets"
+    "slot": "gauntlets",
+    "body_part": "hands",
+    "ac": 1
   },
   {
     "name": "Gauntlets",
-    "char": "]",
-    "slot": "gauntlets"
+    "slot": "gauntlets",
+    "body_part": "hands",
+    "ac": 1
   },
   {
     "name": "Vambraces",
-    "char": "]",
-    "slot": "gauntlets"
+    "slot": "gauntlets",
+    "body_part": "hands",
+    "ac": 1
   },
   {
     "name": "Mitts",
-    "char": "]",
-    "slot": "gauntlets"
+    "slot": "gauntlets",
+    "body_part": "hands",
+    "ac": 1
   },
   {
     "name": "Plate Gauntlets",
-    "char": "]",
-    "slot": "gauntlets"
+    "slot": "gauntlets",
+    "body_part": "hands",
+    "ac": 1
   },
   {
     "name": "Chain Gauntlets",
-    "char": "]",
-    "slot": "gauntlets"
+    "slot": "gauntlets",
+    "body_part": "hands",
+    "ac": 1
   },
   {
     "name": "Leather Gloves",
-    "char": "]",
-    "slot": "gauntlets"
+    "slot": "gauntlets",
+    "body_part": "hands",
+    "ac": 1
   },
   {
     "name": "Battle Gauntlets",
-    "char": "]",
-    "slot": "gauntlets"
+    "slot": "gauntlets",
+    "body_part": "hands",
+    "ac": 1
   },
   {
     "name": "Spiked Gauntlets",
-    "char": "]",
-    "slot": "gauntlets"
+    "slot": "gauntlets",
+    "body_part": "hands",
+    "ac": 1
   },
   {
     "name": "Enchanted Gloves",
-    "char": "]",
-    "slot": "gauntlets"
+    "slot": "gauntlets",
+    "body_part": "hands",
+    "ac": 1
   }
 ]

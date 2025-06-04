@@ -11,6 +11,7 @@ os.environ.setdefault("ESCDELAY", "25")
 sys.path.append(os.path.dirname(os.path.realpath(__file__)))
 
 from classes.game import Game
+from classes.item import Equipment
 from curses import KEY_NPAGE, KEY_PPAGE
 
 def draw(stdscr, game):
@@ -20,8 +21,27 @@ def draw(stdscr, game):
         for x, cell in enumerate(row):
             stdscr.addch(y, x, cell)
 
+    icon_map = {
+        'weapon': '/',
+        'missile weapon': '}',
+        'helmet': '^',
+        'armor': '[',
+        'cloak': 'B',
+        'shield': ')',
+        'boots': '(',
+        'bracers': '|',
+        'gauntlets': ']',
+        'girdle': ':',
+        'amulet': '"',
+        'ring (right)': '=',
+        'ring (left)': '=',
+    }
     for item in game.items:
-        stdscr.addch(item.y, item.x, item.char)
+        if isinstance(item, Equipment):
+            ch = icon_map.get(item.slot, '?')
+        else:
+            ch = '!'
+        stdscr.addch(item.y, item.x, ch)
 
     for enemy in game.enemies:
         stdscr.addch(enemy.y, enemy.x, enemy.char)
