@@ -3,6 +3,10 @@ from curses import wrapper
 import sys
 import os
 
+# Reduce the delay for detecting an isolated ESC key press. The default delay
+# can make exiting menus feel sluggish.
+os.environ.setdefault("ESCDELAY", "25")
+
 # Add the current directory to Python path to find the 'classes' package
 sys.path.append(os.path.dirname(os.path.realpath(__file__)))
 
@@ -44,6 +48,8 @@ def draw(stdscr, game):
 def main(stdscr):
     # Initialize curses
     curses.start_color()
+    # Further reduce the ESC key delay inside curses itself
+    curses.set_escdelay(25)
     curses.init_pair(1, curses.COLOR_WHITE, curses.COLOR_BLACK)  # Default
     curses.init_pair(2, curses.COLOR_RED, curses.COLOR_BLACK)    # Player
     curses.init_pair(3, curses.COLOR_GREEN, curses.COLOR_BLACK)  # Monsters
