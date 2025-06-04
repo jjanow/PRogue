@@ -152,19 +152,6 @@ class Game:
         elif 97 <= key <= 122:  # a-z
             self.drop_backpack_item(chr(key))
 
-    def handle_drop_input(self, key):
-        inventory_items = self.player.get_inventory_items()
-        max_pages = (len(inventory_items) - 1) // self.items_per_page
-
-        if key == 27:  # ESC key
-            self.drop_mode = False
-        elif key in [ord('+'), ord('='), KEY_NPAGE]:
-            self.backpack_page = min(self.backpack_page + 1, max_pages)
-        elif key in [ord('-'), KEY_PPAGE]:
-            self.backpack_page = max(0, self.backpack_page - 1)
-        elif 97 <= key <= 122:  # a-z
-            self.drop_backpack_item(chr(key))
-
     def draw(self, stdscr):
         self.renderer.draw(stdscr)
 
@@ -362,29 +349,11 @@ class Game:
         self.wait_for_key()
         sys.exit()
 
-    def use_stairs(self, direction):
-        if direction == 'down' and self.player.x == self.stairs_x and self.player.y == self.stairs_y:
-            self.next_level()
-        elif direction == 'up' and self.player.x == self.stairs_up_x and self.player.y == self.stairs_up_y:
-            if self.dungeon_level > 1:
-                self.previous_level()
-            else:
-                self.exit_game()
-        else:
-            self.messages.append("There are no stairs here.")
-    
     def wait_for_key(self):
         # This method should be implemented to wait for a key press
         # For now, we'll just pass
         pass
     
-    def next_level(self):
-        self.dungeon_level += 1
-        self.messages.append(f"You descend to dungeon level {self.dungeon_level}.")
-        self.enemies.clear()
-        self.items.clear()
-        self.generate_level()
-
     def previous_level(self):
         self.dungeon_level -= 1
         self.messages.append(f"You ascend to dungeon level {self.dungeon_level}.")
