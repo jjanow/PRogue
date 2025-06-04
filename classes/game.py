@@ -439,7 +439,7 @@ class Game:
 
                 if animate and self.stdscr:
                     self.renderer.draw(self.stdscr)
-                    time.sleep(0.025)
+                    time.sleep(0.005)
 
                 if (self.player.x, self.player.y) == (prev_x, prev_y):
                     break
