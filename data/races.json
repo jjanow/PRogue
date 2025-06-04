@@ -2,14 +2,14 @@
   {
     "name": "Human",
     "bonuses": {
-      "strength": 1,
-      "dexterity": 1,
-      "constitution": 1,
-      "intelligence": 1,
-      "willpower": 1,
-      "charisma": 1,
-      "appearance": 1,
-      "perception": 1
+      "strength": 0,
+      "dexterity": 0,
+      "constitution": 0,
+      "intelligence": 0,
+      "willpower": 0,
+      "charisma": 0,
+      "appearance": 0,
+      "perception": 0
     }
   },
   {
@@ -17,35 +17,45 @@
     "bonuses": {
       "dexterity": 2,
       "perception": 2,
-      "appearance": 1
+      "appearance": 1,
+      "constitution": -2,
+      "strength": -1
     }
   },
   {
     "name": "Dwarf",
     "bonuses": {
       "constitution": 2,
-      "willpower": 1
+      "willpower": 1,
+      "charisma": -1,
+      "dexterity": -1
     }
   },
   {
     "name": "Halfling",
     "bonuses": {
       "dexterity": 2,
-      "charisma": 1
+      "charisma": 1,
+      "strength": -1,
+      "constitution": -1
     }
   },
   {
     "name": "Orc",
     "bonuses": {
       "strength": 2,
-      "constitution": 1
+      "constitution": 1,
+      "charisma": -2,
+      "intelligence": -1
     }
   },
   {
     "name": "Gnome",
     "bonuses": {
       "intelligence": 2,
-      "dexterity": 1
+      "dexterity": 1,
+      "strength": -1,
+      "constitution": -1
     }
   }
 ]
