@@ -63,6 +63,8 @@ class Game:
         self.quit = False
         self.walk_mode = False
         self.auto_explore_mode = False
+        self.options_mode = False
+        self.walk_speed = 5  # milliseconds between auto-move steps
 
     def open_character_stats_screen(self):
         self.character_stats_mode = True
@@ -101,17 +103,14 @@ class Game:
     def create_specific_item(self, category):
         if category == 'potion':
             template = random.choice(all_consumables)
-        elif category == 'weapon':
-            pool = [e for e in all_equipment if e.slot in ['weapon', 'missile weapon']]
-            template = random.choice(pool)
-        elif category == 'armor':
-            pool = [e for e in all_equipment if e.slot == 'armor']
-            template = random.choice(pool)
-        elif category == 'accessory':
-            pool = [e for e in all_equipment if e.slot not in ['weapon', 'missile weapon', 'armor']]
-            template = random.choice(pool)
         else:
-            template = random.choice(all_items)
+            if category == 'ring':
+                pool = [e for e in all_equipment if e.slot.startswith('ring')]
+            else:
+                pool = [e for e in all_equipment if e.slot == category]
+            if not pool:
+                pool = all_equipment
+            template = random.choice(pool)
 
         if isinstance(template, Equipment):
             material = random.choice(all_materials)
@@ -439,7 +438,7 @@ class Game:
 
                 if animate and self.stdscr:
                     self.renderer.draw(self.stdscr)
-                    time.sleep(0.005)
+                    time.sleep(self.walk_speed / 1000.0)
 
                 if (self.player.x, self.player.y) == (prev_x, prev_y):
                     break
