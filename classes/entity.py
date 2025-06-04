@@ -69,7 +69,8 @@ class Entity:
         strength_bonus = self.strength * 0.5
         level_bonus = self.level * 0.5
 
-        return self.base_damage + weapon_bonus + strength_bonus + level_bonus
+        total_damage = self.base_damage + weapon_bonus + strength_bonus + level_bonus
+        return round(total_damage, 1)
 
     @property
     def defense(self):
@@ -85,7 +86,14 @@ class Entity:
         constitution_bonus = self.constitution * 0.2
         level_bonus = self.level * 0.5
 
-        return self.base_defense + armor_bonus + dexterity_bonus + constitution_bonus + level_bonus
+        total_defense = (
+            self.base_defense
+            + armor_bonus
+            + dexterity_bonus
+            + constitution_bonus
+            + level_bonus
+        )
+        return round(total_defense, 1)
 
     def equip(self, item, slot_key):
         slot = self.equipment[slot_key]
