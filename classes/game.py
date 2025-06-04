@@ -424,6 +424,7 @@ class Game:
             item, _ = inventory_items[index]
             self.player.remove_item(item)
             item.x, item.y = self.player.x, self.player.y
+            item.seen = True  # Player is aware of dropped items immediately
             self.items.append(item)
             self.messages.append(f"You dropped {item.name}.")
             self.drop_mode = False
@@ -437,6 +438,7 @@ class Game:
             item, _ = inventory_items[index]
             self.player.remove_item(item)
             item.x, item.y = self.player.x, self.player.y
+            item.seen = True  # Player is aware of dropped items immediately
             self.items.append(item)
             self.messages.append(f"You dropped {item.name}.")
             self.drop_mode = False
@@ -799,6 +801,13 @@ class Game:
 
                 self.visible[y][x] = True
                 self.explored[y][x] = True
+
+        # Mark any items within the current field of view as seen so they remain
+        # visible on explored tiles even after they leave the player's sight.
+        for item in self.items:
+            if 0 <= item.y < self.height and 0 <= item.x < self.width:
+                if self.visible[item.y][item.x]:
+                    item.seen = True
     
     def open_equipment_screen(self):
         self.equipment_mode = True
