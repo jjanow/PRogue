@@ -1,0 +1,2402 @@
+[
+  {
+    "name": "Bronze Arming Sword",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 5
+  },
+  {
+    "name": "Iron Arming Sword",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 6
+  },
+  {
+    "name": "Steel Arming Sword",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 7
+  },
+  {
+    "name": "Fine Steel Arming Sword",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 8
+  },
+  {
+    "name": "Mithril Arming Sword",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 9
+  },
+  {
+    "name": "Adamantine Arming Sword",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 10
+  },
+  {
+    "name": "Obsidian Arming Sword",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 11
+  },
+  {
+    "name": "Dragonbone Arming Sword",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 12
+  },
+  {
+    "name": "Ethereal Arming Sword",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 13
+  },
+  {
+    "name": "Legendary Arming Sword",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 14
+  },
+  {
+    "name": "Bronze Bastard Sword",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 5
+  },
+  {
+    "name": "Iron Bastard Sword",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 6
+  },
+  {
+    "name": "Steel Bastard Sword",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 7
+  },
+  {
+    "name": "Fine Steel Bastard Sword",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 8
+  },
+  {
+    "name": "Mithril Bastard Sword",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 9
+  },
+  {
+    "name": "Adamantine Bastard Sword",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 10
+  },
+  {
+    "name": "Obsidian Bastard Sword",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 11
+  },
+  {
+    "name": "Dragonbone Bastard Sword",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 12
+  },
+  {
+    "name": "Ethereal Bastard Sword",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 13
+  },
+  {
+    "name": "Legendary Bastard Sword",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 14
+  },
+  {
+    "name": "Bronze Claymore",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 5
+  },
+  {
+    "name": "Iron Claymore",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 6
+  },
+  {
+    "name": "Steel Claymore",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 7
+  },
+  {
+    "name": "Fine Steel Claymore",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 8
+  },
+  {
+    "name": "Mithril Claymore",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 9
+  },
+  {
+    "name": "Adamantine Claymore",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 10
+  },
+  {
+    "name": "Obsidian Claymore",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 11
+  },
+  {
+    "name": "Dragonbone Claymore",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 12
+  },
+  {
+    "name": "Ethereal Claymore",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 13
+  },
+  {
+    "name": "Legendary Claymore",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 14
+  },
+  {
+    "name": "Bronze Flamberge",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 5
+  },
+  {
+    "name": "Iron Flamberge",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 6
+  },
+  {
+    "name": "Steel Flamberge",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 7
+  },
+  {
+    "name": "Fine Steel Flamberge",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 8
+  },
+  {
+    "name": "Mithril Flamberge",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 9
+  },
+  {
+    "name": "Adamantine Flamberge",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 10
+  },
+  {
+    "name": "Obsidian Flamberge",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 11
+  },
+  {
+    "name": "Dragonbone Flamberge",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 12
+  },
+  {
+    "name": "Ethereal Flamberge",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 13
+  },
+  {
+    "name": "Legendary Flamberge",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 14
+  },
+  {
+    "name": "Bronze Katana",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 5
+  },
+  {
+    "name": "Iron Katana",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 6
+  },
+  {
+    "name": "Steel Katana",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 7
+  },
+  {
+    "name": "Fine Steel Katana",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 8
+  },
+  {
+    "name": "Mithril Katana",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 9
+  },
+  {
+    "name": "Adamantine Katana",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 10
+  },
+  {
+    "name": "Obsidian Katana",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 11
+  },
+  {
+    "name": "Dragonbone Katana",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 12
+  },
+  {
+    "name": "Ethereal Katana",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 13
+  },
+  {
+    "name": "Legendary Katana",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 14
+  },
+  {
+    "name": "Bronze Gladius",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 4
+  },
+  {
+    "name": "Iron Gladius",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 5
+  },
+  {
+    "name": "Steel Gladius",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 6
+  },
+  {
+    "name": "Fine Steel Gladius",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 7
+  },
+  {
+    "name": "Mithril Gladius",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 8
+  },
+  {
+    "name": "Adamantine Gladius",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 9
+  },
+  {
+    "name": "Obsidian Gladius",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 10
+  },
+  {
+    "name": "Dragonbone Gladius",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 11
+  },
+  {
+    "name": "Ethereal Gladius",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 12
+  },
+  {
+    "name": "Legendary Gladius",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 13
+  },
+  {
+    "name": "Bronze Falchion",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 4
+  },
+  {
+    "name": "Iron Falchion",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 5
+  },
+  {
+    "name": "Steel Falchion",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 6
+  },
+  {
+    "name": "Fine Steel Falchion",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 7
+  },
+  {
+    "name": "Mithril Falchion",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 8
+  },
+  {
+    "name": "Adamantine Falchion",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 9
+  },
+  {
+    "name": "Obsidian Falchion",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 10
+  },
+  {
+    "name": "Dragonbone Falchion",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 11
+  },
+  {
+    "name": "Ethereal Falchion",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 12
+  },
+  {
+    "name": "Legendary Falchion",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 13
+  },
+  {
+    "name": "Bronze Cutlass",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 4
+  },
+  {
+    "name": "Iron Cutlass",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 5
+  },
+  {
+    "name": "Steel Cutlass",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 6
+  },
+  {
+    "name": "Fine Steel Cutlass",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 7
+  },
+  {
+    "name": "Mithril Cutlass",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 8
+  },
+  {
+    "name": "Adamantine Cutlass",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 9
+  },
+  {
+    "name": "Obsidian Cutlass",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 10
+  },
+  {
+    "name": "Dragonbone Cutlass",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 11
+  },
+  {
+    "name": "Ethereal Cutlass",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 12
+  },
+  {
+    "name": "Legendary Cutlass",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 13
+  },
+  {
+    "name": "Bronze Sabre",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 4
+  },
+  {
+    "name": "Iron Sabre",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 5
+  },
+  {
+    "name": "Steel Sabre",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 6
+  },
+  {
+    "name": "Fine Steel Sabre",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 7
+  },
+  {
+    "name": "Mithril Sabre",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 8
+  },
+  {
+    "name": "Adamantine Sabre",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 9
+  },
+  {
+    "name": "Obsidian Sabre",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 10
+  },
+  {
+    "name": "Dragonbone Sabre",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 11
+  },
+  {
+    "name": "Ethereal Sabre",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 12
+  },
+  {
+    "name": "Legendary Sabre",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 13
+  },
+  {
+    "name": "Bronze Rapier",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 4
+  },
+  {
+    "name": "Iron Rapier",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 5
+  },
+  {
+    "name": "Steel Rapier",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 6
+  },
+  {
+    "name": "Fine Steel Rapier",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 7
+  },
+  {
+    "name": "Mithril Rapier",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 8
+  },
+  {
+    "name": "Adamantine Rapier",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 9
+  },
+  {
+    "name": "Obsidian Rapier",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 10
+  },
+  {
+    "name": "Dragonbone Rapier",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 11
+  },
+  {
+    "name": "Ethereal Rapier",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 12
+  },
+  {
+    "name": "Legendary Rapier",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 13
+  },
+  {
+    "name": "Bronze Stiletto",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 3
+  },
+  {
+    "name": "Iron Stiletto",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 4
+  },
+  {
+    "name": "Steel Stiletto",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 5
+  },
+  {
+    "name": "Fine Steel Stiletto",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 6
+  },
+  {
+    "name": "Mithril Stiletto",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 7
+  },
+  {
+    "name": "Adamantine Stiletto",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 8
+  },
+  {
+    "name": "Obsidian Stiletto",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 9
+  },
+  {
+    "name": "Dragonbone Stiletto",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 10
+  },
+  {
+    "name": "Ethereal Stiletto",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 11
+  },
+  {
+    "name": "Legendary Stiletto",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 12
+  },
+  {
+    "name": "Bronze Dirk",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 3
+  },
+  {
+    "name": "Iron Dirk",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 4
+  },
+  {
+    "name": "Steel Dirk",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 5
+  },
+  {
+    "name": "Fine Steel Dirk",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 6
+  },
+  {
+    "name": "Mithril Dirk",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 7
+  },
+  {
+    "name": "Adamantine Dirk",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 8
+  },
+  {
+    "name": "Obsidian Dirk",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 9
+  },
+  {
+    "name": "Dragonbone Dirk",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 10
+  },
+  {
+    "name": "Ethereal Dirk",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 11
+  },
+  {
+    "name": "Legendary Dirk",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 12
+  },
+  {
+    "name": "Bronze Kris",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 3
+  },
+  {
+    "name": "Iron Kris",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 4
+  },
+  {
+    "name": "Steel Kris",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 5
+  },
+  {
+    "name": "Fine Steel Kris",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 6
+  },
+  {
+    "name": "Mithril Kris",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 7
+  },
+  {
+    "name": "Adamantine Kris",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 8
+  },
+  {
+    "name": "Obsidian Kris",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 9
+  },
+  {
+    "name": "Dragonbone Kris",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 10
+  },
+  {
+    "name": "Ethereal Kris",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 11
+  },
+  {
+    "name": "Legendary Kris",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 12
+  },
+  {
+    "name": "Bronze Rondel",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 3
+  },
+  {
+    "name": "Iron Rondel",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 4
+  },
+  {
+    "name": "Steel Rondel",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 5
+  },
+  {
+    "name": "Fine Steel Rondel",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 6
+  },
+  {
+    "name": "Mithril Rondel",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 7
+  },
+  {
+    "name": "Adamantine Rondel",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 8
+  },
+  {
+    "name": "Obsidian Rondel",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 9
+  },
+  {
+    "name": "Dragonbone Rondel",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 10
+  },
+  {
+    "name": "Ethereal Rondel",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 11
+  },
+  {
+    "name": "Legendary Rondel",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 12
+  },
+  {
+    "name": "Bronze Cinquedea",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 3
+  },
+  {
+    "name": "Iron Cinquedea",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 4
+  },
+  {
+    "name": "Steel Cinquedea",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 5
+  },
+  {
+    "name": "Fine Steel Cinquedea",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 6
+  },
+  {
+    "name": "Mithril Cinquedea",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 7
+  },
+  {
+    "name": "Adamantine Cinquedea",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 8
+  },
+  {
+    "name": "Obsidian Cinquedea",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 9
+  },
+  {
+    "name": "Dragonbone Cinquedea",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 10
+  },
+  {
+    "name": "Ethereal Cinquedea",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 11
+  },
+  {
+    "name": "Legendary Cinquedea",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 12
+  },
+  {
+    "name": "Bronze Club",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 5
+  },
+  {
+    "name": "Iron Club",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 6
+  },
+  {
+    "name": "Steel Club",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 7
+  },
+  {
+    "name": "Fine Steel Club",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 8
+  },
+  {
+    "name": "Mithril Club",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 9
+  },
+  {
+    "name": "Adamantine Club",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 10
+  },
+  {
+    "name": "Obsidian Club",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 11
+  },
+  {
+    "name": "Dragonbone Club",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 12
+  },
+  {
+    "name": "Ethereal Club",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 13
+  },
+  {
+    "name": "Legendary Club",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 14
+  },
+  {
+    "name": "Bronze Morning Star",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 5
+  },
+  {
+    "name": "Iron Morning Star",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 6
+  },
+  {
+    "name": "Steel Morning Star",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 7
+  },
+  {
+    "name": "Fine Steel Morning Star",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 8
+  },
+  {
+    "name": "Mithril Morning Star",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 9
+  },
+  {
+    "name": "Adamantine Morning Star",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 10
+  },
+  {
+    "name": "Obsidian Morning Star",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 11
+  },
+  {
+    "name": "Dragonbone Morning Star",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 12
+  },
+  {
+    "name": "Ethereal Morning Star",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 13
+  },
+  {
+    "name": "Legendary Morning Star",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 14
+  },
+  {
+    "name": "Bronze Flanged Mace",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 5
+  },
+  {
+    "name": "Iron Flanged Mace",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 6
+  },
+  {
+    "name": "Steel Flanged Mace",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 7
+  },
+  {
+    "name": "Fine Steel Flanged Mace",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 8
+  },
+  {
+    "name": "Mithril Flanged Mace",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 9
+  },
+  {
+    "name": "Adamantine Flanged Mace",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 10
+  },
+  {
+    "name": "Obsidian Flanged Mace",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 11
+  },
+  {
+    "name": "Dragonbone Flanged Mace",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 12
+  },
+  {
+    "name": "Ethereal Flanged Mace",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 13
+  },
+  {
+    "name": "Legendary Flanged Mace",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 14
+  },
+  {
+    "name": "Bronze Holy Mace",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 5
+  },
+  {
+    "name": "Iron Holy Mace",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 6
+  },
+  {
+    "name": "Steel Holy Mace",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 7
+  },
+  {
+    "name": "Fine Steel Holy Mace",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 8
+  },
+  {
+    "name": "Mithril Holy Mace",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 9
+  },
+  {
+    "name": "Adamantine Holy Mace",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 10
+  },
+  {
+    "name": "Obsidian Holy Mace",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 11
+  },
+  {
+    "name": "Dragonbone Holy Mace",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 12
+  },
+  {
+    "name": "Ethereal Holy Mace",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 13
+  },
+  {
+    "name": "Legendary Holy Mace",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 14
+  },
+  {
+    "name": "Bronze War Mace",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 5
+  },
+  {
+    "name": "Iron War Mace",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 6
+  },
+  {
+    "name": "Steel War Mace",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 7
+  },
+  {
+    "name": "Fine Steel War Mace",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 8
+  },
+  {
+    "name": "Mithril War Mace",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 9
+  },
+  {
+    "name": "Adamantine War Mace",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 10
+  },
+  {
+    "name": "Obsidian War Mace",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 11
+  },
+  {
+    "name": "Dragonbone War Mace",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 12
+  },
+  {
+    "name": "Ethereal War Mace",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 13
+  },
+  {
+    "name": "Legendary War Mace",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 14
+  },
+  {
+    "name": "Bronze War Hammer",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 6
+  },
+  {
+    "name": "Iron War Hammer",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 7
+  },
+  {
+    "name": "Steel War Hammer",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 8
+  },
+  {
+    "name": "Fine Steel War Hammer",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 9
+  },
+  {
+    "name": "Mithril War Hammer",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 10
+  },
+  {
+    "name": "Adamantine War Hammer",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 11
+  },
+  {
+    "name": "Obsidian War Hammer",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 12
+  },
+  {
+    "name": "Dragonbone War Hammer",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 13
+  },
+  {
+    "name": "Ethereal War Hammer",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 14
+  },
+  {
+    "name": "Legendary War Hammer",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 15
+  },
+  {
+    "name": "Bronze Maul",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 6
+  },
+  {
+    "name": "Iron Maul",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 7
+  },
+  {
+    "name": "Steel Maul",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 8
+  },
+  {
+    "name": "Fine Steel Maul",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 9
+  },
+  {
+    "name": "Mithril Maul",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 10
+  },
+  {
+    "name": "Adamantine Maul",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 11
+  },
+  {
+    "name": "Obsidian Maul",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 12
+  },
+  {
+    "name": "Dragonbone Maul",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 13
+  },
+  {
+    "name": "Ethereal Maul",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 14
+  },
+  {
+    "name": "Legendary Maul",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 15
+  },
+  {
+    "name": "Bronze Sledge Hammer",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 6
+  },
+  {
+    "name": "Iron Sledge Hammer",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 7
+  },
+  {
+    "name": "Steel Sledge Hammer",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 8
+  },
+  {
+    "name": "Fine Steel Sledge Hammer",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 9
+  },
+  {
+    "name": "Mithril Sledge Hammer",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 10
+  },
+  {
+    "name": "Adamantine Sledge Hammer",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 11
+  },
+  {
+    "name": "Obsidian Sledge Hammer",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 12
+  },
+  {
+    "name": "Dragonbone Sledge Hammer",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 13
+  },
+  {
+    "name": "Ethereal Sledge Hammer",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 14
+  },
+  {
+    "name": "Legendary Sledge Hammer",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 15
+  },
+  {
+    "name": "Bronze Lucerne Hammer",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 6
+  },
+  {
+    "name": "Iron Lucerne Hammer",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 7
+  },
+  {
+    "name": "Steel Lucerne Hammer",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 8
+  },
+  {
+    "name": "Fine Steel Lucerne Hammer",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 9
+  },
+  {
+    "name": "Mithril Lucerne Hammer",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 10
+  },
+  {
+    "name": "Adamantine Lucerne Hammer",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 11
+  },
+  {
+    "name": "Obsidian Lucerne Hammer",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 12
+  },
+  {
+    "name": "Dragonbone Lucerne Hammer",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 13
+  },
+  {
+    "name": "Ethereal Lucerne Hammer",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 14
+  },
+  {
+    "name": "Legendary Lucerne Hammer",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 15
+  },
+  {
+    "name": "Bronze Forge Hammer",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 6
+  },
+  {
+    "name": "Iron Forge Hammer",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 7
+  },
+  {
+    "name": "Steel Forge Hammer",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 8
+  },
+  {
+    "name": "Fine Steel Forge Hammer",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 9
+  },
+  {
+    "name": "Mithril Forge Hammer",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 10
+  },
+  {
+    "name": "Adamantine Forge Hammer",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 11
+  },
+  {
+    "name": "Obsidian Forge Hammer",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 12
+  },
+  {
+    "name": "Dragonbone Forge Hammer",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 13
+  },
+  {
+    "name": "Ethereal Forge Hammer",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 14
+  },
+  {
+    "name": "Legendary Forge Hammer",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 15
+  },
+  {
+    "name": "Bronze Hand Axe",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 5
+  },
+  {
+    "name": "Iron Hand Axe",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 6
+  },
+  {
+    "name": "Steel Hand Axe",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 7
+  },
+  {
+    "name": "Fine Steel Hand Axe",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 8
+  },
+  {
+    "name": "Mithril Hand Axe",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 9
+  },
+  {
+    "name": "Adamantine Hand Axe",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 10
+  },
+  {
+    "name": "Obsidian Hand Axe",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 11
+  },
+  {
+    "name": "Dragonbone Hand Axe",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 12
+  },
+  {
+    "name": "Ethereal Hand Axe",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 13
+  },
+  {
+    "name": "Legendary Hand Axe",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 14
+  },
+  {
+    "name": "Bronze Battle Axe",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 5
+  },
+  {
+    "name": "Iron Battle Axe",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 6
+  },
+  {
+    "name": "Steel Battle Axe",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 7
+  },
+  {
+    "name": "Fine Steel Battle Axe",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 8
+  },
+  {
+    "name": "Mithril Battle Axe",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 9
+  },
+  {
+    "name": "Adamantine Battle Axe",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 10
+  },
+  {
+    "name": "Obsidian Battle Axe",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 11
+  },
+  {
+    "name": "Dragonbone Battle Axe",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 12
+  },
+  {
+    "name": "Ethereal Battle Axe",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 13
+  },
+  {
+    "name": "Legendary Battle Axe",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 14
+  },
+  {
+    "name": "Bronze Great Axe",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 5
+  },
+  {
+    "name": "Iron Great Axe",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 6
+  },
+  {
+    "name": "Steel Great Axe",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 7
+  },
+  {
+    "name": "Fine Steel Great Axe",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 8
+  },
+  {
+    "name": "Mithril Great Axe",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 9
+  },
+  {
+    "name": "Adamantine Great Axe",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 10
+  },
+  {
+    "name": "Obsidian Great Axe",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 11
+  },
+  {
+    "name": "Dragonbone Great Axe",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 12
+  },
+  {
+    "name": "Ethereal Great Axe",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 13
+  },
+  {
+    "name": "Legendary Great Axe",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 14
+  },
+  {
+    "name": "Bronze Double Axe",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 5
+  },
+  {
+    "name": "Iron Double Axe",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 6
+  },
+  {
+    "name": "Steel Double Axe",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 7
+  },
+  {
+    "name": "Fine Steel Double Axe",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 8
+  },
+  {
+    "name": "Mithril Double Axe",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 9
+  },
+  {
+    "name": "Adamantine Double Axe",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 10
+  },
+  {
+    "name": "Obsidian Double Axe",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 11
+  },
+  {
+    "name": "Dragonbone Double Axe",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 12
+  },
+  {
+    "name": "Ethereal Double Axe",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 13
+  },
+  {
+    "name": "Legendary Double Axe",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 14
+  },
+  {
+    "name": "Bronze Throwing Axe",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 5
+  },
+  {
+    "name": "Iron Throwing Axe",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 6
+  },
+  {
+    "name": "Steel Throwing Axe",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 7
+  },
+  {
+    "name": "Fine Steel Throwing Axe",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 8
+  },
+  {
+    "name": "Mithril Throwing Axe",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 9
+  },
+  {
+    "name": "Adamantine Throwing Axe",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 10
+  },
+  {
+    "name": "Obsidian Throwing Axe",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 11
+  },
+  {
+    "name": "Dragonbone Throwing Axe",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 12
+  },
+  {
+    "name": "Ethereal Throwing Axe",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 13
+  },
+  {
+    "name": "Legendary Throwing Axe",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 14
+  },
+  {
+    "name": "Bronze Short Spear",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 4
+  },
+  {
+    "name": "Iron Short Spear",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 5
+  },
+  {
+    "name": "Steel Short Spear",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 6
+  },
+  {
+    "name": "Fine Steel Short Spear",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 7
+  },
+  {
+    "name": "Mithril Short Spear",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 8
+  },
+  {
+    "name": "Adamantine Short Spear",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 9
+  },
+  {
+    "name": "Obsidian Short Spear",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 10
+  },
+  {
+    "name": "Dragonbone Short Spear",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 11
+  },
+  {
+    "name": "Ethereal Short Spear",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 12
+  },
+  {
+    "name": "Legendary Short Spear",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 13
+  },
+  {
+    "name": "Bronze Long Spear",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 4
+  },
+  {
+    "name": "Iron Long Spear",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 5
+  },
+  {
+    "name": "Steel Long Spear",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 6
+  },
+  {
+    "name": "Fine Steel Long Spear",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 7
+  },
+  {
+    "name": "Mithril Long Spear",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 8
+  },
+  {
+    "name": "Adamantine Long Spear",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 9
+  },
+  {
+    "name": "Obsidian Long Spear",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 10
+  },
+  {
+    "name": "Dragonbone Long Spear",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 11
+  },
+  {
+    "name": "Ethereal Long Spear",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 12
+  },
+  {
+    "name": "Legendary Long Spear",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 13
+  },
+  {
+    "name": "Bronze Javelin",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 4
+  },
+  {
+    "name": "Iron Javelin",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 5
+  },
+  {
+    "name": "Steel Javelin",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 6
+  },
+  {
+    "name": "Fine Steel Javelin",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 7
+  },
+  {
+    "name": "Mithril Javelin",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 8
+  },
+  {
+    "name": "Adamantine Javelin",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 9
+  },
+  {
+    "name": "Obsidian Javelin",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 10
+  },
+  {
+    "name": "Dragonbone Javelin",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 11
+  },
+  {
+    "name": "Ethereal Javelin",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 12
+  },
+  {
+    "name": "Legendary Javelin",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 13
+  },
+  {
+    "name": "Bronze Pike",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 4
+  },
+  {
+    "name": "Iron Pike",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 5
+  },
+  {
+    "name": "Steel Pike",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 6
+  },
+  {
+    "name": "Fine Steel Pike",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 7
+  },
+  {
+    "name": "Mithril Pike",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 8
+  },
+  {
+    "name": "Adamantine Pike",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 9
+  },
+  {
+    "name": "Obsidian Pike",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 10
+  },
+  {
+    "name": "Dragonbone Pike",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 11
+  },
+  {
+    "name": "Ethereal Pike",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 12
+  },
+  {
+    "name": "Legendary Pike",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 13
+  },
+  {
+    "name": "Bronze Trident",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 4
+  },
+  {
+    "name": "Iron Trident",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 5
+  },
+  {
+    "name": "Steel Trident",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 6
+  },
+  {
+    "name": "Fine Steel Trident",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 7
+  },
+  {
+    "name": "Mithril Trident",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 8
+  },
+  {
+    "name": "Adamantine Trident",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 9
+  },
+  {
+    "name": "Obsidian Trident",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 10
+  },
+  {
+    "name": "Dragonbone Trident",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 11
+  },
+  {
+    "name": "Ethereal Trident",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 12
+  },
+  {
+    "name": "Legendary Trident",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 13
+  },
+  {
+    "name": "Bronze Halberd",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 6
+  },
+  {
+    "name": "Iron Halberd",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 7
+  },
+  {
+    "name": "Steel Halberd",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 8
+  },
+  {
+    "name": "Fine Steel Halberd",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 9
+  },
+  {
+    "name": "Mithril Halberd",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 10
+  },
+  {
+    "name": "Adamantine Halberd",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 11
+  },
+  {
+    "name": "Obsidian Halberd",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 12
+  },
+  {
+    "name": "Dragonbone Halberd",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 13
+  },
+  {
+    "name": "Ethereal Halberd",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 14
+  },
+  {
+    "name": "Legendary Halberd",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 15
+  },
+  {
+    "name": "Bronze Glaive",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 6
+  },
+  {
+    "name": "Iron Glaive",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 7
+  },
+  {
+    "name": "Steel Glaive",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 8
+  },
+  {
+    "name": "Fine Steel Glaive",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 9
+  },
+  {
+    "name": "Mithril Glaive",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 10
+  },
+  {
+    "name": "Adamantine Glaive",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 11
+  },
+  {
+    "name": "Obsidian Glaive",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 12
+  },
+  {
+    "name": "Dragonbone Glaive",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 13
+  },
+  {
+    "name": "Ethereal Glaive",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 14
+  },
+  {
+    "name": "Legendary Glaive",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 15
+  },
+  {
+    "name": "Bronze Naginata",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 6
+  },
+  {
+    "name": "Iron Naginata",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 7
+  },
+  {
+    "name": "Steel Naginata",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 8
+  },
+  {
+    "name": "Fine Steel Naginata",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 9
+  },
+  {
+    "name": "Mithril Naginata",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 10
+  },
+  {
+    "name": "Adamantine Naginata",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 11
+  },
+  {
+    "name": "Obsidian Naginata",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 12
+  },
+  {
+    "name": "Dragonbone Naginata",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 13
+  },
+  {
+    "name": "Ethereal Naginata",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 14
+  },
+  {
+    "name": "Legendary Naginata",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 15
+  },
+  {
+    "name": "Bronze Bardiche",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 6
+  },
+  {
+    "name": "Iron Bardiche",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 7
+  },
+  {
+    "name": "Steel Bardiche",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 8
+  },
+  {
+    "name": "Fine Steel Bardiche",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 9
+  },
+  {
+    "name": "Mithril Bardiche",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 10
+  },
+  {
+    "name": "Adamantine Bardiche",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 11
+  },
+  {
+    "name": "Obsidian Bardiche",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 12
+  },
+  {
+    "name": "Dragonbone Bardiche",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 13
+  },
+  {
+    "name": "Ethereal Bardiche",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 14
+  },
+  {
+    "name": "Legendary Bardiche",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 15
+  },
+  {
+    "name": "Bronze Scythe",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 6
+  },
+  {
+    "name": "Iron Scythe",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 7
+  },
+  {
+    "name": "Steel Scythe",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 8
+  },
+  {
+    "name": "Fine Steel Scythe",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 9
+  },
+  {
+    "name": "Mithril Scythe",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 10
+  },
+  {
+    "name": "Adamantine Scythe",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 11
+  },
+  {
+    "name": "Obsidian Scythe",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 12
+  },
+  {
+    "name": "Dragonbone Scythe",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 13
+  },
+  {
+    "name": "Ethereal Scythe",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 14
+  },
+  {
+    "name": "Legendary Scythe",
+    "char": "/",
+    "slot": "weapon",
+    "stat_boost": 15
+  }
+]
