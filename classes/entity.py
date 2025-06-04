@@ -217,8 +217,13 @@ class Entity:
             self.equip(robe, 'f')  # 'f' is the armor slot
 
     def heal(self, amount):
+        """Heal the entity by the given amount and report the actual gain."""
+        prev_health = self.health
         self.health = min(self.max_health, self.health + amount)
-        return f"You healed for {amount} HP."
+        gained = self.health - prev_health
+        if gained > 0:
+            return f"You healed for {gained} HP."
+        return "You're already at full health."
 
     def apply_item_effect(self, item):
         if item.effect == 'heal':
@@ -235,13 +240,18 @@ class Entity:
         if not hasattr(self, 'temporary_boosts'):
             self.temporary_boosts = {}
         self.temporary_boosts[stat] = {'value': value, 'duration': duration}
+        stat_name = stat.capitalize()
+        return f"Your {stat_name} increases by {value} for {duration} turns."
 
     def update_temporary_boosts(self):
+        messages = []
         if hasattr(self, 'temporary_boosts'):
             for stat, boost in list(self.temporary_boosts.items()):
                 boost['duration'] -= 1
                 if boost['duration'] <= 0:
                     del self.temporary_boosts[stat]
+                    messages.append(f"Your {stat.capitalize()} boost wears off.")
+        return messages
 
     def get_stat(self, stat):
         base_value = getattr(self, stat)
@@ -250,8 +260,13 @@ class Entity:
         return base_value
 
     def restore_mana(self, amount):
+        """Restore mana and report the actual amount recovered."""
+        prev_mana = self.mana
         self.mana = min(self.max_mana, self.mana + amount)
-        return f"You restored {amount} mana."
+        gained = self.mana - prev_mana
+        if gained > 0:
+            return f"You restored {gained} mana."
+        return "Your mana is already full."
 
     def equip_item(self, item):
         for slot_key, slot in self.equipment.items():
