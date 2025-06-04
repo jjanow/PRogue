@@ -1,10 +1,22 @@
-import curses
-from curses import wrapper
+try:
+    import curses
+    from curses import wrapper
+except ImportError as exc:
+    if os.name == 'nt':
+        raise ImportError(
+            "The 'windows-curses' package is required on Windows. Install it with 'pip install windows-curses'."
+        ) from exc
+    raise
 import sys
 import os
 import random
-import tty
-import termios
+
+# Windows compatibility: use msvcrt for single key input
+if os.name == 'nt':
+    import msvcrt
+else:
+    import tty
+    import termios
 
 # Reduce the delay for detecting an isolated ESC key press. The default delay
 # can make exiting menus feel sluggish.
@@ -26,14 +38,20 @@ def clear_screen():
 
 def get_single_key():
     """Wait for a single keypress and return the pressed character."""
-    fd = sys.stdin.fileno()
-    old_settings = termios.tcgetattr(fd)
-    try:
-        tty.setraw(fd)
-        ch = sys.stdin.read(1)
-    finally:
-        termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)
-    return ch
+    if os.name == 'nt':
+        ch = msvcrt.getch()
+        if ch in b"\x00\xe0":  # Handle special keys
+            ch = msvcrt.getch()
+        return ch.decode("utf-8", errors="ignore")
+    else:
+        fd = sys.stdin.fileno()
+        old_settings = termios.tcgetattr(fd)
+        try:
+            tty.setraw(fd)
+            ch = sys.stdin.read(1)
+        finally:
+            termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)
+        return ch
 
 
 def choose_option_single_click(prompt, options):
