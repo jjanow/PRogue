@@ -499,6 +499,14 @@ class Game:
                 return True
         return False
 
+    def get_room(self, x, y):
+        """Return the room tuple containing (x, y) or None if not in a room."""
+        for room in self.rooms:
+            rx, ry, w, h = room
+            if rx <= x < rx + w and ry <= y < ry + h:
+                return room
+        return None
+
     def corridor_distance(self, x1, y1, x2, y2):
         """Return the number of corridor tiles between leaving the starting
         room and reaching (x2, y2). Only meaningful if (x1, y1) is inside a
@@ -534,7 +542,8 @@ class Game:
         when the player is in a hallway."""
 
         px, py = self.player.x, self.player.y
-        player_in_room = self.in_room(px, py)
+        player_room = self.get_room(px, py)
+        player_in_room = player_room is not None
 
         if radius is None:
             # Unlimited radius in rooms, but only three tiles while in corridors
@@ -553,8 +562,13 @@ class Game:
                 if not self.has_line_of_sight(px, py, x, y):
                     continue
 
-                if player_in_room and not self.in_room(x, y):
-                    if self.corridor_distance(px, py, x, y) > 2:
+                target_room = self.get_room(x, y)
+
+                if player_in_room:
+                    if target_room is None:
+                        if self.corridor_distance(px, py, x, y) > 2:
+                            continue
+                    elif target_room != player_room:
                         continue
 
                 self.visible[y][x] = True
