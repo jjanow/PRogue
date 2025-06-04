@@ -3,60 +3,70 @@
     "name": "Belt",
     "slot": "girdle",
     "body_part": "waist",
-    "ac": 1
+    "ac": 1,
+    "material_type": "armor"
   },
   {
     "name": "Chain Belt",
     "slot": "girdle",
     "body_part": "waist",
-    "ac": 1
+    "ac": 1,
+    "material_type": "armor"
   },
   {
     "name": "Girdle",
     "slot": "girdle",
     "body_part": "waist",
-    "ac": 1
+    "ac": 1,
+    "material_type": "armor"
   },
   {
     "name": "Rope Belt",
     "slot": "girdle",
     "body_part": "waist",
-    "ac": 1
+    "ac": 1,
+    "material_type": "armor"
   },
   {
     "name": "Leather Girdle",
     "slot": "girdle",
     "body_part": "waist",
-    "ac": 1
+    "ac": 1,
+    "material_type": "armor"
   },
   {
     "name": "Studded Belt",
     "slot": "girdle",
     "body_part": "waist",
-    "ac": 1
+    "ac": 1,
+    "material_type": "armor"
   },
   {
     "name": "Sash",
     "slot": "girdle",
     "body_part": "waist",
-    "ac": 1
+    "ac": 1,
+    "material_type": "armor"
   },
   {
     "name": "Corded Belt",
     "slot": "girdle",
     "body_part": "waist",
-    "ac": 1
+    "ac": 1,
+    "material_type": "armor"
   },
   {
     "name": "Reinforced Belt",
     "slot": "girdle",
     "body_part": "waist",
-    "ac": 1
+    "ac": 1,
+    "material_type": "armor"
   },
   {
     "name": "Heavy Girdle",
     "slot": "girdle",
     "body_part": "waist",
-    "ac": 1
+    "ac": 1,
+    "material_type": "armor"
   }
 ]

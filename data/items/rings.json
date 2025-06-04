@@ -3,60 +3,70 @@
     "name": "Ring",
     "slot": "ring (right)",
     "body_part": "finger",
-    "ac": 1
+    "ac": 1,
+    "material_type": "jewelry"
   },
   {
     "name": "Band",
     "slot": "ring (right)",
     "body_part": "finger",
-    "ac": 1
+    "ac": 1,
+    "material_type": "jewelry"
   },
   {
     "name": "Signet",
     "slot": "ring (right)",
     "body_part": "finger",
-    "ac": 1
+    "ac": 1,
+    "material_type": "jewelry"
   },
   {
     "name": "Loop",
     "slot": "ring (right)",
     "body_part": "finger",
-    "ac": 1
+    "ac": 1,
+    "material_type": "jewelry"
   },
   {
     "name": "Seal",
     "slot": "ring (right)",
     "body_part": "finger",
-    "ac": 1
+    "ac": 1,
+    "material_type": "jewelry"
   },
   {
     "name": "Ring",
     "slot": "ring (left)",
     "body_part": "finger",
-    "ac": 1
+    "ac": 1,
+    "material_type": "jewelry"
   },
   {
     "name": "Band",
     "slot": "ring (left)",
     "body_part": "finger",
-    "ac": 1
+    "ac": 1,
+    "material_type": "jewelry"
   },
   {
     "name": "Signet",
     "slot": "ring (left)",
     "body_part": "finger",
-    "ac": 1
+    "ac": 1,
+    "material_type": "jewelry"
   },
   {
     "name": "Loop",
     "slot": "ring (left)",
     "body_part": "finger",
-    "ac": 1
+    "ac": 1,
+    "material_type": "jewelry"
   },
   {
     "name": "Seal",
     "slot": "ring (left)",
     "body_part": "finger",
-    "ac": 1
+    "ac": 1,
+    "material_type": "jewelry"
   }
 ]

@@ -1,7 +1,12 @@
 import random
 from collections import Counter
 from classes.item import Equipment, Item
-from classes.item_loader import all_consumables, all_equipment, all_materials
+from classes.item_loader import (
+    all_consumables,
+    all_equipment,
+    materials_by_type,
+    all_materials,
+)
 
 
 class Entity:
@@ -181,8 +186,8 @@ class Entity:
         # Equip the player with a basic dagger and robe
         dagger_base = next((item for item in all_equipment if item.name == "Dagger"), None)
         robe_base = next((item for item in all_equipment if item.name == "Robe"), None)
-        bronze = next((m for m in all_materials if m.name == "Bronze"), None)
-        cloth = next((m for m in all_materials if m.name == "Cloth"), None)
+        bronze = next((m for m in materials_by_type.get('weapons', []) if m.name == "Bronze"), None)
+        cloth = next((m for m in materials_by_type.get('cloth', []) if m.name == "Cloth"), None)
 
         if dagger_base and bronze:
             dagger = Equipment(
@@ -194,6 +199,7 @@ class Entity:
                 ac=dagger_base.ac,
                 accuracy_bonus=dagger_base.accuracy_bonus,
                 weight=dagger_base.weight,
+                material_type=dagger_base.material_type,
             )
             self.equip(dagger, 'a')  # 'a' is the weapon slot
 
@@ -206,6 +212,7 @@ class Entity:
                 damage=robe_base.damage,
                 ac=robe_base.ac,
                 weight=robe_base.weight,
+                material_type=robe_base.material_type,
             )
             self.equip(robe, 'f')  # 'f' is the armor slot
 

@@ -7,6 +7,26 @@ class Material:
         self.name = name
         self.power = power
 
+
+def load_materials():
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    materials_dir = os.path.join(script_dir, '..', 'data', 'materials')
+    materials_by_type = {}
+    all_materials = []
+
+    for fname in os.listdir(materials_dir):
+        if not fname.endswith('.json'):
+            continue
+        category = os.path.splitext(fname)[0]
+        path = os.path.join(materials_dir, fname)
+        with open(path, 'r') as file:
+            material_data = json.load(file)
+        mats = [Material(m['name'], m['power']) for m in material_data]
+        materials_by_type[category] = mats
+        all_materials.extend(mats)
+
+    return materials_by_type, all_materials
+
 def load_items():
     script_dir = os.path.dirname(os.path.abspath(__file__))
     items_dir = os.path.join(script_dir, '..', 'data', 'items')
@@ -15,9 +35,7 @@ def load_items():
     with open(consumables_path, 'r') as file:
         consumable_data = json.load(file)
 
-    materials_path = os.path.join(items_dir, 'materials.json')
-    with open(materials_path, 'r') as file:
-        material_data = json.load(file)
+    materials_by_type, all_materials = load_materials()
 
     consumables = []
     for item_data in consumable_data:
@@ -32,17 +50,17 @@ def load_items():
         )
         consumables.append(item)
 
-    materials = [Material(m['name'], m['power']) for m in material_data]
 
     equipment = []
     for fname in os.listdir(items_dir):
-        if not fname.endswith('.json') or fname in ('consumables.json', 'materials.json'):
+        if not fname.endswith('.json') or fname == 'consumables.json':
             continue
         path = os.path.join(items_dir, fname)
         with open(path, 'r') as file:
             items = json.load(file)
         for item_data in items:
             accuracy = item_data.get('accuracy', 0)
+            material_type = item_data.get('material_type')
             item = Equipment(
                 item_data['name'],
                 item_data['slot'],
@@ -52,11 +70,12 @@ def load_items():
                 ac=item_data.get('ac'),
                 accuracy_bonus=accuracy,
                 weight=item_data.get('weight', 1),
+                material_type=material_type,
             )
             equipment.append(item)
 
     all_items = consumables + equipment
-    return consumables, equipment, materials, all_items
+    return consumables, equipment, materials_by_type, all_materials, all_items
 
 def create_effect(effect_type, value):
     if effect_type == 'heal':
@@ -70,4 +89,10 @@ def create_effect(effect_type, value):
     else:
         return lambda e: None  # Null effect if not recognized
 
-all_consumables, all_equipment, all_materials, all_items = load_items()
+(
+    all_consumables,
+    all_equipment,
+    materials_by_type,
+    all_materials,
+    all_items,
+) = load_items()

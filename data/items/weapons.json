@@ -6,7 +6,8 @@
     "damage": {
       "min": 1,
       "max": 4
-    }
+    },
+    "material_type": "weapons"
   },
   {
     "name": "Arming Sword",
@@ -15,7 +16,8 @@
     "damage": {
       "min": 1,
       "max": 6
-    }
+    },
+    "material_type": "weapons"
   },
   {
     "name": "Bastard Sword",
@@ -24,7 +26,8 @@
     "damage": {
       "min": 1,
       "max": 8
-    }
+    },
+    "material_type": "weapons"
   },
   {
     "name": "Claymore",
@@ -33,7 +36,8 @@
     "damage": {
       "min": 1,
       "max": 8
-    }
+    },
+    "material_type": "weapons"
   },
   {
     "name": "Flamberge",
@@ -42,7 +46,8 @@
     "damage": {
       "min": 1,
       "max": 8
-    }
+    },
+    "material_type": "weapons"
   },
   {
     "name": "Katana",
@@ -51,7 +56,8 @@
     "damage": {
       "min": 1,
       "max": 8
-    }
+    },
+    "material_type": "weapons"
   },
   {
     "name": "Gladius",
@@ -60,7 +66,8 @@
     "damage": {
       "min": 1,
       "max": 6
-    }
+    },
+    "material_type": "weapons"
   },
   {
     "name": "Falchion",
@@ -69,7 +76,8 @@
     "damage": {
       "min": 1,
       "max": 6
-    }
+    },
+    "material_type": "weapons"
   },
   {
     "name": "Cutlass",
@@ -78,7 +86,8 @@
     "damage": {
       "min": 1,
       "max": 6
-    }
+    },
+    "material_type": "weapons"
   },
   {
     "name": "Sabre",
@@ -87,7 +96,8 @@
     "damage": {
       "min": 1,
       "max": 6
-    }
+    },
+    "material_type": "weapons"
   },
   {
     "name": "Rapier",
@@ -96,7 +106,8 @@
     "damage": {
       "min": 1,
       "max": 6
-    }
+    },
+    "material_type": "weapons"
   },
   {
     "name": "Stiletto",
@@ -105,7 +116,8 @@
     "damage": {
       "min": 1,
       "max": 4
-    }
+    },
+    "material_type": "weapons"
   },
   {
     "name": "Dirk",
@@ -114,7 +126,8 @@
     "damage": {
       "min": 1,
       "max": 4
-    }
+    },
+    "material_type": "weapons"
   },
   {
     "name": "Kris",
@@ -123,7 +136,8 @@
     "damage": {
       "min": 1,
       "max": 4
-    }
+    },
+    "material_type": "weapons"
   },
   {
     "name": "Rondel",
@@ -132,7 +146,8 @@
     "damage": {
       "min": 1,
       "max": 4
-    }
+    },
+    "material_type": "weapons"
   },
   {
     "name": "Cinquedea",
@@ -141,7 +156,8 @@
     "damage": {
       "min": 1,
       "max": 4
-    }
+    },
+    "material_type": "weapons"
   },
   {
     "name": "Club",
@@ -150,7 +166,8 @@
     "damage": {
       "min": 1,
       "max": 4
-    }
+    },
+    "material_type": "weapons"
   },
   {
     "name": "Morning Star",
@@ -159,7 +176,8 @@
     "damage": {
       "min": 1,
       "max": 6
-    }
+    },
+    "material_type": "weapons"
   },
   {
     "name": "Flanged Mace",
@@ -168,7 +186,8 @@
     "damage": {
       "min": 1,
       "max": 6
-    }
+    },
+    "material_type": "weapons"
   },
   {
     "name": "Holy Mace",
@@ -177,7 +196,8 @@
     "damage": {
       "min": 1,
       "max": 6
-    }
+    },
+    "material_type": "weapons"
   },
   {
     "name": "War Mace",
@@ -186,7 +206,8 @@
     "damage": {
       "min": 1,
       "max": 6
-    }
+    },
+    "material_type": "weapons"
   },
   {
     "name": "War Hammer",
@@ -195,7 +216,8 @@
     "damage": {
       "min": 1,
       "max": 8
-    }
+    },
+    "material_type": "weapons"
   },
   {
     "name": "Maul",
@@ -204,7 +226,8 @@
     "damage": {
       "min": 1,
       "max": 8
-    }
+    },
+    "material_type": "weapons"
   },
   {
     "name": "Sledge Hammer",
@@ -213,7 +236,8 @@
     "damage": {
       "min": 1,
       "max": 8
-    }
+    },
+    "material_type": "weapons"
   },
   {
     "name": "Lucerne Hammer",
@@ -222,7 +246,8 @@
     "damage": {
       "min": 1,
       "max": 8
-    }
+    },
+    "material_type": "weapons"
   },
   {
     "name": "Forge Hammer",
@@ -231,7 +256,8 @@
     "damage": {
       "min": 1,
       "max": 8
-    }
+    },
+    "material_type": "weapons"
   },
   {
     "name": "Hand Axe",
@@ -240,7 +266,8 @@
     "damage": {
       "min": 1,
       "max": 6
-    }
+    },
+    "material_type": "weapons"
   },
   {
     "name": "Battle Axe",
@@ -249,7 +276,8 @@
     "damage": {
       "min": 1,
       "max": 8
-    }
+    },
+    "material_type": "weapons"
   },
   {
     "name": "Great Axe",
@@ -258,7 +286,8 @@
     "damage": {
       "min": 1,
       "max": 8
-    }
+    },
+    "material_type": "weapons"
   },
   {
     "name": "Double Axe",
@@ -267,7 +296,8 @@
     "damage": {
       "min": 1,
       "max": 8
-    }
+    },
+    "material_type": "weapons"
   },
   {
     "name": "Throwing Axe",
@@ -276,7 +306,8 @@
     "damage": {
       "min": 1,
       "max": 4
-    }
+    },
+    "material_type": "weapons"
   },
   {
     "name": "Short Spear",
@@ -285,7 +316,8 @@
     "damage": {
       "min": 1,
       "max": 6
-    }
+    },
+    "material_type": "weapons"
   },
   {
     "name": "Long Spear",
@@ -294,7 +326,8 @@
     "damage": {
       "min": 1,
       "max": 8
-    }
+    },
+    "material_type": "weapons"
   },
   {
     "name": "Javelin",
@@ -303,7 +336,8 @@
     "damage": {
       "min": 1,
       "max": 4
-    }
+    },
+    "material_type": "weapons"
   },
   {
     "name": "Pike",
@@ -312,7 +346,8 @@
     "damage": {
       "min": 1,
       "max": 8
-    }
+    },
+    "material_type": "weapons"
   },
   {
     "name": "Trident",
@@ -321,7 +356,8 @@
     "damage": {
       "min": 1,
       "max": 6
-    }
+    },
+    "material_type": "weapons"
   },
   {
     "name": "Halberd",
@@ -330,7 +366,8 @@
     "damage": {
       "min": 1,
       "max": 8
-    }
+    },
+    "material_type": "weapons"
   },
   {
     "name": "Glaive",
@@ -339,7 +376,8 @@
     "damage": {
       "min": 1,
       "max": 8
-    }
+    },
+    "material_type": "weapons"
   },
   {
     "name": "Naginata",
@@ -348,7 +386,8 @@
     "damage": {
       "min": 1,
       "max": 8
-    }
+    },
+    "material_type": "weapons"
   },
   {
     "name": "Bardiche",
@@ -357,7 +396,8 @@
     "damage": {
       "min": 1,
       "max": 8
-    }
+    },
+    "material_type": "weapons"
   },
   {
     "name": "Scythe",
@@ -366,6 +406,7 @@
     "damage": {
       "min": 1,
       "max": 8
-    }
+    },
+    "material_type": "weapons"
   }
 ]
