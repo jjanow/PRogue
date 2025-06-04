@@ -13,6 +13,7 @@ sys.path.append(os.path.dirname(os.path.realpath(__file__)))
 
 from classes.game import Game
 from classes.item import Equipment
+from classes.race_loader import all_races
 from curses import KEY_NPAGE, KEY_PPAGE
 
 def character_creation_cli():
@@ -20,8 +21,30 @@ def character_creation_cli():
     print("=== Character Creation ===")
     name = input("Name: ")
     gender = input("Gender: ")
-    sex = input("Sex: ")
-    race = input("Race: ")
+    # Choose sex
+    sex_options = ["male", "female", "other"]
+    while True:
+        print("Choose Sex:")
+        for idx, opt in enumerate(sex_options, 1):
+            print(f"  {idx}) {opt.title()}")
+        choice = input("Sex selection: ").strip()
+        if choice.isdigit() and 1 <= int(choice) <= len(sex_options):
+            sex = sex_options[int(choice) - 1]
+            break
+        else:
+            print("Invalid choice. Try again.")
+
+    # Choose race from data file
+    while True:
+        print("Choose Race:")
+        for idx, r in enumerate(all_races, 1):
+            print(f"  {idx}) {r.name}")
+        r_choice = input("Race selection: ").strip()
+        if r_choice.isdigit() and 1 <= int(r_choice) <= len(all_races):
+            race = all_races[int(r_choice) - 1]
+            break
+        else:
+            print("Invalid choice. Try again.")
 
     attributes = [
         "strength",
@@ -69,11 +92,15 @@ def character_creation_cli():
         if remaining:
             print(f"{remaining} unspent points will be ignored.")
 
+    # Apply race bonuses to stats
+    for attr, bonus in race.bonuses.items():
+        stats[attr] = stats.get(attr, 0) + bonus
+
     return {
         "name": name,
         "gender": gender,
         "sex": sex,
-        "race": race,
+        "race": race.name,
         "stats": stats,
     }
 
