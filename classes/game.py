@@ -471,6 +471,7 @@ class Game:
 
         if enemy_at_position:
             self.combat(self.player, enemy_at_position)
+            self.process_turn()
         elif self.is_valid_move(new_x, new_y):
             self.player.x, self.player.y = new_x, new_y
             self.process_turn()
