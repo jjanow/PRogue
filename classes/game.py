@@ -71,8 +71,6 @@ class Game:
         self.walk_speed = 5  # milliseconds between auto-move steps
         self.help_mode = False
         self.speed_input = ""
-        self.item_info_mode = False
-        self.item_info_item = None
 
     def open_character_stats_screen(self):
         self.character_stats_mode = True
@@ -106,9 +104,16 @@ class Game:
                 damage=item_template.damage,
                 ac=item_template.ac,
                 accuracy_bonus=item_template.accuracy_bonus,
+                weight=item_template.weight,
             )
         else:
-            return Item(item_template.name, item_template.effect)
+            return Item(
+                item_template.name,
+                item_template.effect,
+                value=getattr(item_template, "value", None),
+                weight=item_template.weight,
+                effect_type=getattr(item_template, "effect_type", None),
+            )
 
     def create_specific_item(self, category):
         if category == 'potion':
@@ -134,9 +139,16 @@ class Game:
                 damage=template.damage,
                 ac=template.ac,
                 accuracy_bonus=template.accuracy_bonus,
+                weight=template.weight,
             )
         else:
-            return Item(template.name, template.effect)
+            return Item(
+                template.name,
+                template.effect,
+                value=getattr(template, "value", None),
+                weight=template.weight,
+                effect_type=getattr(template, "effect_type", None),
+            )
 
     def map_current_level(self):
         for y in range(self.height):
@@ -170,9 +182,7 @@ class Game:
         return defeated
 
     def handle_input(self, key):
-        if self.item_info_mode:
-            self.handle_item_info_input(key)
-        elif self.inventory_mode:
+        if self.inventory_mode:
             self.input_handler.handle_inventory_input(key)
         elif self.backpack_mode:
             self.handle_backpack_input(key)
@@ -224,9 +234,6 @@ class Game:
         elif 97 <= key <= 122:  # a-z
             self.drop_backpack_item(chr(key))
 
-    def handle_item_info_input(self, key):
-        self.input_handler.handle_item_info_input(key)
-
     def draw(self, stdscr):
         self.renderer.draw(stdscr)
 
@@ -241,9 +248,6 @@ class Game:
 
     def draw_drop_interface(self, stdscr):
         self.renderer.draw_drop_interface(stdscr)
-
-    def draw_item_info(self, stdscr):
-        self.renderer.draw_item_info(stdscr)
 
     def generate_level(self):
         self.map, self.rooms, self.stairs_up_x, self.stairs_up_y, self.stairs_x, self.stairs_y = self.map_generator.generate_level(self.player)
@@ -266,7 +270,15 @@ class Game:
             defense = int((random.randint(0, 3) + self.dungeon_level // 2) * difficulty_factor)
             enemy = Entity(x, y, 'E', f"Enemy Lv{self.dungeon_level}", health, damage, defense)
             if random.random() < 0.3:
-                enemy.add_item(Item("Health Potion", lambda e: setattr(e, 'health', min(e.max_health, e.health + 20))))
+                enemy.add_item(
+                    Item(
+                        "Health Potion",
+                        lambda e: setattr(e, 'health', min(e.max_health, e.health + 20)),
+                        value=20,
+                        weight=1,
+                        effect_type='heal',
+                    )
+                )
             self.enemies.append(enemy)
 
     def get_random_floor(self):

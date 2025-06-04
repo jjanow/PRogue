@@ -27,6 +27,56 @@ class Renderer:
             return ITEM_ICONS.get(item.slot, '?')
         return '!'
 
+    def _format_item_stats(self, item):
+        info = []
+        if isinstance(item, Equipment):
+            equipped = None
+            for slot_key, slot in self.game.player.equipment.items():
+                if slot['name'] == item.slot:
+                    equipped = slot['item']
+                    break
+            if item.damage is not None:
+                dmg = (
+                    f"{item.damage.get('min',0)}-{item.damage.get('max',0)}"
+                    if isinstance(item.damage, dict)
+                    else str(item.damage)
+                )
+                if equipped and equipped.damage is not None:
+                    eqd = (
+                        f"{equipped.damage.get('min',0)}-{equipped.damage.get('max',0)}"
+                        if isinstance(equipped.damage, dict)
+                        else str(equipped.damage)
+                    )
+                    info.append(f"DMG {eqd}->{dmg}")
+                else:
+                    info.append(f"DMG {dmg}")
+            if item.ac is not None:
+                if equipped and equipped.ac is not None:
+                    info.append(f"AC {equipped.ac}->{item.ac}")
+                else:
+                    info.append(f"AC {item.ac}")
+            if item.accuracy_bonus:
+                if equipped and equipped.accuracy_bonus:
+                    info.append(f"ACC {equipped.accuracy_bonus}->{item.accuracy_bonus}")
+                else:
+                    info.append(f"ACC {item.accuracy_bonus}")
+            if item.stat_boost:
+                if equipped and equipped.stat_boost:
+                    info.append(f"STAT {equipped.stat_boost}->{item.stat_boost}")
+                else:
+                    info.append(f"STAT {item.stat_boost}")
+            info.append(f"WT {item.weight}")
+        else:
+            if getattr(item, 'effect_type', None) == 'heal':
+                info.append(f"Heal {item.value}")
+            elif getattr(item, 'effect_type', None) == 'restore_mana':
+                info.append(f"Mana {item.value}")
+            elif getattr(item, 'effect_type', '').startswith('boost_'):
+                stat = item.effect_type.split('_', 1)[1].title()
+                info.append(f"+{item.value} {stat}")
+            info.append(f"WT {item.weight}")
+        return ' '.join(info)
+
     def draw(self, stdscr):
         stdscr.clear()
         height, width = stdscr.getmaxyx()
@@ -94,7 +144,8 @@ class Renderer:
 
         for i, (item, count) in enumerate(inventory_items[start_index:end_index], start=0):
             key = chr(97 + i)  # a-z
-            item_str = f"{key}) {item.name} [{count}]"
+            info = self._format_item_stats(item)
+            item_str = f"{key}) {item.name} [{count}] {info}"
             stdscr.addstr(i + 2, 0, item_str[:width-1])
 
         total_pages = max(1, (len(inventory_items) - 1) // self.game.items_per_page + 1)
@@ -214,67 +265,6 @@ class Renderer:
 
         stdscr.refresh()
 
-    def draw_item_info(self, stdscr):
-        stdscr.clear()
-        height, width = stdscr.getmaxyx()
-
-        item = self.game.item_info_item
-        stdscr.addstr(0, 0, "Item Details (press escape to return)"[:width-1])
-
-        if not item:
-            stdscr.refresh()
-            return
-
-        lines = []
-        lines.append(f"Name: {item.name}")
-
-        if isinstance(item, Equipment):
-            lines.append(f"Slot: {item.slot}")
-            lines.append(f"Body: {item.body_part}")
-            if item.damage:
-                if isinstance(item.damage, dict):
-                    dmg = f"{item.damage.get('min', 0)}-{item.damage.get('max', 0)}"
-                else:
-                    dmg = str(item.damage)
-                lines.append(f"Damage: {dmg}")
-            if item.ac is not None:
-                lines.append(f"AC: {item.ac}")
-            if item.accuracy_bonus:
-                lines.append(f"Accuracy Bonus: {item.accuracy_bonus}")
-            lines.append(f"Stat Bonus: {item.stat_boost}")
-
-            equipped = None
-            for slot in self.game.player.equipment.values():
-                if slot['name'] == item.slot:
-                    equipped = slot['item']
-                    break
-            if equipped:
-                lines.append("")
-                lines.append(f"Equipped: {equipped.name}")
-                if equipped.damage or item.damage:
-                    if equipped.damage:
-                        eqd = f"{equipped.damage.get('min',0)}-{equipped.damage.get('max',0)}" if isinstance(equipped.damage, dict) else str(equipped.damage)
-                    else:
-                        eqd = "-"
-                    dmg = f"{item.damage.get('min',0)}-{item.damage.get('max',0)}" if isinstance(item.damage, dict) else str(item.damage)
-                    lines.append(f"Damage: {eqd} -> {dmg}")
-                if equipped.ac is not None or item.ac is not None:
-                    eqac = equipped.ac if equipped.ac is not None else '-'
-                    lines.append(f"AC: {eqac} -> {item.ac if item.ac is not None else '-'}")
-                if equipped.accuracy_bonus or item.accuracy_bonus:
-                    lines.append(f"Accuracy: {equipped.accuracy_bonus} -> {item.accuracy_bonus}")
-                lines.append(f"Stat Bonus: {equipped.stat_boost} -> {item.stat_boost}")
-        else:
-            if item.duration:
-                lines.append(f"Duration: {item.duration}")
-            lines.append("Consumable item")
-
-        for i, line in enumerate(lines, start=2):
-            if i >= height:
-                break
-            stdscr.addstr(i, 0, line[:width-1])
-
-        stdscr.refresh()
 
     def draw_equipment_screen(self, stdscr):
         stdscr.clear()
