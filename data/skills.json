@@ -1,0 +1,72 @@
+[
+  {
+    "name": "Stealth",
+    "cost_multiplier": 1.0,
+    "description": "Move silently and remain unseen, reducing the chance of detection."
+  },
+  {
+    "name": "Lockpicking",
+    "cost_multiplier": 1.0,
+    "description": "Open locked doors and chests using cunning and simple tools."
+  },
+  {
+    "name": "Pickpocket",
+    "cost_multiplier": 1.0,
+    "description": "Swipe small items or coins from unaware targets."
+  },
+  {
+    "name": "Backstab",
+    "cost_multiplier": 1.0,
+    "description": "Deal extra damage when attacking an unsuspecting foe from behind."
+  },
+  {
+    "name": "Fire Magic",
+    "cost_multiplier": 1.0,
+    "description": "Harness flames to scorch enemies or ignite obstacles."
+  },
+  {
+    "name": "Ice Magic",
+    "cost_multiplier": 1.0,
+    "description": "Manipulate cold to freeze enemies or create slippery surfaces."
+  },
+  {
+    "name": "Lightning Magic",
+    "cost_multiplier": 1.0,
+    "description": "Channel electricity to shock and stun opponents."
+  },
+  {
+    "name": "Healing Magic",
+    "cost_multiplier": 1.0,
+    "description": "Mend wounds and cure ailments for yourself or allies."
+  },
+  {
+    "name": "Shielding Magic",
+    "cost_multiplier": 1.0,
+    "description": "Conjure protective barriers to lessen incoming damage."
+  },
+  {
+    "name": "Archery",
+    "cost_multiplier": 1.0,
+    "description": "Improve accuracy and damage with bows and crossbows."
+  },
+  {
+    "name": "Dual Wielding",
+    "cost_multiplier": 1.0,
+    "description": "Effectively fight while holding a weapon in each hand."
+  },
+  {
+    "name": "Alchemy",
+    "cost_multiplier": 1.0,
+    "description": "Brew potions and poisons from gathered ingredients."
+  },
+  {
+    "name": "Tracking",
+    "cost_multiplier": 1.0,
+    "description": "Follow trails and identify the presence of creatures nearby."
+  },
+  {
+    "name": "Speechcraft",
+    "cost_multiplier": 1.0,
+    "description": "Persuade or deceive others through conversation."
+  }
+]
