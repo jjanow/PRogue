@@ -246,6 +246,7 @@ def main(stdscr, char_data):
     curses.init_pair(4, curses.COLOR_YELLOW, curses.COLOR_BLACK) # Items
     curses.init_pair(5, curses.COLOR_BLUE, curses.COLOR_BLACK)   # Walls
     curses.init_pair(6, curses.COLOR_CYAN, curses.COLOR_BLACK)   # Doors
+    curses.init_pair(7, curses.COLOR_MAGENTA, curses.COLOR_BLACK) # Menu headers
 
     # Initialize game
     height, width = stdscr.getmaxyx()
