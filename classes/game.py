@@ -529,15 +529,21 @@ class Game:
 
     def update_fov(self, radius=None):
         """Update which tiles are visible using line of sight and mark them as
-        explored. When the player is in a room, vision down connecting
-        corridors is limited to two tiles."""
+        explored. Vision down connecting corridors is limited to two tiles when
+        standing in a room, and overall sight is restricted to a 3 tile radius
+        when the player is in a hallway."""
 
-        if radius is None:
-            radius = max(self.width, self.height)
-
-        self.visible = [[False for _ in range(self.width)] for _ in range(self.height)]
         px, py = self.player.x, self.player.y
         player_in_room = self.in_room(px, py)
+
+        if radius is None:
+            # Unlimited radius in rooms, but only three tiles while in corridors
+            radius = 3 if not player_in_room else max(self.width, self.height)
+        else:
+            if not player_in_room:
+                radius = min(radius, 3)
+
+        self.visible = [[False for _ in range(self.width)] for _ in range(self.height)]
 
         for y in range(max(0, py - radius), min(self.height, py + radius + 1)):
             for x in range(max(0, px - radius), min(self.width, px + radius + 1)):
