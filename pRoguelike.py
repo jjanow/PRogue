@@ -304,6 +304,14 @@ def main(stdscr, char_data):
         if game.quit:
             break
 
+    if game.game_over:
+        game.renderer.draw(stdscr)
+        stdscr.nodelay(False)
+        while True:
+            key = stdscr.getch()
+            if key in (10, 13):
+                break
+
     return
 
 if __name__ == "__main__":
