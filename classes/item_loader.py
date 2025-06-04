@@ -2,6 +2,11 @@ import json
 import os
 from classes.item import Item, Equipment
 
+class Material:
+    def __init__(self, name, power):
+        self.name = name
+        self.power = power
+
 def load_items():
     script_dir = os.path.dirname(os.path.abspath(__file__))
     items_dir = os.path.join(script_dir, '..', 'data', 'items')
@@ -10,15 +15,21 @@ def load_items():
     with open(consumables_path, 'r') as file:
         consumable_data = json.load(file)
 
+    materials_path = os.path.join(items_dir, 'materials.json')
+    with open(materials_path, 'r') as file:
+        material_data = json.load(file)
+
     consumables = []
     for item_data in consumable_data:
         effect = create_effect(item_data['effect'], item_data['value'])
         item = Item(item_data['name'], item_data['char'], effect, item_data.get('duration', None))
         consumables.append(item)
 
+    materials = [Material(m['name'], m['power']) for m in material_data]
+
     equipment = []
     for fname in os.listdir(items_dir):
-        if not fname.endswith('.json') or fname == 'consumables.json':
+        if not fname.endswith('.json') or fname in ('consumables.json', 'materials.json'):
             continue
         path = os.path.join(items_dir, fname)
         with open(path, 'r') as file:
@@ -29,13 +40,13 @@ def load_items():
                 item_data['name'],
                 item_data['char'],
                 item_data['slot'],
-                item_data['stat_boost'],
+                0,
                 accuracy_bonus=accuracy,
             )
             equipment.append(item)
 
     all_items = consumables + equipment
-    return consumables, equipment, all_items
+    return consumables, equipment, materials, all_items
 
 def create_effect(effect_type, value):
     if effect_type == 'heal':
@@ -49,4 +60,4 @@ def create_effect(effect_type, value):
     else:
         return lambda e: None  # Null effect if not recognized
 
-all_consumables, all_equipment, all_items = load_items()
+all_consumables, all_equipment, all_materials, all_items = load_items()
