@@ -1,0 +1,51 @@
+[
+  {
+    "name": "Human",
+    "bonuses": {
+      "strength": 1,
+      "dexterity": 1,
+      "constitution": 1,
+      "intelligence": 1,
+      "willpower": 1,
+      "charisma": 1,
+      "appearance": 1,
+      "perception": 1
+    }
+  },
+  {
+    "name": "Elf",
+    "bonuses": {
+      "dexterity": 2,
+      "perception": 2,
+      "appearance": 1
+    }
+  },
+  {
+    "name": "Dwarf",
+    "bonuses": {
+      "constitution": 2,
+      "willpower": 1
+    }
+  },
+  {
+    "name": "Halfling",
+    "bonuses": {
+      "dexterity": 2,
+      "charisma": 1
+    }
+  },
+  {
+    "name": "Orc",
+    "bonuses": {
+      "strength": 2,
+      "constitution": 1
+    }
+  },
+  {
+    "name": "Gnome",
+    "bonuses": {
+      "intelligence": 2,
+      "dexterity": 1
+    }
+  }
+]

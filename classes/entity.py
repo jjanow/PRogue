@@ -52,6 +52,9 @@ class Entity:
         self.month = "Unknown"
         self.day = "Unknown"
         self.age = 0
+        self.gender = ""
+        self.sex = ""
+        self.race = ""
     
     @property
     def damage(self):
