@@ -1,0 +1,38 @@
+[
+  {
+    "name": "Health Potion",
+    "char": "!",
+    "effect": "heal",
+    "value": 20
+  },
+  {
+    "name": "Greater Health Potion",
+    "char": "!",
+    "effect": "heal",
+    "value": 50
+  },
+  {
+    "name": "Mana Potion",
+    "char": "!",
+    "effect": "restore_mana",
+    "value": 20
+  },
+  {
+    "name": "Greater Mana Potion",
+    "char": "!",
+    "effect": "restore_mana",
+    "value": 50
+  },
+  {
+    "name": "Strength Elixir",
+    "char": "!",
+    "effect": "boost_strength",
+    "value": 2
+  },
+  {
+    "name": "Dexterity Elixir",
+    "char": "!",
+    "effect": "boost_dexterity",
+    "value": 2
+  }
+]

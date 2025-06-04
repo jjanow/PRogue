@@ -4,29 +4,35 @@ from classes.item import Item, Equipment
 
 def load_items():
     script_dir = os.path.dirname(os.path.abspath(__file__))
-    json_path = os.path.join(script_dir, '..', 'data', 'items.json')
-    
-    with open(json_path, 'r') as file:
-        data = json.load(file)
+    items_dir = os.path.join(script_dir, '..', 'data', 'items')
+
+    consumables_path = os.path.join(items_dir, 'consumables.json')
+    with open(consumables_path, 'r') as file:
+        consumable_data = json.load(file)
 
     consumables = []
-    equipment = []
-
-    for item_data in data['consumables']:
+    for item_data in consumable_data:
         effect = create_effect(item_data['effect'], item_data['value'])
         item = Item(item_data['name'], item_data['char'], effect, item_data.get('duration', None))
         consumables.append(item)
 
-    for item_data in data['equipment']:
-        accuracy = item_data.get('accuracy', 0)
-        item = Equipment(
-            item_data['name'],
-            item_data['char'],
-            item_data['slot'],
-            item_data['stat_boost'],
-            accuracy_bonus=accuracy,
-        )
-        equipment.append(item)
+    equipment = []
+    for fname in os.listdir(items_dir):
+        if not fname.endswith('.json') or fname == 'consumables.json':
+            continue
+        path = os.path.join(items_dir, fname)
+        with open(path, 'r') as file:
+            items = json.load(file)
+        for item_data in items:
+            accuracy = item_data.get('accuracy', 0)
+            item = Equipment(
+                item_data['name'],
+                item_data['char'],
+                item_data['slot'],
+                item_data['stat_boost'],
+                accuracy_bonus=accuracy,
+            )
+            equipment.append(item)
 
     all_items = consumables + equipment
     return consumables, equipment, all_items

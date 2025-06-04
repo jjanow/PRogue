@@ -1,0 +1,182 @@
+[
+  {
+    "name": "Bronze Pendant",
+    "char": "\"",
+    "slot": "amulet",
+    "stat_boost": 1
+  },
+  {
+    "name": "Iron Pendant",
+    "char": "\"",
+    "slot": "amulet",
+    "stat_boost": 2
+  },
+  {
+    "name": "Steel Pendant",
+    "char": "\"",
+    "slot": "amulet",
+    "stat_boost": 3
+  },
+  {
+    "name": "Fine Steel Pendant",
+    "char": "\"",
+    "slot": "amulet",
+    "stat_boost": 4
+  },
+  {
+    "name": "Mithril Pendant",
+    "char": "\"",
+    "slot": "amulet",
+    "stat_boost": 5
+  },
+  {
+    "name": "Adamantine Pendant",
+    "char": "\"",
+    "slot": "amulet",
+    "stat_boost": 6
+  },
+  {
+    "name": "Obsidian Pendant",
+    "char": "\"",
+    "slot": "amulet",
+    "stat_boost": 7
+  },
+  {
+    "name": "Dragonbone Pendant",
+    "char": "\"",
+    "slot": "amulet",
+    "stat_boost": 8
+  },
+  {
+    "name": "Ethereal Pendant",
+    "char": "\"",
+    "slot": "amulet",
+    "stat_boost": 9
+  },
+  {
+    "name": "Legendary Pendant",
+    "char": "\"",
+    "slot": "amulet",
+    "stat_boost": 10
+  },
+  {
+    "name": "Bronze Amulet",
+    "char": "\"",
+    "slot": "amulet",
+    "stat_boost": 1
+  },
+  {
+    "name": "Iron Amulet",
+    "char": "\"",
+    "slot": "amulet",
+    "stat_boost": 2
+  },
+  {
+    "name": "Steel Amulet",
+    "char": "\"",
+    "slot": "amulet",
+    "stat_boost": 3
+  },
+  {
+    "name": "Fine Steel Amulet",
+    "char": "\"",
+    "slot": "amulet",
+    "stat_boost": 4
+  },
+  {
+    "name": "Mithril Amulet",
+    "char": "\"",
+    "slot": "amulet",
+    "stat_boost": 5
+  },
+  {
+    "name": "Adamantine Amulet",
+    "char": "\"",
+    "slot": "amulet",
+    "stat_boost": 6
+  },
+  {
+    "name": "Obsidian Amulet",
+    "char": "\"",
+    "slot": "amulet",
+    "stat_boost": 7
+  },
+  {
+    "name": "Dragonbone Amulet",
+    "char": "\"",
+    "slot": "amulet",
+    "stat_boost": 8
+  },
+  {
+    "name": "Ethereal Amulet",
+    "char": "\"",
+    "slot": "amulet",
+    "stat_boost": 9
+  },
+  {
+    "name": "Legendary Amulet",
+    "char": "\"",
+    "slot": "amulet",
+    "stat_boost": 10
+  },
+  {
+    "name": "Bronze Talisman",
+    "char": "\"",
+    "slot": "amulet",
+    "stat_boost": 1
+  },
+  {
+    "name": "Iron Talisman",
+    "char": "\"",
+    "slot": "amulet",
+    "stat_boost": 2
+  },
+  {
+    "name": "Steel Talisman",
+    "char": "\"",
+    "slot": "amulet",
+    "stat_boost": 3
+  },
+  {
+    "name": "Fine Steel Talisman",
+    "char": "\"",
+    "slot": "amulet",
+    "stat_boost": 4
+  },
+  {
+    "name": "Mithril Talisman",
+    "char": "\"",
+    "slot": "amulet",
+    "stat_boost": 5
+  },
+  {
+    "name": "Adamantine Talisman",
+    "char": "\"",
+    "slot": "amulet",
+    "stat_boost": 6
+  },
+  {
+    "name": "Obsidian Talisman",
+    "char": "\"",
+    "slot": "amulet",
+    "stat_boost": 7
+  },
+  {
+    "name": "Dragonbone Talisman",
+    "char": "\"",
+    "slot": "amulet",
+    "stat_boost": 8
+  },
+  {
+    "name": "Ethereal Talisman",
+    "char": "\"",
+    "slot": "amulet",
+    "stat_boost": 9
+  },
+  {
+    "name": "Legendary Talisman",
+    "char": "\"",
+    "slot": "amulet",
+    "stat_boost": 10
+  }
+]

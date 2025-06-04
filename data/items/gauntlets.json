@@ -1,0 +1,182 @@
+[
+  {
+    "name": "Bronze Gloves",
+    "char": "]",
+    "slot": "gauntlets",
+    "stat_boost": 1
+  },
+  {
+    "name": "Iron Gloves",
+    "char": "]",
+    "slot": "gauntlets",
+    "stat_boost": 2
+  },
+  {
+    "name": "Steel Gloves",
+    "char": "]",
+    "slot": "gauntlets",
+    "stat_boost": 3
+  },
+  {
+    "name": "Fine Steel Gloves",
+    "char": "]",
+    "slot": "gauntlets",
+    "stat_boost": 4
+  },
+  {
+    "name": "Mithril Gloves",
+    "char": "]",
+    "slot": "gauntlets",
+    "stat_boost": 5
+  },
+  {
+    "name": "Adamantine Gloves",
+    "char": "]",
+    "slot": "gauntlets",
+    "stat_boost": 6
+  },
+  {
+    "name": "Obsidian Gloves",
+    "char": "]",
+    "slot": "gauntlets",
+    "stat_boost": 7
+  },
+  {
+    "name": "Dragonbone Gloves",
+    "char": "]",
+    "slot": "gauntlets",
+    "stat_boost": 8
+  },
+  {
+    "name": "Ethereal Gloves",
+    "char": "]",
+    "slot": "gauntlets",
+    "stat_boost": 9
+  },
+  {
+    "name": "Legendary Gloves",
+    "char": "]",
+    "slot": "gauntlets",
+    "stat_boost": 10
+  },
+  {
+    "name": "Bronze Gauntlets",
+    "char": "]",
+    "slot": "gauntlets",
+    "stat_boost": 1
+  },
+  {
+    "name": "Iron Gauntlets",
+    "char": "]",
+    "slot": "gauntlets",
+    "stat_boost": 2
+  },
+  {
+    "name": "Steel Gauntlets",
+    "char": "]",
+    "slot": "gauntlets",
+    "stat_boost": 3
+  },
+  {
+    "name": "Fine Steel Gauntlets",
+    "char": "]",
+    "slot": "gauntlets",
+    "stat_boost": 4
+  },
+  {
+    "name": "Mithril Gauntlets",
+    "char": "]",
+    "slot": "gauntlets",
+    "stat_boost": 5
+  },
+  {
+    "name": "Adamantine Gauntlets",
+    "char": "]",
+    "slot": "gauntlets",
+    "stat_boost": 6
+  },
+  {
+    "name": "Obsidian Gauntlets",
+    "char": "]",
+    "slot": "gauntlets",
+    "stat_boost": 7
+  },
+  {
+    "name": "Dragonbone Gauntlets",
+    "char": "]",
+    "slot": "gauntlets",
+    "stat_boost": 8
+  },
+  {
+    "name": "Ethereal Gauntlets",
+    "char": "]",
+    "slot": "gauntlets",
+    "stat_boost": 9
+  },
+  {
+    "name": "Legendary Gauntlets",
+    "char": "]",
+    "slot": "gauntlets",
+    "stat_boost": 10
+  },
+  {
+    "name": "Bronze Vambraces",
+    "char": "]",
+    "slot": "gauntlets",
+    "stat_boost": 1
+  },
+  {
+    "name": "Iron Vambraces",
+    "char": "]",
+    "slot": "gauntlets",
+    "stat_boost": 2
+  },
+  {
+    "name": "Steel Vambraces",
+    "char": "]",
+    "slot": "gauntlets",
+    "stat_boost": 3
+  },
+  {
+    "name": "Fine Steel Vambraces",
+    "char": "]",
+    "slot": "gauntlets",
+    "stat_boost": 4
+  },
+  {
+    "name": "Mithril Vambraces",
+    "char": "]",
+    "slot": "gauntlets",
+    "stat_boost": 5
+  },
+  {
+    "name": "Adamantine Vambraces",
+    "char": "]",
+    "slot": "gauntlets",
+    "stat_boost": 6
+  },
+  {
+    "name": "Obsidian Vambraces",
+    "char": "]",
+    "slot": "gauntlets",
+    "stat_boost": 7
+  },
+  {
+    "name": "Dragonbone Vambraces",
+    "char": "]",
+    "slot": "gauntlets",
+    "stat_boost": 8
+  },
+  {
+    "name": "Ethereal Vambraces",
+    "char": "]",
+    "slot": "gauntlets",
+    "stat_boost": 9
+  },
+  {
+    "name": "Legendary Vambraces",
+    "char": "]",
+    "slot": "gauntlets",
+    "stat_boost": 10
+  }
+]
