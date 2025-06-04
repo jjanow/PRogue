@@ -51,6 +51,7 @@ class Game:
         self.time = 0
         self.selected_slot = None
         self.debug_mode = False
+        self.quit = False
 
     def open_character_stats_screen(self):
         self.character_stats_mode = True
