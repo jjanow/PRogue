@@ -1,11 +1,10 @@
 import random
 from collections import Counter
-from classes.item import Equipment, Item
+from classes.item import Equipment
 from classes.item_loader import (
     all_consumables,
     all_equipment,
     materials_by_type,
-    all_materials,
 )
 
 

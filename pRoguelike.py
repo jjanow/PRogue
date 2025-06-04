@@ -1,3 +1,5 @@
+import os
+
 try:
     import curses
     from curses import wrapper
@@ -8,7 +10,6 @@ except ImportError as exc:
         ) from exc
     raise
 import sys
-import os
 import random
 
 # Windows compatibility: use msvcrt for single key input

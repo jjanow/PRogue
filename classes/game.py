@@ -18,7 +18,6 @@ from curses import KEY_NPAGE, KEY_PPAGE
 from classes.input_handler import InputHandler
 from classes.renderer import Renderer
 from classes.combat_system import CombatSystem
-from classes.item import Equipment
 from classes.monster_loader import all_monsters
 
 class Game:
@@ -457,18 +456,6 @@ class Game:
                 return
         self.messages.append("There's nothing here to pick up.")
 
-    def use_item(self, item):
-        if item in self.player.inventory:
-            effect_result = item.effect(self.player)
-            self.player.remove_item(item)
-            self.messages.append(f"You used {item.name}. {effect_result}")
-        else:
-            self.messages.append(f"You don't have {item.name}")
-
-    def equip_item(self, item):
-        result = self.player.equip(item)
-        self.messages.append(result)
-    
     def use_backpack_item(self, item_key):
         inventory_items = self.player.get_inventory_items()
         index = ord(item_key) - ord('a') + self.backpack_page * self.items_per_page
@@ -478,20 +465,6 @@ class Game:
                 self.equip_item(item)
             else:
                 self.use_item(item)
-        else:
-            self.messages.append("Invalid item.")
-
-    def drop_backpack_item(self, item_key):
-        inventory_items = self.player.get_inventory_items()
-        index = ord(item_key) - ord('a') + self.backpack_page * self.items_per_page
-        if 0 <= index < len(inventory_items):
-            item, _ = inventory_items[index]
-            self.player.remove_item(item)
-            item.x, item.y = self.player.x, self.player.y
-            item.seen = True  # Player is aware of dropped items immediately
-            self.items.append(item)
-            self.messages.append(f"You dropped {item.name}.")
-            self.drop_mode = False
         else:
             self.messages.append("Invalid item.")
 
