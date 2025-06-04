@@ -115,6 +115,7 @@ class Game:
                 accuracy_bonus=item_template.accuracy_bonus,
                 weight=item_template.weight,
                 material_type=item_template.material_type,
+                gold_value=item_template.gold_value * material.value_multiplier,
             )
         else:
             return Item(
@@ -123,6 +124,7 @@ class Game:
                 value=getattr(item_template, "value", None),
                 weight=item_template.weight,
                 effect_type=getattr(item_template, "effect_type", None),
+                gold_value=item_template.gold_value,
             )
 
     def create_specific_item(self, category):
@@ -154,6 +156,7 @@ class Game:
                 accuracy_bonus=template.accuracy_bonus,
                 weight=template.weight,
                 material_type=template.material_type,
+                gold_value=template.gold_value * material.value_multiplier,
             )
         else:
             return Item(
@@ -162,6 +165,7 @@ class Game:
                 value=getattr(template, "value", None),
                 weight=template.weight,
                 effect_type=getattr(template, "effect_type", None),
+                gold_value=template.gold_value,
             )
 
     def map_current_level(self):

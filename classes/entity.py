@@ -200,6 +200,7 @@ class Entity:
                 accuracy_bonus=dagger_base.accuracy_bonus,
                 weight=dagger_base.weight,
                 material_type=dagger_base.material_type,
+                gold_value=dagger_base.gold_value * bronze.value_multiplier,
             )
             self.equip(dagger, 'a')  # 'a' is the weapon slot
 
@@ -213,6 +214,7 @@ class Entity:
                 ac=robe_base.ac,
                 weight=robe_base.weight,
                 material_type=robe_base.material_type,
+                gold_value=robe_base.gold_value * cloth.value_multiplier,
             )
             self.equip(robe, 'f')  # 'f' is the armor slot
 

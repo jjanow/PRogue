@@ -1,11 +1,12 @@
 class Item:
-    def __init__(self, name, effect, duration=None, value=None, weight=1, effect_type=None):
+    def __init__(self, name, effect, duration=None, value=None, weight=1, effect_type=None, gold_value=0):
         self.name = name
         self.effect = effect
         self.duration = duration
         self.value = value
         self.weight = weight
         self.effect_type = effect_type
+        self.gold_value = gold_value
         self.x = None
         self.y = None
         self.quantity = 1
@@ -23,8 +24,8 @@ class Item:
         return hash(self.name)
 
 class Equipment(Item):
-    def __init__(self, name, slot, body_part, stat_boost, damage=None, ac=None, accuracy_bonus=0, weight=1, material_type=None):
-        super().__init__(name, None, None, None, weight)
+    def __init__(self, name, slot, body_part, stat_boost, damage=None, ac=None, accuracy_bonus=0, weight=1, material_type=None, gold_value=0):
+        super().__init__(name, None, None, None, weight, None, gold_value)
         self.slot = slot
         self.body_part = body_part
         self.damage = damage
