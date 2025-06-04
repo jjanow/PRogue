@@ -52,8 +52,9 @@ class CombatSystem:
 
         drops = []
         for item in getattr(enemy, 'loot', []):
-            item.x, item.y = enemy.x, enemy.y
-            drops.append(item)
+            if random.random() < 0.05:
+                item.x, item.y = enemy.x, enemy.y
+                drops.append(item)
 
         # Fallback random drop if no predefined loot
         if not drops and random.random() < 0.05:

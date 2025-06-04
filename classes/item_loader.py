@@ -6,6 +6,8 @@ class Material:
     def __init__(self, name, power):
         self.name = name
         self.power = power
+        # Higher tier materials are worth more
+        self.value_multiplier = power
 
 
 def load_materials():
@@ -47,6 +49,7 @@ def load_items():
             value=item_data.get('value'),
             weight=item_data.get('weight', 1),
             effect_type=item_data.get('effect'),
+            gold_value=item_data.get('gold', 10),
         )
         consumables.append(item)
 
@@ -71,6 +74,7 @@ def load_items():
                 accuracy_bonus=accuracy,
                 weight=item_data.get('weight', 1),
                 material_type=material_type,
+                gold_value=item_data.get('gold', 50),
             )
             equipment.append(item)
 

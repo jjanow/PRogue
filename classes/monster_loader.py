@@ -31,6 +31,7 @@ class MonsterTemplate:
                         accuracy_bonus=template.accuracy_bonus,
                         weight=template.weight,
                         material_type=template.material_type,
+                        gold_value=template.gold_value * mat.value_multiplier,
                     )
                 else:
                     loot_item = Item(
@@ -40,6 +41,7 @@ class MonsterTemplate:
                         value=getattr(template, 'value', None),
                         weight=template.weight,
                         effect_type=getattr(template, 'effect_type', None),
+                        gold_value=template.gold_value,
                     )
             else:
                 # Generic placeholder item
