@@ -11,6 +11,10 @@ class InputHandler:
             self.handle_debug_input(key)
             return False  # Don't exit the game
 
+        if self.game.options_mode:
+            self.handle_options_input(key)
+            return False
+
         if self.game.inventory_mode:
             self.handle_inventory_input(key)
         elif self.game.backpack_mode:
@@ -60,6 +64,10 @@ class InputHandler:
 
         if key == ord('0'):
             self.game.auto_explore()
+            return
+
+        if key == ord('='):
+            self.game.options_mode = True
             return
 
         movement_keys = {
@@ -172,6 +180,18 @@ class InputHandler:
         elif 97 <= key <= 122:  # a-z
             self.game.use_backpack_item(chr(key))
 
+    def handle_options_input(self, key):
+        if key == 27:  # ESC
+            self.game.options_mode = False
+            return
+
+        if key in [ord('+'), curses.KEY_RIGHT]:
+            self.game.walk_speed = min(1000, self.game.walk_speed + 10)
+        elif key in [ord('-'), curses.KEY_LEFT]:
+            self.game.walk_speed = max(0, self.game.walk_speed - 10)
+        elif key in [10, 13]:
+            self.game.options_mode = False
+
     def handle_debug_input(self, key):
         # If the menu isn't open yet, hitting '!' will open it
         if not self.game.debug_mode and key == ord('!'):
@@ -182,29 +202,31 @@ class InputHandler:
             self.game.debug_mode = False
             return
 
-        if key == ord('a'):
-            item = self.game.create_specific_item('weapon')
+        item_keys = {
+            'a': 'weapon',
+            'b': 'missile weapon',
+            'c': 'helmet',
+            'd': 'amulet',
+            'e': 'shield',
+            'f': 'armor',
+            'g': 'cloak',
+            'h': 'girdle',
+            'i': 'gauntlets',
+            'j': 'boots',
+            'k': 'ring',
+            'l': 'bracers',
+            'm': 'potion',
+        }
+
+        if chr(key) in item_keys:
+            category = item_keys[chr(key)]
+            item = self.game.create_specific_item(category)
             self.game.player.add_item(item)
             self.game.messages.append(f"Created {item.name} in your inventory.")
             self.game.debug_mode = False
-        elif key == ord('b'):
-            item = self.game.create_specific_item('armor')
-            self.game.player.add_item(item)
-            self.game.messages.append(f"Created {item.name} in your inventory.")
-            self.game.debug_mode = False
-        elif key == ord('c'):
-            item = self.game.create_specific_item('accessory')
-            self.game.player.add_item(item)
-            self.game.messages.append(f"Created {item.name} in your inventory.")
-            self.game.debug_mode = False
-        elif key == ord('d'):
-            item = self.game.create_specific_item('potion')
-            self.game.player.add_item(item)
-            self.game.messages.append(f"Created {item.name} in your inventory.")
-            self.game.debug_mode = False
-        elif key == ord('e'):
+        elif key == ord('n'):
             self.game.map_current_level()
             self.game.debug_mode = False
-        elif key == ord('f'):
+        elif key == ord('o'):
             self.game.level_up_player()
             self.game.debug_mode = False

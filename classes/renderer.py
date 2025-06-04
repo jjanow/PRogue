@@ -265,14 +265,37 @@ class Renderer:
         menu_text = [
             "Cheat Menu (press escape to exit):",
             "a) Create weapon",
-            "b) Create armor",
-            "c) Create accessory",
-            "d) Create potion",
-            "e) Map level",
-            "f) Level up",
+            "b) Create missile weapon",
+            "c) Create helmet",
+            "d) Create amulet",
+            "e) Create shield",
+            "f) Create armor",
+            "g) Create cloak",
+            "h) Create girdle",
+            "i) Create gauntlets",
+            "j) Create boots",
+            "k) Create ring",
+            "l) Create bracers",
+            "m) Create potion",
+            "n) Map level",
+            "o) Level up",
         ]
 
         for i, line in enumerate(menu_text):
+            stdscr.addstr(i, 0, line[:width-1])
+
+        stdscr.refresh()
+
+    def draw_options_menu(self, stdscr):
+        stdscr.clear()
+        height, width = stdscr.getmaxyx()
+
+        lines = [
+            "Options (press escape to exit):",
+            f"Walking speed: {self.game.walk_speed} ms (+/- to adjust)",
+        ]
+
+        for i, line in enumerate(lines):
             stdscr.addstr(i, 0, line[:width-1])
 
         stdscr.refresh()

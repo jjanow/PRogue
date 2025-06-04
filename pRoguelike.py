@@ -70,6 +70,8 @@ def main(stdscr):
             game.renderer.draw_backpack(stdscr)
         elif game.drop_mode:
             game.renderer.draw_drop_interface(stdscr)
+        elif game.options_mode:
+            game.renderer.draw_options_menu(stdscr)
         elif game.debug_mode:
             game.renderer.draw_debug_menu(stdscr)
         else:
