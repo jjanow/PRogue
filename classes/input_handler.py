@@ -36,19 +36,29 @@ class InputHandler:
     def handle_main_game_input(self, key):
         if self.game.walk_mode:
             if key == ord('<'):
-                self.game.walk_to_stairs('up')
+                if not self.game.explored[self.game.stairs_up_y][self.game.stairs_up_x]:
+                    self.game.messages.append("You don't know where the upstairs are.")
+                else:
+                    self.game.walk_to_stairs('up')
                 self.game.walk_mode = False
                 return
             elif key == ord('>'):
-                self.game.walk_to_stairs('down')
+                if not self.game.explored[self.game.stairs_y][self.game.stairs_x]:
+                    self.game.messages.append("You don't know where the downstairs are.")
+                else:
+                    self.game.walk_to_stairs('down')
                 self.game.walk_mode = False
                 return
             else:
                 self.game.walk_mode = False
 
         if key == ord('w'):
-            self.game.walk_mode = True
-            self.game.messages.append("Walk to stairs: < or >")
+            if not (self.game.explored[self.game.stairs_y][self.game.stairs_x] or
+                    self.game.explored[self.game.stairs_up_y][self.game.stairs_up_x]):
+                self.game.messages.append("You haven't found any stairs yet.")
+            else:
+                self.game.walk_mode = True
+                self.game.messages.append("Walk to stairs: < or >")
             return
 
         movement_keys = {

@@ -35,6 +35,9 @@ class Game:
         self.stairs_up_x = None
         self.stairs_up_y = None
         self.generate_level()
+        self.visible = [[False for _ in range(self.width)] for _ in range(self.height)]
+        self.explored = [[False for _ in range(self.width)] for _ in range(self.height)]
+        self.update_fov()
         self.inventory_page = 0
         self.inventory_mode = False
         self.character_screen_mode = False
@@ -176,7 +179,10 @@ class Game:
         self.renderer.draw_drop_interface(stdscr)
 
     def generate_level(self):
-        self.map, self.rooms, self.stairs_up_x, self.stairs_up_y, self.stairs_x, self.stairs_y = self.map_generator.generate_level(self.player)        
+        self.map, self.rooms, self.stairs_up_x, self.stairs_up_y, self.stairs_x, self.stairs_y = self.map_generator.generate_level(self.player)
+        self.visible = [[False for _ in range(self.width)] for _ in range(self.height)]
+        self.explored = [[False for _ in range(self.width)] for _ in range(self.height)]
+        self.update_fov()
         self.spawn_enemies(len(self.rooms))
         self.spawn_items()
 
@@ -227,6 +233,7 @@ class Game:
                     self.messages.append(message)
 
         self.player.update_temporary_boosts()
+        self.update_fov()
 
     def check_collisions(self):
         for item in self.items[:]:
@@ -456,6 +463,14 @@ class Game:
 
     def distance(self, entity1, entity2):
         return max(abs(entity1.x - entity2.x), abs(entity1.y - entity2.y))
+
+    def update_fov(self, radius=6):
+        """Update which tiles are visible and mark them as explored."""
+        self.visible = [[False for _ in range(self.width)] for _ in range(self.height)]
+        for y in range(max(0, self.player.y - radius), min(self.height, self.player.y + radius + 1)):
+            for x in range(max(0, self.player.x - radius), min(self.width, self.player.x + radius + 1)):
+                self.visible[y][x] = True
+                self.explored[y][x] = True
     
     def open_equipment_screen(self):
         self.equipment_mode = True
