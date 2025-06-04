@@ -11,6 +11,10 @@ class InputHandler:
             self.handle_debug_input(key)
             return False  # Don't exit the game
 
+        if self.game.help_mode:
+            self.handle_help_input(key)
+            return False
+
         if self.game.options_mode:
             self.handle_options_input(key)
             return False
@@ -68,6 +72,9 @@ class InputHandler:
 
         if key == ord('='):
             self.game.options_mode = True
+            return
+        if key == ord('?'):
+            self.game.help_mode = True
             return
 
         movement_keys = {
@@ -183,14 +190,29 @@ class InputHandler:
     def handle_options_input(self, key):
         if key == 27:  # ESC
             self.game.options_mode = False
+            self.game.speed_input = ""
             return
 
         if key in [ord('+'), curses.KEY_RIGHT]:
             self.game.walk_speed = min(1000, self.game.walk_speed + 10)
         elif key in [ord('-'), curses.KEY_LEFT]:
             self.game.walk_speed = max(0, self.game.walk_speed - 10)
+        elif ord('0') <= key <= ord('9'):
+            self.game.speed_input += chr(key)
+            if len(self.game.speed_input) > 4:
+                self.game.speed_input = self.game.speed_input[-4:]
+        elif key in (curses.KEY_BACKSPACE, 127, 8):
+            self.game.speed_input = self.game.speed_input[:-1]
         elif key in [10, 13]:
+            if self.game.speed_input:
+                value = int(self.game.speed_input)
+                self.game.walk_speed = max(0, min(1000, value))
+            self.game.speed_input = ""
             self.game.options_mode = False
+
+    def handle_help_input(self, key):
+        if key in (27, ord('q')):
+            self.game.help_mode = False
 
     def handle_debug_input(self, key):
         # If the menu isn't open yet, hitting '!' will open it

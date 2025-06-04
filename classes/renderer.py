@@ -292,10 +292,38 @@ class Renderer:
 
         lines = [
             "Options (press escape to exit):",
-            f"Walking speed: {self.game.walk_speed} ms (+/- to adjust)",
+            f"Walking speed: {self.game.walk_speed} ms (enter 0-1000)",
+        ]
+
+        if self.game.speed_input:
+            lines.append(f"New speed: {self.game.speed_input}")
+
+        for i, line in enumerate(lines):
+            stdscr.addstr(i, 0, line[:width-1])
+
+        stdscr.refresh()
+
+    def draw_help_menu(self, stdscr):
+        stdscr.clear()
+        height, width = stdscr.getmaxyx()
+
+        lines = [
+            "Help (press escape to exit):",
+            "Movement: hjkl or arrow keys; diagonals yubn",
+            "Wait: 5",
+            "Pick up item: ','",
+            "Open inventory: i",
+            "Character info: @",
+            "Auto-explore: 0",
+            "Walk to stairs: w",
+            "Options menu: =",
+            "Quit game: Q",
+            "Show this help: ?",
         ]
 
         for i, line in enumerate(lines):
+            if i >= height:
+                break
             stdscr.addstr(i, 0, line[:width-1])
 
         stdscr.refresh()
