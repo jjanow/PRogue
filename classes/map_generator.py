@@ -50,7 +50,7 @@ class MapGenerator:
     def create_corridor(self, room1, room2):
         x1, y1 = room1[0] + room1[2] // 2, room1[1] + room1[3] // 2
         x2, y2 = room2[0] + room2[2] // 2, room2[1] + room2[3] // 2
-        
+
         if random.random() < 0.5:
             self.create_h_tunnel(x1, x2, y1)
             self.create_v_tunnel(y1, y2, x2)
@@ -59,11 +59,15 @@ class MapGenerator:
             self.create_h_tunnel(x1, x2, y2)
 
     def create_h_tunnel(self, x1, x2, y):
-        for x in range(min(x1, x2), max(x1, x2) + 1):
+        """Dig a horizontal corridor exactly one tile wide."""
+        step = 1 if x2 >= x1 else -1
+        for x in range(x1, x2 + step, step):
             self.map[y][x] = '.'
 
     def create_v_tunnel(self, y1, y2, x):
-        for y in range(min(y1, y2), max(y1, y2) + 1):
+        """Dig a vertical corridor exactly one tile wide."""
+        step = 1 if y2 >= y1 else -1
+        for y in range(y1, y2 + step, step):
             self.map[y][x] = '.'
 
     def rooms_overlap(self, x, y, w, h, room):
