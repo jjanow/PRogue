@@ -2,6 +2,7 @@ import curses
 from curses import wrapper
 import sys
 import os
+import random
 
 # Reduce the delay for detecting an isolated ESC key press. The default delay
 # can make exiting menus feel sluggish.
@@ -13,6 +14,68 @@ sys.path.append(os.path.dirname(os.path.realpath(__file__)))
 from classes.game import Game
 from classes.item import Equipment
 from curses import KEY_NPAGE, KEY_PPAGE
+
+def character_creation_cli():
+    """Simple command line character creation before launching curses."""
+    print("=== Character Creation ===")
+    name = input("Name: ")
+    gender = input("Gender: ")
+    sex = input("Sex: ")
+    race = input("Race: ")
+
+    attributes = [
+        "strength",
+        "dexterity",
+        "constitution",
+        "intelligence",
+        "willpower",
+        "charisma",
+        "appearance",
+        "perception",
+    ]
+
+    method = input(
+        "Choose stat generation - random roll (r) or point buy (p): "
+    ).strip().lower()
+
+    stats = {}
+    if method.startswith("r"):
+        while True:
+            stats = {attr: random.randint(1, 20) for attr in attributes}
+            print("Rolled stats:")
+            for attr in attributes:
+                print(f"  {attr.title()}: {stats[attr]}")
+            choice = input("Press 'r' to reroll or any other key to accept: ").lower()
+            if choice != "r":
+                break
+    else:
+        remaining = 20
+        stats = {attr: 10 for attr in attributes}
+        for attr in attributes:
+            while True:
+                max_add = min(20 - stats[attr], remaining)
+                prompt = f"Add points to {attr.title()} (0-{max_add}, remaining {remaining}): "
+                try:
+                    add = int(input(prompt))
+                except ValueError:
+                    print("Please enter a number.")
+                    continue
+                if 0 <= add <= max_add:
+                    stats[attr] += add
+                    remaining -= add
+                    break
+                else:
+                    print("Invalid amount.")
+        if remaining:
+            print(f"{remaining} unspent points will be ignored.")
+
+    return {
+        "name": name,
+        "gender": gender,
+        "sex": sex,
+        "race": race,
+        "stats": stats,
+    }
 
 def draw(stdscr, game):
     stdscr.clear()
@@ -65,7 +128,7 @@ def draw(stdscr, game):
 
     stdscr.refresh()
 
-def main(stdscr):
+def main(stdscr, char_data):
     # Initialize curses
     curses.start_color()
     # Further reduce the ESC key delay inside curses itself
@@ -80,6 +143,14 @@ def main(stdscr):
     # Initialize game
     height, width = stdscr.getmaxyx()
     game = Game(height - 3, width, stdscr)
+    # Apply character creation choices
+    game.player.name = char_data.get("name", game.player.name)
+    game.player.gender = char_data.get("gender", "")
+    game.player.sex = char_data.get("sex", "")
+    game.player.race = char_data.get("race", "")
+    for stat, value in char_data.get("stats", {}).items():
+        if hasattr(game.player, stat):
+            setattr(game.player, stat, value)
 
     while True:
         if game.character_stats_mode:
@@ -121,5 +192,10 @@ def main(stdscr):
     return
 
 if __name__ == "__main__":
-    wrapper(main)
+    char_data = character_creation_cli()
+
+    def run(stdscr):
+        main(stdscr, char_data)
+
+    wrapper(run)
     print("Thanks for playing!")
