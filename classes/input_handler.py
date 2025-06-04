@@ -22,9 +22,6 @@ class InputHandler:
         elif key == ord('i'):
             self.game.inventory_mode = True
             self.game.inventory_page = 0
-        elif key == ord('I'):
-            self.game.backpack_mode = True
-            self.game.backpack_page = 0
         elif key == ord('@'):
             self.game.open_character_stats_screen()
         elif key == ord('Q'):
@@ -88,8 +85,6 @@ class InputHandler:
 
         if key == ord('i'):
             self.game.open_inventory()
-        elif key == ord('c'):
-            self.game.open_character_screen()
         elif key == ord(','):
             self.game.pickup_item()
         elif key == ord('>'):

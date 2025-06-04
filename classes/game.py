@@ -161,9 +161,6 @@ class Game:
         elif key == ord('i'):
             self.inventory_mode = True
             self.inventory_page = 0
-        elif key == ord('I'):
-            self.backpack_mode = True
-            self.backpack_page = 0
         elif key == ord('d'):
             self.drop_mode = True
             self.backpack_page = 0

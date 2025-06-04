@@ -31,6 +31,9 @@ control to you.
 While in the dungeon, press `i` to open your inventory. Press the letter
 corresponding to an equipment item to wear or wield it. Any item already in that
 slot will be returned to your pack automatically.
+
+Press `@` to view your character sheet, which lists your statistics and all
+currently equipped items.
 =======
 
 ### Note on Escape Key Responsiveness

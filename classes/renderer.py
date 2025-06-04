@@ -235,17 +235,26 @@ class Renderer:
             f"Age: {self.game.player.age} years",
         ]
 
-        # Draw attributes
-        for i, line in enumerate(attributes, start=2):
-            if i >= height:
-                break
-            stdscr.addstr(i, 0, line[:width-1])
+        # Equipment Data
+        equipment_lines = [
+            f"{slot['name'].title()}: {slot['item'].name if slot['item'] else 'Empty'}"
+            for slot in self.game.player.equipment.values()
+        ]
 
-        # Draw miscellaneous data
-        for i, line in enumerate(misc_data, start=2):
+        left_lines = attributes + [""] + misc_data
+        left_width = width // 2 - 2
+
+        for i, line in enumerate(left_lines, start=2):
             if i >= height:
                 break
-            stdscr.addstr(i, width // 2, line[:width-1])
+            stdscr.addstr(i, 0, line[:left_width])
+
+        right_start = 1
+        stdscr.addstr(right_start, width // 2, "Equipment:")
+        for i, line in enumerate(equipment_lines, start=right_start + 1):
+            if i >= height:
+                break
+            stdscr.addstr(i, width // 2, line[:width // 2 - 1])
 
         stdscr.refresh()
 
