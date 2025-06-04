@@ -268,6 +268,8 @@ def main(stdscr, char_data):
     while True:
         if game.character_stats_mode:
             game.renderer.draw_character_stats_screen(stdscr)
+        elif game.combat_stats_mode:
+            game.renderer.draw_combat_stats_screen(stdscr)
         elif game.inventory_mode:
             game.renderer.draw_inventory(stdscr)
         elif game.backpack_mode:

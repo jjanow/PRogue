@@ -99,6 +99,37 @@ class Entity:
         )
         return round(total_defense, 1)
 
+    def damage_breakdown(self):
+        """Return a list of (source, value) tuples contributing to damage."""
+        components = [("Base damage", self.base_damage)]
+        weapon = next(
+            (slot["item"] for slot in self.equipment.values() if slot["name"] in ["weapon", "missile weapon"]),
+            None,
+        )
+        if weapon and weapon.damage_bonus:
+            components.append((weapon.name, weapon.damage_bonus))
+
+        strength = self.get_stat("strength")
+        components.append((f"Strength {strength}", strength * 0.5))
+
+        components.append((f"Level {self.level}", self.level * 0.5))
+        return components
+
+    def defense_breakdown(self):
+        """Return a list of (source, value) tuples contributing to defense."""
+        components = [("Base defense", self.base_defense)]
+        for slot in self.equipment.values():
+            item = slot.get("item")
+            if item and item.defense_bonus:
+                components.append((item.name, item.defense_bonus))
+
+        dexterity = self.get_stat("dexterity")
+        constitution = self.get_stat("constitution")
+        components.append((f"Dexterity {dexterity}", dexterity * 0.3))
+        components.append((f"Constitution {constitution}", constitution * 0.2))
+        components.append((f"Level {self.level}", self.level * 0.5))
+        return components
+
     def equip(self, item, slot_key):
         slot = self.equipment[slot_key]
         if isinstance(item, Equipment) and item.slot == slot['name']:

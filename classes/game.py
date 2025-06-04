@@ -73,9 +73,13 @@ class Game:
         self.walk_speed = 5  # milliseconds between auto-move steps
         self.help_mode = False
         self.speed_input = ""
+        self.combat_stats_mode = False
 
     def open_character_stats_screen(self):
         self.character_stats_mode = True
+
+    def open_combat_stats_screen(self):
+        self.combat_stats_mode = True
 
     def spawn_item_in_inventory(self):
         item = self.create_random_item()

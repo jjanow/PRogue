@@ -412,10 +412,35 @@ class Renderer:
             "Character info: @",
             "Auto-explore: 0",
             "Walk to stairs: w",
+            "Combat stats: Ctrl+W",
             "Options menu: =",
             "Quit game: Q",
             "Show this help: ?",
         ]
+
+        for i, line in enumerate(lines):
+            if i >= height:
+                break
+            color = curses.color_pair(7) if i == 0 else curses.color_pair(4)
+            stdscr.addstr(i, 0, line[:width-1], color)
+
+        stdscr.refresh()
+
+    def draw_combat_stats_screen(self, stdscr):
+        stdscr.clear()
+        height, width = stdscr.getmaxyx()
+
+        dmg_lines = ["Combat Stats (press escape to exit):", "", "Damage Breakdown:"]
+        for src, val in self.game.player.damage_breakdown():
+            dmg_lines.append(f"  {src}: {val:.1f}")
+        dmg_lines.append(f"  Total Damage: {self.game.player.damage:.1f}")
+
+        def_lines = ["", "Defense Breakdown:"]
+        for src, val in self.game.player.defense_breakdown():
+            def_lines.append(f"  {src}: {val:.1f}")
+        def_lines.append(f"  Total Defense: {self.game.player.defense:.1f}")
+
+        lines = dmg_lines + def_lines
 
         for i, line in enumerate(lines):
             if i >= height:
