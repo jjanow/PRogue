@@ -16,3 +16,7 @@ To run the game, ensure you have Python installed, then execute the following co
 
 ```bash
 python pRoguelike.py
+```
+
+Make sure to run the game in a terminal that supports `curses`.
+Press `Q` during play to begin the quit process.
