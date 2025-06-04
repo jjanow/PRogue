@@ -1,0 +1,82 @@
+[
+  {
+    "name": "Bandit",
+    "xp": 15,
+    "gold": 10,
+    "items": ["Dagger"],
+    "challenge_rating": 0.25,
+    "archetype": "humanoid"
+  },
+  {
+    "name": "Goblin",
+    "xp": 20,
+    "gold": 12,
+    "items": ["Short Sword"],
+    "challenge_rating": 0.5,
+    "archetype": "humanoid"
+  },
+  {
+    "name": "Kobold",
+    "xp": 25,
+    "gold": 15,
+    "items": ["Sling"],
+    "challenge_rating": 0.75,
+    "archetype": "humanoid"
+  },
+  {
+    "name": "Hobgoblin",
+    "xp": 40,
+    "gold": 20,
+    "items": ["Spear"],
+    "challenge_rating": 1.0,
+    "archetype": "humanoid"
+  },
+  {
+    "name": "Orc Warrior",
+    "xp": 60,
+    "gold": 30,
+    "items": ["Battle Axe"],
+    "challenge_rating": 1.5,
+    "archetype": "humanoid"
+  },
+  {
+    "name": "Barbarian Raider",
+    "xp": 80,
+    "gold": 40,
+    "items": ["Great Axe"],
+    "challenge_rating": 2.0,
+    "archetype": "humanoid"
+  },
+  {
+    "name": "Gnoll",
+    "xp": 100,
+    "gold": 50,
+    "items": ["Flail"],
+    "challenge_rating": 2.5,
+    "archetype": "humanoid"
+  },
+  {
+    "name": "Dark Elf",
+    "xp": 120,
+    "gold": 60,
+    "items": ["Poison Dagger"],
+    "challenge_rating": 3.0,
+    "archetype": "humanoid"
+  },
+  {
+    "name": "Troll",
+    "xp": 150,
+    "gold": 70,
+    "items": ["Club"],
+    "challenge_rating": 3.5,
+    "archetype": "humanoid"
+  },
+  {
+    "name": "Ogre",
+    "xp": 200,
+    "gold": 80,
+    "items": ["Ogre Maul"],
+    "challenge_rating": 4.0,
+    "archetype": "humanoid"
+  }
+]

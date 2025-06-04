@@ -1,0 +1,82 @@
+[
+  {
+    "name": "Chaos Spawn",
+    "xp": 60,
+    "gold": 20,
+    "items": ["Warped Claw"],
+    "challenge_rating": 1.0,
+    "archetype": "abomination"
+  },
+  {
+    "name": "Shambling Mass",
+    "xp": 80,
+    "gold": 25,
+    "items": ["Oozing Core"],
+    "challenge_rating": 1.5,
+    "archetype": "abomination"
+  },
+  {
+    "name": "Corrupted Treant",
+    "xp": 110,
+    "gold": 30,
+    "items": ["Twisted Bark"],
+    "challenge_rating": 2.0,
+    "archetype": "abomination"
+  },
+  {
+    "name": "Blighted Troll",
+    "xp": 140,
+    "gold": 40,
+    "items": ["Toxic Blood"],
+    "challenge_rating": 2.5,
+    "archetype": "abomination"
+  },
+  {
+    "name": "Tentacled Abomination",
+    "xp": 170,
+    "gold": 50,
+    "items": ["Slime Tendril"],
+    "challenge_rating": 3.0,
+    "archetype": "abomination"
+  },
+  {
+    "name": "Cursed Chimera",
+    "xp": 200,
+    "gold": 60,
+    "items": ["Chimera Scale"],
+    "challenge_rating": 3.5,
+    "archetype": "abomination"
+  },
+  {
+    "name": "Nightmare Beast",
+    "xp": 230,
+    "gold": 70,
+    "items": ["Nightmare Horn"],
+    "challenge_rating": 4.0,
+    "archetype": "abomination"
+  },
+  {
+    "name": "Eye of the Abyss",
+    "xp": 260,
+    "gold": 80,
+    "items": ["Abyssal Eye"],
+    "challenge_rating": 4.5,
+    "archetype": "abomination"
+  },
+  {
+    "name": "Shadow Fiend",
+    "xp": 300,
+    "gold": 90,
+    "items": ["Dark Essence"],
+    "challenge_rating": 5.0,
+    "archetype": "abomination"
+  },
+  {
+    "name": "Eldritch Horror",
+    "xp": 350,
+    "gold": 100,
+    "items": ["Eldritch Ichor"],
+    "challenge_rating": 6.0,
+    "archetype": "abomination"
+  }
+]

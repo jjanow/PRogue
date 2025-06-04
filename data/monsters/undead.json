@@ -1,0 +1,82 @@
+[
+  {
+    "name": "Skeleton",
+    "xp": 15,
+    "gold": 5,
+    "items": ["Rusty Sword"],
+    "challenge_rating": 0.25,
+    "archetype": "undead"
+  },
+  {
+    "name": "Zombie",
+    "xp": 20,
+    "gold": 8,
+    "items": ["Rotten Flesh"],
+    "challenge_rating": 0.5,
+    "archetype": "undead"
+  },
+  {
+    "name": "Ghoul",
+    "xp": 35,
+    "gold": 12,
+    "items": ["Cracked Claws"],
+    "challenge_rating": 1.0,
+    "archetype": "undead"
+  },
+  {
+    "name": "Ghost",
+    "xp": 40,
+    "gold": 15,
+    "items": ["Ectoplasm"],
+    "challenge_rating": 1.5,
+    "archetype": "undead"
+  },
+  {
+    "name": "Mummy",
+    "xp": 55,
+    "gold": 30,
+    "items": ["Ancient Wrappings"],
+    "challenge_rating": 2.0,
+    "archetype": "undead"
+  },
+  {
+    "name": "Banshee",
+    "xp": 70,
+    "gold": 35,
+    "items": ["Wailing Essence"],
+    "challenge_rating": 2.5,
+    "archetype": "undead"
+  },
+  {
+    "name": "Wraith",
+    "xp": 80,
+    "gold": 40,
+    "items": ["Shadow Blade"],
+    "challenge_rating": 3.0,
+    "archetype": "undead"
+  },
+  {
+    "name": "Bone Knight",
+    "xp": 95,
+    "gold": 50,
+    "items": ["Bone Armor"],
+    "challenge_rating": 3.5,
+    "archetype": "undead"
+  },
+  {
+    "name": "Vampire",
+    "xp": 120,
+    "gold": 60,
+    "items": ["Vampire Fang"],
+    "challenge_rating": 4.0,
+    "archetype": "undead"
+  },
+  {
+    "name": "Lich",
+    "xp": 200,
+    "gold": 100,
+    "items": ["Phylactery"],
+    "challenge_rating": 5.0,
+    "archetype": "undead"
+  }
+]
