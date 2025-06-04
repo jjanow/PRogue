@@ -66,7 +66,7 @@ class Entity:
         weapon_bonus = weapon.damage_bonus if weapon else 0
 
         # Every point of strength increases damage. Levels give a small bonus
-        strength_bonus = self.strength * 0.5
+        strength_bonus = self.get_stat('strength') * 0.5
         level_bonus = self.level * 0.5
 
         total_damage = self.base_damage + weapon_bonus + strength_bonus + level_bonus
@@ -82,8 +82,8 @@ class Entity:
         )
 
         # Every point of dexterity/constitution increases defense
-        dexterity_bonus = self.dexterity * 0.3
-        constitution_bonus = self.constitution * 0.2
+        dexterity_bonus = self.get_stat('dexterity') * 0.3
+        constitution_bonus = self.get_stat('constitution') * 0.2
         level_bonus = self.level * 0.5
 
         total_defense = (

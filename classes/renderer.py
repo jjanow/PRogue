@@ -140,7 +140,7 @@ class Renderer:
         height, width = stdscr.getmaxyx()
 
         header = "Inventory (press escape to exit, '+' for next page, '-' for previous page)"
-        stdscr.addstr(0, 0, header[:width-1])
+        stdscr.addstr(0, 0, header[:width-1], curses.color_pair(7))
 
         inventory_items = self.game.player.get_inventory_items()
         start_index = self.game.inventory_page * self.game.items_per_page
@@ -150,11 +150,11 @@ class Renderer:
             key = chr(97 + i)  # a-z
             info = self._format_item_stats(item)
             item_str = f"{key}) {item.name} [{count}] {info}"
-            stdscr.addstr(i + 2, 0, item_str[:width-1])
+            stdscr.addstr(i + 2, 0, item_str[:width-1], curses.color_pair(4))
 
         total_pages = max(1, (len(inventory_items) - 1) // self.game.items_per_page + 1)
         footer = f"Page {self.game.inventory_page + 1}/{total_pages}"
-        stdscr.addstr(height - 1, 0, footer[:width-1])
+        stdscr.addstr(height - 1, 0, footer[:width-1], curses.color_pair(7))
 
         stdscr.refresh()
 
@@ -163,7 +163,7 @@ class Renderer:
         height, width = stdscr.getmaxyx()
         
         header = "Character Information (press escape to exit)"
-        stdscr.addstr(0, 0, header[:width-1])
+        stdscr.addstr(0, 0, header[:width-1], curses.color_pair(7))
 
         # Left column: Basic Info
         left_column = [
@@ -228,7 +228,7 @@ class Renderer:
         height, width = stdscr.getmaxyx()
         
         header = "Backpack Items (press '+' for next page, '-' for previous page, escape to exit)"
-        stdscr.addstr(0, 0, header[:width-1])
+        stdscr.addstr(0, 0, header[:width-1], curses.color_pair(7))
 
         backpack_items = self.game.player.get_inventory_items()
         items_per_page = self.game.items_per_page
@@ -238,11 +238,11 @@ class Renderer:
         for i, (item, count) in enumerate(backpack_items[start_index:end_index], start=0):
             key = chr(97 + i)  # a-z
             item_str = f"{key}) {item.name} [{count}]"
-            stdscr.addstr(i + 2, 0, item_str[:width-1])
+            stdscr.addstr(i + 2, 0, item_str[:width-1], curses.color_pair(4))
 
         total_pages = (len(backpack_items) - 1) // items_per_page + 1
         footer = f"Page {self.game.backpack_page + 1}/{total_pages}"
-        stdscr.addstr(height - 1, 0, footer[:width-1])
+        stdscr.addstr(height - 1, 0, footer[:width-1], curses.color_pair(7))
 
         stdscr.refresh()
 
@@ -251,7 +251,7 @@ class Renderer:
         height, width = stdscr.getmaxyx()
         
         header = "Drop Items (press '+' for next page, '-' for previous page, escape to exit)"
-        stdscr.addstr(0, 0, header[:width-1])
+        stdscr.addstr(0, 0, header[:width-1], curses.color_pair(7))
 
         backpack_items = self.game.player.get_inventory_items()
         items_per_page = self.game.items_per_page
@@ -261,11 +261,11 @@ class Renderer:
         for i, (item, count) in enumerate(backpack_items[start_index:end_index], start=0):
             key = chr(97 + i)  # a-z
             item_str = f"{key}) {item.name} [{count}]"
-            stdscr.addstr(i + 2, 0, item_str[:width-1])
+            stdscr.addstr(i + 2, 0, item_str[:width-1], curses.color_pair(4))
 
         total_pages = (len(backpack_items) - 1) // items_per_page + 1
         footer = f"Page {self.game.backpack_page + 1}/{total_pages}"
-        stdscr.addstr(height - 1, 0, footer[:width-1])
+        stdscr.addstr(height - 1, 0, footer[:width-1], curses.color_pair(7))
 
         stdscr.refresh()
 
@@ -274,7 +274,7 @@ class Renderer:
         stdscr.clear()
         height, width = stdscr.getmaxyx()
 
-        stdscr.addstr(0, 0, "Equipment:")
+        stdscr.addstr(0, 0, "Equipment:", curses.color_pair(7))
         for i, (key, slot) in enumerate(self.game.player.equipment.items()):
             item = slot['item']
             item_name = item.name if item else "Empty"
@@ -285,7 +285,7 @@ class Renderer:
             if equippable_items:
                 stdscr.addstr(i + 2, 40, f"Equippable: {', '.join(item.name for item in equippable_items)}")
 
-        stdscr.addstr(height - 1, 0, "Press the letter of a slot to equip an item, or 'q' to exit")
+        stdscr.addstr(height - 1, 0, "Press the letter of a slot to equip an item, or 'q' to exit", curses.color_pair(7))
         stdscr.refresh()
 
     def draw_character_stats_screen(self, stdscr):
@@ -293,7 +293,7 @@ class Renderer:
         height, width = stdscr.getmaxyx()
 
         header = "Character Stats (press escape to exit)"
-        stdscr.addstr(0, 0, header[:width-1])
+        stdscr.addstr(0, 0, header[:width-1], curses.color_pair(7))
 
         # Attribute Scores
         attributes = [
@@ -335,7 +335,7 @@ class Renderer:
             stdscr.addstr(i, 0, line[:left_width])
 
         right_start = 1
-        stdscr.addstr(right_start, width // 2, "Equipment:")
+        stdscr.addstr(right_start, width // 2, "Equipment:", curses.color_pair(7))
         for i, line in enumerate(equipment_lines, start=right_start + 1):
             if i >= height:
                 break
@@ -367,7 +367,8 @@ class Renderer:
         ]
 
         for i, line in enumerate(menu_text):
-            stdscr.addstr(i, 0, line[:width-1])
+            color = curses.color_pair(7) if i == 0 else curses.color_pair(4)
+            stdscr.addstr(i, 0, line[:width-1], color)
 
         stdscr.refresh()
 
@@ -384,7 +385,8 @@ class Renderer:
             lines.append(f"New speed: {self.game.speed_input}")
 
         for i, line in enumerate(lines):
-            stdscr.addstr(i, 0, line[:width-1])
+            color = curses.color_pair(7) if i == 0 else curses.color_pair(4)
+            stdscr.addstr(i, 0, line[:width-1], color)
 
         stdscr.refresh()
 
@@ -409,6 +411,7 @@ class Renderer:
         for i, line in enumerate(lines):
             if i >= height:
                 break
-            stdscr.addstr(i, 0, line[:width-1])
+            color = curses.color_pair(7) if i == 0 else curses.color_pair(4)
+            stdscr.addstr(i, 0, line[:width-1], color)
 
         stdscr.refresh()
