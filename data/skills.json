@@ -68,5 +68,130 @@
     "name": "Speechcraft",
     "cost_multiplier": 1.0,
     "description": "Persuade or deceive others through conversation."
+  },
+  {
+    "name": "Daggers",
+    "cost_multiplier": 1.0,
+    "description": "Mastery of stabbing weapons for precise melee attacks."
+  },
+  {
+    "name": "Swords",
+    "cost_multiplier": 1.0,
+    "description": "Skilled use of swords in close combat."
+  },
+  {
+    "name": "Axes",
+    "cost_multiplier": 1.0,
+    "description": "Effective chopping techniques with axes and hatchets."
+  },
+  {
+    "name": "Maces",
+    "cost_multiplier": 1.0,
+    "description": "Expertise with clubs and maces to crush armor."
+  },
+  {
+    "name": "Hammers",
+    "cost_multiplier": 1.0,
+    "description": "Skilled in swinging hammers for heavy blows."
+  },
+  {
+    "name": "Spears",
+    "cost_multiplier": 1.0,
+    "description": "Proficiency with spears and javelins."
+  },
+  {
+    "name": "Polearms",
+    "cost_multiplier": 1.0,
+    "description": "Training with polearms to strike at reach."
+  },
+  {
+    "name": "Flails",
+    "cost_multiplier": 1.0,
+    "description": "Control of flails and chain weapons."
+  },
+  {
+    "name": "Crossbows",
+    "cost_multiplier": 1.0,
+    "description": "Accurate firing and reloading of crossbows."
+  },
+  {
+    "name": "Bows",
+    "cost_multiplier": 1.0,
+    "description": "Draw and shoot bows with precision."
+  },
+  {
+    "name": "Slings",
+    "cost_multiplier": 1.0,
+    "description": "Aim and release stones from slings."
+  },
+  {
+    "name": "Thrown Weapons",
+    "cost_multiplier": 1.0,
+    "description": "Skill in throwing knives, axes, and other weapons."
+  },
+  {
+    "name": "Light Armor",
+    "cost_multiplier": 1.0,
+    "description": "Move easily while wearing light protective gear."
+  },
+  {
+    "name": "Medium Armor",
+    "cost_multiplier": 1.0,
+    "description": "Balance protection and agility in medium armor."
+  },
+  {
+    "name": "Heavy Armor",
+    "cost_multiplier": 1.0,
+    "description": "Wear heavy armor without being slowed."
+  },
+  {
+    "name": "First Aid",
+    "cost_multiplier": 1.0,
+    "description": "Treat wounds and stabilize the injured."
+  },
+  {
+    "name": "Camping",
+    "cost_multiplier": 1.0,
+    "description": "Quickly set up and break down camps."
+  },
+  {
+    "name": "Mining",
+    "cost_multiplier": 1.0,
+    "description": "Extract ore and gems from the earth efficiently."
+  },
+  {
+    "name": "Music",
+    "cost_multiplier": 1.0,
+    "description": "Play instruments and inspire listeners."
+  },
+  {
+    "name": "Traps",
+    "cost_multiplier": 1.0,
+    "description": "Set and disarm traps with care."
+  },
+  {
+    "name": "Blacksmithing",
+    "cost_multiplier": 1.0,
+    "description": "Forge and repair metal equipment."
+  },
+  {
+    "name": "Shields",
+    "cost_multiplier": 1.0,
+    "description": "Use shields to block and bash foes."
+  },
+  {
+    "name": "Necromantic Magic",
+    "cost_multiplier": 1.0,
+    "description": "Manipulate the forces of death and undeath."
+  },
+  {
+    "name": "Mental Magic",
+    "cost_multiplier": 1.0,
+    "description": "Bend minds with psychic spells."
+  },
+  {
+    "name": "Swimming",
+    "cost_multiplier": 1.0,
+    "description": "Move swiftly through the water."
   }
 ]
