@@ -268,6 +268,11 @@ class Entity:
             return f"You restored {gained} mana."
         return "Your mana is already full."
 
+    def take_damage(self, amount):
+        """Inflict damage on the entity and report the loss."""
+        self.health = max(0, self.health - amount)
+        return f"You take {amount} damage."
+
     def equip_item(self, item):
         for slot_key, slot in self.equipment.items():
             if slot['name'] == item.slot:

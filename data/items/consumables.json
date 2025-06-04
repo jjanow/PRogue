@@ -48,5 +48,10 @@
     "name": "Dexterity Draught",
     "effect": "boost_dexterity",
     "value": 3
+  },
+  {
+    "name": "Poison Potion",
+    "effect": "poison",
+    "value": 10
   }
 ]
