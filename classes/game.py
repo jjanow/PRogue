@@ -479,7 +479,20 @@ class Game:
             if self.dungeon_level > 1:
                 self.previous_level()
             else:
-                self.exit_game()
+                self.messages.append("Are you sure you want to leave the dungeon? (Y/N)")
+                if self.stdscr:
+                    self.renderer.draw(self.stdscr)
+                    key = self.stdscr.getch()
+                else:
+                    key = ord('n')
+
+                if key in (ord('Y'), ord('y')):
+                    self.messages.append("You ascend the stairs and leave the dungeon.")
+                    if self.stdscr:
+                        self.renderer.draw(self.stdscr)
+                    self.exit_game()
+                else:
+                    self.messages.pop()  # remove confirmation message
 
     def walk_to(self, x, y, animate=False):
         """Automatically walk the player to the given coordinates using pathfinding.
