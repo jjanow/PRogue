@@ -408,5 +408,54 @@
       "max": 8
     },
     "material_type": "weapons"
+  },
+  {
+    "name": "Flail",
+    "slot": "weapon",
+    "body_part": "hands",
+    "damage": {"min": 1, "max": 6},
+    "material_type": "weapons"
+  },
+  {
+    "name": "Ogre Maul",
+    "slot": "weapon",
+    "body_part": "hands",
+    "damage": {"min": 1, "max": 8},
+    "material_type": "weapons"
+  },
+  {
+    "name": "Poison Dagger",
+    "slot": "weapon",
+    "body_part": "hands",
+    "damage": {"min": 1, "max": 4},
+    "material_type": "weapons"
+  },
+  {
+    "name": "Rusty Sword",
+    "slot": "weapon",
+    "body_part": "hands",
+    "damage": {"min": 1, "max": 6},
+    "material_type": "weapons"
+  },
+  {
+    "name": "Short Sword",
+    "slot": "weapon",
+    "body_part": "hands",
+    "damage": {"min": 1, "max": 6},
+    "material_type": "weapons"
+  },
+  {
+    "name": "Spear",
+    "slot": "weapon",
+    "body_part": "hands",
+    "damage": {"min": 1, "max": 6},
+    "material_type": "weapons"
+  },
+  {
+    "name": "Shadow Blade",
+    "slot": "weapon",
+    "body_part": "hands",
+    "damage": {"min": 1, "max": 8},
+    "material_type": "weapons"
   }
 ]

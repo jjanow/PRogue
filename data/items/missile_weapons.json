@@ -198,5 +198,12 @@
       "max": 4
     },
     "material_type": "weapons"
+  },
+  {
+    "name": "Sling",
+    "slot": "missile weapon",
+    "body_part": "hands",
+    "damage": {"min": 1, "max": 4},
+    "material_type": "weapons"
   }
 ]

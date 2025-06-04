@@ -68,5 +68,12 @@
     "body_part": "torso",
     "ac": 3,
     "material_type": "armor"
+  },
+  {
+    "name": "Bone Armor",
+    "slot": "armor",
+    "body_part": "torso",
+    "ac": 3,
+    "material_type": "armor"
   }
 ]

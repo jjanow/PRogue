@@ -50,11 +50,13 @@ def load_items():
             weight=item_data.get('weight', 1),
             effect_type=item_data.get('effect'),
             gold_value=item_data.get('gold', 10),
+            material_type=item_data.get('material_type'),
         )
         consumables.append(item)
 
 
     equipment = []
+    misc_items = []
     for fname in os.listdir(items_dir):
         if not fname.endswith('.json') or fname == 'consumables.json':
             continue
@@ -64,22 +66,32 @@ def load_items():
         for item_data in items:
             accuracy = item_data.get('accuracy', 0)
             material_type = item_data.get('material_type')
-            item = Equipment(
-                item_data['name'],
-                item_data['slot'],
-                item_data.get('body_part', 'unknown'),
-                0,
-                damage=item_data.get('damage'),
-                ac=item_data.get('ac'),
-                accuracy_bonus=accuracy,
-                weight=item_data.get('weight', 1),
-                material_type=material_type,
-                gold_value=item_data.get('gold', 50),
-            )
-            equipment.append(item)
+            if 'slot' in item_data:
+                item = Equipment(
+                    item_data['name'],
+                    item_data['slot'],
+                    item_data.get('body_part', 'unknown'),
+                    0,
+                    damage=item_data.get('damage'),
+                    ac=item_data.get('ac'),
+                    accuracy_bonus=accuracy,
+                    weight=item_data.get('weight', 1),
+                    material_type=material_type,
+                    gold_value=item_data.get('gold', 50),
+                )
+                equipment.append(item)
+            else:
+                item = Item(
+                    item_data['name'],
+                    lambda e: None,
+                    weight=item_data.get('weight', 1),
+                    gold_value=item_data.get('gold', 0),
+                    material_type=material_type,
+                )
+                misc_items.append(item)
 
-    all_items = consumables + equipment
-    return consumables, equipment, materials_by_type, all_materials, all_items
+    all_items = consumables + equipment + misc_items
+    return consumables, equipment, misc_items, materials_by_type, all_materials, all_items
 
 def create_effect(effect_type, value):
     if effect_type == 'heal':
@@ -98,6 +110,7 @@ def create_effect(effect_type, value):
 (
     all_consumables,
     all_equipment,
+    all_misc,
     materials_by_type,
     all_materials,
     all_items,
