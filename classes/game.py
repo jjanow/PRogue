@@ -2,6 +2,7 @@ import curses
 import heapq
 import random
 import sys
+import time
 from classes.entity import Entity
 from classes.item import Item, Equipment
 from classes.map_generator import MapGenerator
@@ -56,6 +57,7 @@ class Game:
         self.debug_mode = False
         self.quit = False
         self.walk_mode = False
+        self.auto_explore_mode = False
 
     def open_character_stats_screen(self):
         self.character_stats_mode = True
@@ -361,7 +363,7 @@ class Game:
             else:
                 self.exit_game()
 
-    def walk_to(self, x, y):
+    def walk_to(self, x, y, animate=False):
         """Automatically walk the player to the given coordinates using pathfinding."""
         target = type('Target', (object,), {'x': x, 'y': y})()
         path = self.find_path(self.player, target)
@@ -373,6 +375,9 @@ class Game:
             dy = step[1] - self.player.y
             prev_x, prev_y = self.player.x, self.player.y
             self.player_move_or_attack(dx, dy)
+            if animate and self.stdscr:
+                self.renderer.draw(self.stdscr)
+                time.sleep(0.05)
             if (self.player.x, self.player.y) == (prev_x, prev_y):
                 break
             if (self.player.x, self.player.y) == (x, y):
@@ -380,9 +385,46 @@ class Game:
 
     def walk_to_stairs(self, direction):
         if direction == 'up':
-            self.walk_to(self.stairs_up_x, self.stairs_up_y)
+            self.walk_to(self.stairs_up_x, self.stairs_up_y, animate=True)
         elif direction == 'down':
-            self.walk_to(self.stairs_x, self.stairs_y)
+            self.walk_to(self.stairs_x, self.stairs_y, animate=True)
+
+    def find_nearest_unexplored(self):
+        """Return coordinates of the nearest unexplored tile reachable from the player."""
+        from collections import deque
+
+        start = (self.player.x, self.player.y)
+        queue = deque([start])
+        visited = {start}
+
+        while queue:
+            x, y = queue.popleft()
+            if not self.explored[y][x] and self.map[y][x] in ['.', '<', '>']:
+                return (x, y)
+            for dx, dy in [(-1,0),(1,0),(0,-1),(0,1),(-1,-1),(1,-1),(-1,1),(1,1)]:
+                nx, ny = x + dx, y + dy
+                if (0 <= nx < self.width and 0 <= ny < self.height and
+                        (nx, ny) not in visited and self.map[ny][nx] in ['.', '<', '>']):
+                    visited.add((nx, ny))
+                    queue.append((nx, ny))
+        return None
+
+    def auto_explore(self):
+        """Automatically explore the dungeon until a monster is seen."""
+        self.auto_explore_mode = True
+        while self.auto_explore_mode:
+            if any(self.visible[e.y][e.x] for e in self.enemies):
+                self.messages.append("Monster spotted!")
+                break
+
+            target = self.find_nearest_unexplored()
+            if not target:
+                self.messages.append("Nothing left to explore.")
+                break
+
+            self.walk_to(target[0], target[1], animate=True)
+
+        self.auto_explore_mode = False
     
     def exit_game(self):
         try:
