@@ -231,8 +231,11 @@ def draw(stdscr, game):
 def main(stdscr, char_data):
     # Initialize curses
     curses.start_color()
-    # Further reduce the ESC key delay inside curses itself
-    curses.set_escdelay(25)
+    # Further reduce the ESC key delay inside curses itself. Not all curses
+    # implementations provide ``set_escdelay`` (e.g. ``windows-curses`` on
+    # Windows). Guard the call so the game runs everywhere.
+    if hasattr(curses, "set_escdelay"):
+        curses.set_escdelay(25)
     curses.init_pair(1, curses.COLOR_WHITE, curses.COLOR_BLACK)  # Default
     curses.init_pair(2, curses.COLOR_RED, curses.COLOR_BLACK)    # Player
     curses.init_pair(3, curses.COLOR_GREEN, curses.COLOR_BLACK)  # Monsters
