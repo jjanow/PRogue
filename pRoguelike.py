@@ -88,8 +88,8 @@ def main(stdscr):
         elif game.handle_input(key):
             break
 
-    curses.endwin()
-    print("Thanks for playing!")
+    return
 
 if __name__ == "__main__":
     wrapper(main)
+    print("Thanks for playing!")
