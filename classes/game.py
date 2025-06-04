@@ -628,18 +628,24 @@ class Game:
                 continue
             visited.add((x, y))
 
-            # If this tile itself is unexplored, walking onto it will explore it
-            if not self.explored[y][x]:
-                return (x, y)
+            # Never target the starting tile; it won't reveal anything new if
+            # unexplored neighbors are blocked by walls or the map edge.
+            if (x, y) != start:
+                # If this tile itself is unexplored, walking onto it will
+                # explore it
+                if not self.explored[y][x]:
+                    return (x, y)
 
-            # If any adjacent tile is unexplored (including walls), moving here
-            # will reveal it via the field of view
-            for dx, dy in [(-1,0), (1,0), (0,-1), (0,1),
-                           (-1,-1), (1,-1), (-1,1), (1,1)]:
-                nx, ny = x + dx, y + dy
-                if 0 <= nx < self.width and 0 <= ny < self.height:
-                    if not self.explored[ny][nx]:
-                        return (x, y)
+                # If any adjacent tile is unexplored (including walls), moving
+                # here will reveal it via the field of view
+                for dx, dy in [
+                    (-1, 0), (1, 0), (0, -1), (0, 1),
+                    (-1, -1), (1, -1), (-1, 1), (1, 1)
+                ]:
+                    nx, ny = x + dx, y + dy
+                    if 0 <= nx < self.width and 0 <= ny < self.height:
+                        if not self.explored[ny][nx]:
+                            return (x, y)
 
             for dx, dy in [(-1,0), (1,0), (0,-1), (0,1),
                            (-1,-1), (1,-1), (-1,1), (1,1)]:
