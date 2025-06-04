@@ -39,10 +39,10 @@ class InputHandler:
             ord('2'): (0, 1), ord('j'): (0, 1), curses.KEY_DOWN: (0, 1),
             ord('4'): (-1, 0), ord('h'): (-1, 0), curses.KEY_LEFT: (-1, 0),
             ord('6'): (1, 0), ord('l'): (1, 0), curses.KEY_RIGHT: (1, 0),
-            ord('7'): (-1, -1), ord('y'): (-1, -1),
-            ord('9'): (1, -1), ord('u'): (1, -1),
-            ord('1'): (-1, 1), ord('b'): (-1, 1),
-            ord('3'): (1, 1), ord('n'): (1, 1),
+            ord('7'): (-1, -1), ord('y'): (-1, -1), curses.KEY_HOME: (-1, -1), curses.KEY_A1: (-1, -1),
+            ord('9'): (1, -1), ord('u'): (1, -1), curses.KEY_PPAGE: (1, -1), curses.KEY_A3: (1, -1),
+            ord('1'): (-1, 1), ord('b'): (-1, 1), curses.KEY_END: (-1, 1), curses.KEY_C1: (-1, 1),
+            ord('3'): (1, 1), ord('n'): (1, 1), curses.KEY_NPAGE: (1, 1), curses.KEY_C3: (1, 1),
         }
 
         if key in movement_keys:
