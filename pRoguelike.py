@@ -113,9 +113,13 @@ def character_creation_cli():
     ]
 
     clear_screen()
-    method = input(
-        "Choose stat generation - random roll (r) or point buy (p): "
-    ).strip().lower()
+    print("Choose stat generation:")
+    print("  r) Random roll")
+    print("  p) Point buy")
+    while True:
+        method = get_single_key().lower()
+        if method in ("r", "p"):
+            break
     
     stats = {}
     if method.startswith("r"):
