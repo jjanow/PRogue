@@ -65,6 +65,8 @@ class Game:
         self.auto_explore_mode = False
         self.options_mode = False
         self.walk_speed = 5  # milliseconds between auto-move steps
+        self.help_mode = False
+        self.speed_input = ""
 
     def open_character_stats_screen(self):
         self.character_stats_mode = True

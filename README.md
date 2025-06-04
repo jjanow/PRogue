@@ -36,6 +36,11 @@ slot will be returned to your pack automatically.
 
 Press `@` to view your character sheet, which lists your statistics and all
 currently equipped items.
+
+Press `=` to open the options menu.  Enter a value between `0` and `1000`
+to set how quickly auto-walking steps are animated.
+
+Press `?` at any time to see a quick reference of available commands.
 =======
 
 ### Note on Escape Key Responsiveness
