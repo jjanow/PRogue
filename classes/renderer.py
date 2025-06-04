@@ -121,7 +121,11 @@ class Renderer:
             stdscr.addch(self.game.player.y, self.game.player.x, self.game.player.char, curses.color_pair(2))  # Player
 
         # Status bar
-        stdscr.addstr(height - 6, 0, f"Health: {self.game.player.health}/{self.game.player.max_health} | Damage: {self.game.player.damage} | Defense: {self.game.player.defense}")
+        stdscr.addstr(
+            height - 6,
+            0,
+            f"Health: {self.game.player.health}/{self.game.player.max_health} | Damage: {self.game.player.damage:.1f} | Defense: {self.game.player.defense:.1f}",
+        )
         stdscr.addstr(height - 5, 0, f"Level: {self.game.player.level} | XP: {self.game.player.xp}/{self.game.player.xp_to_next_level} | Dungeon Level: {self.game.dungeon_level}")
 
         # Messages
@@ -173,8 +177,8 @@ class Renderer:
             "",
             f"Base Damage: {self.game.player.base_damage}",
             f"Base Defense: {self.game.player.base_defense}",
-            f"Total Damage: {self.game.player.damage}",
-            f"Total Defense: {self.game.player.defense}",
+            f"Total Damage: {self.game.player.damage:.1f}",
+            f"Total Defense: {self.game.player.defense:.1f}",
             "",
             f"Money: {self.game.player.money} gold",
         ]

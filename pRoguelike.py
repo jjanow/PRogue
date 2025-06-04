@@ -212,7 +212,11 @@ def draw(stdscr, game):
     stdscr.addch(game.player.y, game.player.x, game.player.char)
 
     # Status bar
-    stdscr.addstr(height - 3, 0, f"Health: {game.player.health}/{game.player.max_health} | Damage: {game.player.damage} | Defense: {game.player.defense}")
+    stdscr.addstr(
+        height - 3,
+        0,
+        f"Health: {game.player.health}/{game.player.max_health} | Damage: {game.player.damage:.1f} | Defense: {game.player.defense:.1f}",
+    )
     stdscr.addstr(height - 2, 0, f"Level: {game.player.level} | XP: {game.player.xp}/{game.player.xp_to_next_level} | Dungeon Level: {game.dungeon_level}")
 
     # Inventory
