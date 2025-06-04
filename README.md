@@ -23,3 +23,10 @@ Make sure to run the game in a terminal that supports `curses`.
 Use the arrow keys or the number pad for movement. Diagonal steps are mapped to
 `1`, `3`, `7`, and `9` on the number pad. Press `Q` during play to begin the
 quit process.
+
+### Note on Escape Key Responsiveness
+
+By default, `curses` waits up to a second to decide whether an `ESC` press is
+part of a special key sequence. To make exiting menus feel snappier, PRogue sets
+the delay to 25&nbsp;ms. If you wish to change this value, set the `ESCDELAY`
+environment variable before launching the game.
