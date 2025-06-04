@@ -2,8 +2,13 @@ import random
 
 class MapGenerator:
     def __init__(self, height, width, screen_height, screen_width):
-        self.height = min(max(10, height), screen_height - 5)  # Ensure minimum height of 10 and max height of screen height minus 5
-        self.width = min(max(20, width), screen_width - 5)  # Ensure minimum width of 20 and max width of screen width minus 5
+        # Reserve six lines at the bottom of the screen for the UI.  Using
+        # ``screen_height - 6`` keeps the generated map fully visible.
+        self.height = min(max(10, height), screen_height - 6)
+
+        # Reserve a few columns on the right so the map never exceeds the
+        # available width.  ``max`` ensures a sensible minimum size.
+        self.width = min(max(20, width), screen_width - 5)
 
     def generate(self):
         # Existing map generation logic

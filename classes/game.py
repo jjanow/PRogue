@@ -87,7 +87,10 @@ class Game:
             # Reduce the number of items spawned by 50%
             num_items = max(1, (5 + self.dungeon_level) // 2)
         for _ in range(num_items):
-            x, y = self.get_random_floor()
+            pos = self.get_random_floor()
+            if not pos:
+                break
+            x, y = pos
             item = self.create_random_item()
             item.x, item.y = x, y
             self.items.append(item)
@@ -278,7 +281,10 @@ class Game:
 
     def spawn_enemies(self, num_enemies):
         for _ in range(num_enemies):
-            x, y = self.get_random_floor()
+            pos = self.get_random_floor()
+            if not pos:
+                break
+            x, y = pos
             difficulty_factor = min(2, 1 + (self.dungeon_level - 1) * 0.1)
             health = int((random.randint(20, 40) + self.dungeon_level * 5) * difficulty_factor)
             base_damage = 0
@@ -305,12 +311,19 @@ class Game:
                 )
             self.enemies.append(enemy)
 
-    def get_random_floor(self):
-        while True:
+    def get_random_floor(self, max_attempts=1000):
+        """Return coordinates of a random walkable tile or ``None`` if none are
+        available."""
+        for _ in range(max_attempts):
             x = random.randint(0, self.map_generator.width - 1)
             y = random.randint(0, self.map_generator.height - 1)
-            if self.map[y][x] == '.' and not any(e.x == x and e.y == y for e in self.enemies):
+            if (
+                self.map[y][x] == '.'
+                and (x, y) != (self.player.x, self.player.y)
+                and not any(e.x == x and e.y == y for e in self.enemies)
+            ):
                 return x, y
+        return None
 
     def is_valid_move(self, x, y):
         return 0 <= x < self.width and 0 <= y < self.height and self.map[y][x] in ['.', '>', '<']
