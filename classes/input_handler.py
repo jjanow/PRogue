@@ -34,6 +34,23 @@ class InputHandler:
         return False  # Don't exit the game
 
     def handle_main_game_input(self, key):
+        if self.game.walk_mode:
+            if key == ord('<'):
+                self.game.walk_to_stairs('up')
+                self.game.walk_mode = False
+                return
+            elif key == ord('>'):
+                self.game.walk_to_stairs('down')
+                self.game.walk_mode = False
+                return
+            else:
+                self.game.walk_mode = False
+
+        if key == ord('w'):
+            self.game.walk_mode = True
+            self.game.messages.append("Walk to stairs: < or >")
+            return
+
         movement_keys = {
             ord('8'): (0, -1), ord('k'): (0, -1), curses.KEY_UP: (0, -1),
             ord('2'): (0, 1), ord('j'): (0, 1), curses.KEY_DOWN: (0, 1),
