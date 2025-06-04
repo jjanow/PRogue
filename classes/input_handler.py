@@ -27,6 +27,8 @@ class InputHandler:
             self.handle_character_screen_input(key)
         elif self.game.character_stats_mode:
             self.handle_character_stats_input(key)
+        elif self.game.combat_stats_mode:
+            self.handle_combat_stats_input(key)
         elif key == ord('i'):
             self.game.inventory_mode = True
             self.game.inventory_page = 0
@@ -56,6 +58,10 @@ class InputHandler:
                 return
             else:
                 self.game.walk_mode = False
+
+        if key == 23:  # CTRL+W
+            self.game.open_combat_stats_screen()
+            return
 
         if key == ord('w'):
             if not (self.game.explored[self.game.stairs_y][self.game.stairs_x] or
@@ -176,6 +182,10 @@ class InputHandler:
     def handle_character_stats_input(self, key):
         if key == 27:  # ESC key
             self.game.character_stats_mode = False
+
+    def handle_combat_stats_input(self, key):
+        if key == 27:  # ESC key
+            self.game.combat_stats_mode = False
 
     def handle_backpack_input(self, key):
         if key == 27:  # ESC key
