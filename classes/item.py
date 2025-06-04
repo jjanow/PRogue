@@ -1,5 +1,5 @@
 class Item:
-    def __init__(self, name, effect, duration=None, value=None, weight=1, effect_type=None, gold_value=0):
+    def __init__(self, name, effect, duration=None, value=None, weight=1, effect_type=None, gold_value=0, material_type=None):
         self.name = name
         self.effect = effect
         self.duration = duration
@@ -7,6 +7,7 @@ class Item:
         self.weight = weight
         self.effect_type = effect_type
         self.gold_value = gold_value
+        self.material_type = material_type
         self.x = None
         self.y = None
         self.quantity = 1

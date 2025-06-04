@@ -125,6 +125,7 @@ class Game:
                 weight=item_template.weight,
                 effect_type=getattr(item_template, "effect_type", None),
                 gold_value=item_template.gold_value,
+                material_type=item_template.material_type,
             )
 
     def create_specific_item(self, category):
@@ -166,6 +167,7 @@ class Game:
                 weight=template.weight,
                 effect_type=getattr(template, "effect_type", None),
                 gold_value=template.gold_value,
+                material_type=template.material_type,
             )
 
     def map_current_level(self):

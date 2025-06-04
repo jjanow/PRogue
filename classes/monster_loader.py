@@ -42,6 +42,7 @@ class MonsterTemplate:
                         weight=template.weight,
                         effect_type=getattr(template, 'effect_type', None),
                         gold_value=template.gold_value,
+                        material_type=getattr(template, 'material_type', None),
                     )
             else:
                 # Generic placeholder item
