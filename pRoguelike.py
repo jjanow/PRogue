@@ -74,7 +74,7 @@ def point_buy_curses(stdscr, stats, total_points=20):
                 stats[attributes[selected]] += 1
                 remaining -= 1
         elif key == curses.KEY_LEFT:
-            if stats[attributes[selected]] > 10:
+            if stats[attributes[selected]] > 1:
                 stats[attributes[selected]] -= 1
                 remaining += 1
         elif key in (10, 13):
@@ -126,15 +126,13 @@ def character_creation_cli():
         while True:
             clear_screen()
             base_stats = {attr: random.randint(1, 20) for attr in attributes}
-            stats = {
-                attr: base_stats[attr] + race.bonuses.get(attr, 0)
-                for attr in attributes
-            }
+            stats = {}
             print("Rolled stats (base + racial bonus = total):")
             for attr in attributes:
                 base = base_stats[attr]
                 bonus = race.bonuses.get(attr, 0)
-                total = stats[attr]
+                total = max(1, base + bonus)
+                stats[attr] = total
                 print(f"  {attr.title():<12}: {base:2d} + {bonus:+2d} = {total:2d}")
             print("Press 'r' to reroll or any other key to accept")
             choice = get_single_key().lower()
@@ -145,9 +143,18 @@ def character_creation_cli():
         stats = {attr: 10 for attr in attributes}
         stats = wrapper(point_buy_curses, stats, 20)
 
-        # Apply race bonuses to stats after point buy
-        for attr, bonus in race.bonuses.items():
-            stats[attr] = stats.get(attr, 0) + bonus
+        # Apply race bonuses and display final values
+        clear_screen()
+        print("Point Buy results (base + racial bonus = total):")
+        for attr in attributes:
+            base = stats[attr]
+            bonus = race.bonuses.get(attr, 0)
+            total = max(1, base + bonus)
+            stats[attr] = total
+            print(f"  {attr.title():<12}: {base:2d} + {bonus:+2d} = {total:2d}")
+        print("Press any key to continue")
+        get_single_key()
+        clear_screen()
 
     return {
         "name": name,
