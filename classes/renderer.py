@@ -149,8 +149,16 @@ class Renderer:
         for i, (item, count) in enumerate(inventory_items[start_index:end_index], start=0):
             key = chr(97 + i)  # a-z
             info = self._format_item_stats(item)
-            item_str = f"{key}) {item.name} [{count}] {info}"
-            stdscr.addstr(i + 2, 0, item_str[:width-1], curses.color_pair(4))
+            name_part = f"{key}) {item.name} [{count}] "
+            stdscr.addstr(i + 2, 0, name_part[:width-1], curses.color_pair(4))
+            start_col = len(name_part)
+            if start_col < width - 1:
+                stdscr.addstr(
+                    i + 2,
+                    start_col,
+                    info[: width - 1 - start_col],
+                    curses.color_pair(6),
+                )
 
         total_pages = max(1, (len(inventory_items) - 1) // self.game.items_per_page + 1)
         footer = f"Page {self.game.inventory_page + 1}/{total_pages}"
