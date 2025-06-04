@@ -19,6 +19,11 @@ from classes.race_loader import all_races
 from curses import KEY_NPAGE, KEY_PPAGE
 
 
+def clear_screen():
+    """Clear the terminal screen."""
+    os.system('cls' if os.name == 'nt' else 'clear')
+
+
 def get_single_key():
     """Wait for a single keypress and return the pressed character."""
     fd = sys.stdin.fileno()
@@ -33,15 +38,16 @@ def get_single_key():
 
 def choose_option_single_click(prompt, options):
     """Display options and return the selected one using a single key press."""
-    print(prompt)
-    for idx, opt in enumerate(options, 1):
-        print(f"  {idx}) {opt}")
     while True:
+        clear_screen()
+        print(prompt)
+        for idx, opt in enumerate(options, 1):
+            print(f"  {idx}) {opt}")
         ch = get_single_key()
         if ch.isdigit():
             sel = int(ch) - 1
             if 0 <= sel < len(options):
-                print(options[sel])
+                clear_screen()
                 return options[sel]
 
 
@@ -77,24 +83,23 @@ def point_buy_curses(stdscr, stats, total_points=20):
 
 def character_creation_cli():
     """Simple command line character creation before launching curses."""
+    clear_screen()
     print("=== Character Creation ===")
     name = input("Name: ")
+    clear_screen()
     gender = input("Gender: ")
+    clear_screen()
     # Choose sex using single key input
     sex_options = ["Male", "Female", "Other"]
     sex = choose_option_single_click("Choose Sex:", sex_options)
+    clear_screen()
 
     # Choose race from data file
-    while True:
-        print("Choose Race:")
-        for idx, r in enumerate(all_races, 1):
-            print(f"  {idx}) {r.name}")
-        r_choice = input("Race selection: ").strip()
-        if r_choice.isdigit() and 1 <= int(r_choice) <= len(all_races):
-            race = all_races[int(r_choice) - 1]
-            break
-        else:
-            print("Invalid choice. Try again.")
+    race = choose_option_single_click(
+        "Choose Race:", [r.name for r in all_races]
+    )
+    race = next(r for r in all_races if r.name == race)
+    clear_screen()
 
     attributes = [
         "strength",
@@ -107,19 +112,23 @@ def character_creation_cli():
         "perception",
     ]
 
+    clear_screen()
     method = input(
         "Choose stat generation - random roll (r) or point buy (p): "
     ).strip().lower()
-
+    
     stats = {}
     if method.startswith("r"):
         while True:
+            clear_screen()
             stats = {attr: random.randint(1, 20) for attr in attributes}
             print("Rolled stats:")
             for attr in attributes:
                 print(f"  {attr.title()}: {stats[attr]}")
-            choice = input("Press 'r' to reroll or any other key to accept: ").lower()
+            print("Press 'r' to reroll or any other key to accept")
+            choice = get_single_key().lower()
             if choice != "r":
+                clear_screen()
                 break
     else:
         stats = {attr: 10 for attr in attributes}

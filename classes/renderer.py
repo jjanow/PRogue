@@ -104,7 +104,7 @@ class Renderer:
 
         # Left column: Basic Info
         left_column = [
-            f"Name: {self.game.player.name}",
+            f"Name: {self.game.player.name.title()}",
             f"Level: {self.game.player.level}",
             f"XP: {self.game.player.xp}/{self.game.player.xp_to_next_level}",
             "",
@@ -246,8 +246,8 @@ class Renderer:
 
         # Miscellaneous Data
         misc_data = [
-            f"Name: {self.game.player.name}",
-            f"Gender: {getattr(self.game.player, 'gender', 'Unknown')}",
+            f"Name: {self.game.player.name.title()}",
+            f"Gender: {getattr(self.game.player, 'gender', 'Unknown').title()}",
             f"Sex: {getattr(self.game.player, 'sex', 'Unknown')}",
             f"Race: {getattr(self.game.player, 'race', 'Unknown')}",
             f"HP: {self.game.player.health}/{self.game.player.max_health}",
