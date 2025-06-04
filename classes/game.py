@@ -413,11 +413,10 @@ class Game:
             if self.distance(enemy, self.player) <= 1:
                 self.combat(enemy, self.player)
             else:
-                path = self.get_cached_path(enemy, self.player)
+                path = self.find_path(enemy, self.player, consider_enemies=True)
                 if path and len(path) > 1:
                     next_pos = path[1]
-                    if not any(e.x == next_pos[0] and e.y == next_pos[1] for e in self.enemies):
-                        enemy.x, enemy.y = next_pos
+                    enemy.x, enemy.y = next_pos
 
     def next_level(self):
         self.dungeon_level += 1
@@ -687,17 +686,26 @@ class Game:
         self.player.x, self.player.y = self.stairs_x, self.stairs_y
     
     def heuristic(self, a, b):
-        return abs(b.x - a[0]) + abs(b.y - a[1])
-        
-    def find_path(self, start, goal):
-        start_pos = (start.x, start.y)
-        goal_pos = (goal.x, goal.y)
+        bx, by = (b.x, b.y) if hasattr(b, "x") else b
+        return abs(bx - a[0]) + abs(by - a[1])
+
+    def find_path(self, start, goal, consider_enemies=False):
+        start_pos = (start.x, start.y) if hasattr(start, "x") else start
+        goal_pos = (goal.x, goal.y) if hasattr(goal, "x") else goal
+
+        avoid = set()
+        if consider_enemies:
+            avoid = {
+                (e.x, e.y)
+                for e in self.enemies
+                if (e.x, e.y) != start_pos and (e.x, e.y) != goal_pos and e.health > 0
+            }
 
         neighbors = [(0,1), (0,-1), (1,0), (-1,0), (1,1), (1,-1), (-1,1), (-1,-1)]
         close_set = set()
         came_from = {}
         gscore = {start_pos: 0}
-        fscore = {start_pos: self.heuristic(start_pos, goal)}
+        fscore = {start_pos: self.heuristic(start_pos, goal_pos)}
         open_heap = []
         heapq.heappush(open_heap, (fscore[start_pos], start_pos))
 
@@ -719,19 +727,19 @@ class Game:
                 if 0 <= neighbor[0] < self.width and 0 <= neighbor[1] < self.height:
                     if self.map[neighbor[1]][neighbor[0]] in ['#', ' ']:
                         continue
-                    if neighbor in close_set:
+                    if neighbor in close_set or neighbor in avoid:
                         continue
 
                     tentative_g_score = gscore[current] + 1
 
-                    if neighbor not in [i[1] for i in open_heap]:
+                    if neighbor not in [n[1] for n in open_heap]:
                         heapq.heappush(open_heap, (fscore.get(neighbor, float('inf')), neighbor))
                     elif tentative_g_score >= gscore.get(neighbor, float('inf')):
                         continue
 
                     came_from[neighbor] = current
                     gscore[neighbor] = tentative_g_score
-                    fscore[neighbor] = gscore[neighbor] + self.heuristic(neighbor, goal)
+                    fscore[neighbor] = gscore[neighbor] + self.heuristic(neighbor, goal_pos)
 
         return None
 
