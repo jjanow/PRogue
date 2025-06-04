@@ -411,7 +411,8 @@ class Game:
                 if message not in self.messages:
                     self.messages.append(message)
 
-        self.player.update_temporary_boosts()
+        for msg in self.player.update_temporary_boosts():
+            self.messages.append(msg)
         self.update_fov()
 
     def check_collisions(self):
