@@ -15,6 +15,9 @@ class Renderer:
         
         for y, row in enumerate(self.game.map[:dungeon_height]):
             for x, cell in enumerate(row[:width]):  # Ensure we don't exceed the screen width
+                if not self.game.explored[y][x]:
+                    stdscr.addch(y, x, ' ')
+                    continue
                 if cell == '#':
                     stdscr.addch(y, x, cell, curses.color_pair(5))  # Walls
                 elif cell == '+':
@@ -23,11 +26,11 @@ class Renderer:
                     stdscr.addch(y, x, cell, curses.color_pair(1))  # Default
 
         for item in self.game.items:
-            if item.y < dungeon_height:
+            if item.y < dungeon_height and self.game.visible[item.y][item.x]:
                 stdscr.addch(item.y, item.x, item.char, curses.color_pair(4))  # Items
 
         for enemy in self.game.enemies:
-            if enemy.y < dungeon_height:
+            if enemy.y < dungeon_height and self.game.visible[enemy.y][enemy.x]:
                 stdscr.addch(enemy.y, enemy.x, enemy.char, curses.color_pair(3))  # Monsters
 
         if self.game.player.y < dungeon_height:
