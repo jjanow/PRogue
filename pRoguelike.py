@@ -75,6 +75,9 @@ def main(stdscr):
         else:
             game.renderer.draw(stdscr)
 
+        if game.quit:
+            break
+
         key = stdscr.getch()
         if game.debug_mode and key == 27:  # ESC key
             game.debug_mode = False
@@ -86,6 +89,9 @@ def main(stdscr):
             elif game.handle_input(key):
                 break
         elif game.handle_input(key):
+            break
+
+        if game.quit:
             break
 
     return
