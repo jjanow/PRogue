@@ -410,12 +410,11 @@ class Game:
             self.spawn_enemies(1)
             self.last_spawn_turn = self.turn_count
         
-        # Check for items on the floor (only if not already in messages)
+        # Check for items on the floor
         for item in self.items:
             if item.x == self.player.x and item.y == self.player.y:
                 message = f"Floor: {item.name}"
-                if message not in self.messages:
-                    self.messages.append(message)
+                self.messages.append(message)
 
         for msg in self.player.update_temporary_boosts():
             self.messages.append(msg)
@@ -591,6 +590,11 @@ class Game:
                 dy = step[1] - self.player.y
                 prev_x, prev_y = self.player.x, self.player.y
                 self.player_move_or_attack(dx, dy)
+
+                if any(self.visible[e.y][e.x] for e in self.enemies):
+                    self.messages.append("Monster spotted!")
+                    interrupted = True
+                    break
 
                 if draw_steps:
                     self.renderer.draw(self.stdscr)
