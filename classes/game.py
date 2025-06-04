@@ -419,12 +419,15 @@ class Game:
             return False
 
         interrupted = False
-        if animate and self.stdscr:
+        draw_steps = animate and self.stdscr and self.walk_speed > 0
+        check_keys = animate and self.stdscr
+
+        if check_keys:
             self.stdscr.nodelay(True)
 
         try:
             for step in path[1:]:
-                if animate and self.stdscr:
+                if check_keys:
                     key = self.stdscr.getch()
                     if key != -1:
                         curses.ungetch(key)
@@ -436,7 +439,7 @@ class Game:
                 prev_x, prev_y = self.player.x, self.player.y
                 self.player_move_or_attack(dx, dy)
 
-                if animate and self.stdscr:
+                if draw_steps:
                     self.renderer.draw(self.stdscr)
                     time.sleep(self.walk_speed / 1000.0)
 
@@ -445,8 +448,11 @@ class Game:
                 if (self.player.x, self.player.y) == (x, y):
                     break
         finally:
-            if animate and self.stdscr:
+            if check_keys:
                 self.stdscr.nodelay(False)
+
+        if animate and not draw_steps and self.stdscr:
+            self.renderer.draw(self.stdscr)
 
         return interrupted
 
