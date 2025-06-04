@@ -3,60 +3,70 @@
     "name": "Gloves",
     "slot": "gauntlets",
     "body_part": "hands",
-    "ac": 1
+    "ac": 1,
+    "material_type": "armor"
   },
   {
     "name": "Gauntlets",
     "slot": "gauntlets",
     "body_part": "hands",
-    "ac": 1
+    "ac": 1,
+    "material_type": "armor"
   },
   {
     "name": "Vambraces",
     "slot": "gauntlets",
     "body_part": "hands",
-    "ac": 1
+    "ac": 1,
+    "material_type": "armor"
   },
   {
     "name": "Mitts",
     "slot": "gauntlets",
     "body_part": "hands",
-    "ac": 1
+    "ac": 1,
+    "material_type": "armor"
   },
   {
     "name": "Plate Gauntlets",
     "slot": "gauntlets",
     "body_part": "hands",
-    "ac": 1
+    "ac": 1,
+    "material_type": "armor"
   },
   {
     "name": "Chain Gauntlets",
     "slot": "gauntlets",
     "body_part": "hands",
-    "ac": 1
+    "ac": 1,
+    "material_type": "armor"
   },
   {
     "name": "Leather Gloves",
     "slot": "gauntlets",
     "body_part": "hands",
-    "ac": 1
+    "ac": 1,
+    "material_type": "armor"
   },
   {
     "name": "Battle Gauntlets",
     "slot": "gauntlets",
     "body_part": "hands",
-    "ac": 1
+    "ac": 1,
+    "material_type": "armor"
   },
   {
     "name": "Spiked Gauntlets",
     "slot": "gauntlets",
     "body_part": "hands",
-    "ac": 1
+    "ac": 1,
+    "material_type": "armor"
   },
   {
     "name": "Enchanted Gloves",
     "slot": "gauntlets",
     "body_part": "hands",
-    "ac": 1
+    "ac": 1,
+    "material_type": "armor"
   }
 ]

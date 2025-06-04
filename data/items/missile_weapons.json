@@ -6,7 +6,8 @@
     "damage": {
       "min": 2,
       "max": 8
-    }
+    },
+    "material_type": "weapons"
   },
   {
     "name": "Heavy Crossbow",
@@ -15,7 +16,8 @@
     "damage": {
       "min": 2,
       "max": 8
-    }
+    },
+    "material_type": "weapons"
   },
   {
     "name": "Repeating Crossbow",
@@ -24,7 +26,8 @@
     "damage": {
       "min": 2,
       "max": 8
-    }
+    },
+    "material_type": "weapons"
   },
   {
     "name": "Siege Crossbow",
@@ -33,7 +36,8 @@
     "damage": {
       "min": 2,
       "max": 8
-    }
+    },
+    "material_type": "weapons"
   },
   {
     "name": "Arbalest",
@@ -42,7 +46,8 @@
     "damage": {
       "min": 2,
       "max": 8
-    }
+    },
+    "material_type": "weapons"
   },
   {
     "name": "Simple Longbow",
@@ -51,7 +56,8 @@
     "damage": {
       "min": 1,
       "max": 6
-    }
+    },
+    "material_type": "weapons"
   },
   {
     "name": "Composite Longbow",
@@ -60,7 +66,8 @@
     "damage": {
       "min": 1,
       "max": 6
-    }
+    },
+    "material_type": "weapons"
   },
   {
     "name": "Recurve Longbow",
@@ -69,7 +76,8 @@
     "damage": {
       "min": 1,
       "max": 6
-    }
+    },
+    "material_type": "weapons"
   },
   {
     "name": "Greatbow",
@@ -78,7 +86,8 @@
     "damage": {
       "min": 1,
       "max": 6
-    }
+    },
+    "material_type": "weapons"
   },
   {
     "name": "Elven Longbow",
@@ -87,7 +96,8 @@
     "damage": {
       "min": 1,
       "max": 6
-    }
+    },
+    "material_type": "weapons"
   },
   {
     "name": "Simple Shortbow",
@@ -96,7 +106,8 @@
     "damage": {
       "min": 1,
       "max": 6
-    }
+    },
+    "material_type": "weapons"
   },
   {
     "name": "Composite Shortbow",
@@ -105,7 +116,8 @@
     "damage": {
       "min": 1,
       "max": 6
-    }
+    },
+    "material_type": "weapons"
   },
   {
     "name": "Recurve Shortbow",
@@ -114,7 +126,8 @@
     "damage": {
       "min": 1,
       "max": 6
-    }
+    },
+    "material_type": "weapons"
   },
   {
     "name": "Hunting Bow",
@@ -123,7 +136,8 @@
     "damage": {
       "min": 1,
       "max": 6
-    }
+    },
+    "material_type": "weapons"
   },
   {
     "name": "Elven Shortbow",
@@ -132,7 +146,8 @@
     "damage": {
       "min": 1,
       "max": 6
-    }
+    },
+    "material_type": "weapons"
   },
   {
     "name": "Simple Sling",
@@ -141,7 +156,8 @@
     "damage": {
       "min": 1,
       "max": 4
-    }
+    },
+    "material_type": "weapons"
   },
   {
     "name": "Staff Sling",
@@ -150,7 +166,8 @@
     "damage": {
       "min": 1,
       "max": 4
-    }
+    },
+    "material_type": "weapons"
   },
   {
     "name": "Heavy Sling",
@@ -159,7 +176,8 @@
     "damage": {
       "min": 1,
       "max": 4
-    }
+    },
+    "material_type": "weapons"
   },
   {
     "name": "Whip Sling",
@@ -168,7 +186,8 @@
     "damage": {
       "min": 1,
       "max": 4
-    }
+    },
+    "material_type": "weapons"
   },
   {
     "name": "Precision Sling",
@@ -177,6 +196,7 @@
     "damage": {
       "min": 1,
       "max": 4
-    }
+    },
+    "material_type": "weapons"
   }
 ]

@@ -11,6 +11,7 @@ from classes.item_loader import (
     all_items,
     all_consumables,
     all_equipment,
+    materials_by_type,
     all_materials,
 )
 from curses import KEY_NPAGE, KEY_PPAGE
@@ -94,7 +95,10 @@ class Game:
     def create_random_item(self):
         item_template = random.choice(all_items)
         if isinstance(item_template, Equipment):
-            material = random.choice(all_materials)
+            material_list = materials_by_type.get(
+                item_template.material_type, all_materials
+            )
+            material = random.choice(material_list)
             name = f"{material.name} {item_template.name}"
             stat = material.power
             return Equipment(
@@ -106,6 +110,7 @@ class Game:
                 ac=item_template.ac,
                 accuracy_bonus=item_template.accuracy_bonus,
                 weight=item_template.weight,
+                material_type=item_template.material_type,
             )
         else:
             return Item(
@@ -129,7 +134,10 @@ class Game:
             template = random.choice(pool)
 
         if isinstance(template, Equipment):
-            material = random.choice(all_materials)
+            material_list = materials_by_type.get(
+                template.material_type, all_materials
+            )
+            material = random.choice(material_list)
             name = f"{material.name} {template.name}"
             stat = material.power
             return Equipment(
@@ -141,6 +149,7 @@ class Game:
                 ac=template.ac,
                 accuracy_bonus=template.accuracy_bonus,
                 weight=template.weight,
+                material_type=template.material_type,
             )
         else:
             return Item(

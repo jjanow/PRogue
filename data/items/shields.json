@@ -3,60 +3,70 @@
     "name": "Buckler",
     "slot": "shield",
     "body_part": "hand",
-    "ac": 2
+    "ac": 2,
+    "material_type": "armor"
   },
   {
     "name": "Kite Shield",
     "slot": "shield",
     "body_part": "hand",
-    "ac": 2
+    "ac": 2,
+    "material_type": "armor"
   },
   {
     "name": "Tower Shield",
     "slot": "shield",
     "body_part": "hand",
-    "ac": 2
+    "ac": 2,
+    "material_type": "armor"
   },
   {
     "name": "Round Shield",
     "slot": "shield",
     "body_part": "hand",
-    "ac": 2
+    "ac": 2,
+    "material_type": "armor"
   },
   {
     "name": "Heater Shield",
     "slot": "shield",
     "body_part": "hand",
-    "ac": 2
+    "ac": 2,
+    "material_type": "armor"
   },
   {
     "name": "Pavise",
     "slot": "shield",
     "body_part": "hand",
-    "ac": 2
+    "ac": 2,
+    "material_type": "armor"
   },
   {
     "name": "Aegis",
     "slot": "shield",
     "body_part": "hand",
-    "ac": 2
+    "ac": 2,
+    "material_type": "armor"
   },
   {
     "name": "Wall Shield",
     "slot": "shield",
     "body_part": "hand",
-    "ac": 2
+    "ac": 2,
+    "material_type": "armor"
   },
   {
     "name": "Barrel Lid",
     "slot": "shield",
     "body_part": "hand",
-    "ac": 2
+    "ac": 2,
+    "material_type": "armor"
   },
   {
     "name": "Spiked Shield",
     "slot": "shield",
     "body_part": "hand",
-    "ac": 2
+    "ac": 2,
+    "material_type": "armor"
   }
 ]

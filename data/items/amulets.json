@@ -3,60 +3,70 @@
     "name": "Pendant",
     "slot": "amulet",
     "body_part": "neck",
-    "ac": 1
+    "ac": 1,
+    "material_type": "jewelry"
   },
   {
     "name": "Amulet",
     "slot": "amulet",
     "body_part": "neck",
-    "ac": 1
+    "ac": 1,
+    "material_type": "jewelry"
   },
   {
     "name": "Talisman",
     "slot": "amulet",
     "body_part": "neck",
-    "ac": 1
+    "ac": 1,
+    "material_type": "jewelry"
   },
   {
     "name": "Charm",
     "slot": "amulet",
     "body_part": "neck",
-    "ac": 1
+    "ac": 1,
+    "material_type": "jewelry"
   },
   {
     "name": "Medallion",
     "slot": "amulet",
     "body_part": "neck",
-    "ac": 1
+    "ac": 1,
+    "material_type": "jewelry"
   },
   {
     "name": "Torque",
     "slot": "amulet",
     "body_part": "neck",
-    "ac": 1
+    "ac": 1,
+    "material_type": "jewelry"
   },
   {
     "name": "Locket",
     "slot": "amulet",
     "body_part": "neck",
-    "ac": 1
+    "ac": 1,
+    "material_type": "jewelry"
   },
   {
     "name": "Phylactery",
     "slot": "amulet",
     "body_part": "neck",
-    "ac": 1
+    "ac": 1,
+    "material_type": "jewelry"
   },
   {
     "name": "Gorget",
     "slot": "amulet",
     "body_part": "neck",
-    "ac": 1
+    "ac": 1,
+    "material_type": "jewelry"
   },
   {
     "name": "Collar",
     "slot": "amulet",
     "body_part": "neck",
-    "ac": 1
+    "ac": 1,
+    "material_type": "jewelry"
   }
 ]

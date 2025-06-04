@@ -3,60 +3,70 @@
     "name": "Wristguards",
     "slot": "bracers",
     "body_part": "arms",
-    "ac": 1
+    "ac": 1,
+    "material_type": "armor"
   },
   {
     "name": "Bracers",
     "slot": "bracers",
     "body_part": "arms",
-    "ac": 1
+    "ac": 1,
+    "material_type": "armor"
   },
   {
     "name": "Armguards",
     "slot": "bracers",
     "body_part": "arms",
-    "ac": 1
+    "ac": 1,
+    "material_type": "armor"
   },
   {
     "name": "Cuffs",
     "slot": "bracers",
     "body_part": "arms",
-    "ac": 1
+    "ac": 1,
+    "material_type": "armor"
   },
   {
     "name": "Armlets",
     "slot": "bracers",
     "body_part": "arms",
-    "ac": 1
+    "ac": 1,
+    "material_type": "armor"
   },
   {
     "name": "Leather Bracers",
     "slot": "bracers",
     "body_part": "arms",
-    "ac": 1
+    "ac": 1,
+    "material_type": "armor"
   },
   {
     "name": "Plate Bracers",
     "slot": "bracers",
     "body_part": "arms",
-    "ac": 1
+    "ac": 1,
+    "material_type": "armor"
   },
   {
     "name": "Studded Bracers",
     "slot": "bracers",
     "body_part": "arms",
-    "ac": 1
+    "ac": 1,
+    "material_type": "armor"
   },
   {
     "name": "Forearm Guards",
     "slot": "bracers",
     "body_part": "arms",
-    "ac": 1
+    "ac": 1,
+    "material_type": "armor"
   },
   {
     "name": "Enchanted Bracers",
     "slot": "bracers",
     "body_part": "arms",
-    "ac": 1
+    "ac": 1,
+    "material_type": "armor"
   }
 ]

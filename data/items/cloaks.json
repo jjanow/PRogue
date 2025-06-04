@@ -3,60 +3,70 @@
     "name": "Cloak",
     "slot": "cloak",
     "body_part": "back",
-    "ac": 1
+    "ac": 1,
+    "material_type": "cloth"
   },
   {
     "name": "Cape",
     "slot": "cloak",
     "body_part": "back",
-    "ac": 1
+    "ac": 1,
+    "material_type": "cloth"
   },
   {
     "name": "Mantle",
     "slot": "cloak",
     "body_part": "back",
-    "ac": 1
+    "ac": 1,
+    "material_type": "cloth"
   },
   {
     "name": "Hooded Cloak",
     "slot": "cloak",
     "body_part": "back",
-    "ac": 1
+    "ac": 1,
+    "material_type": "cloth"
   },
   {
     "name": "Traveling Cloak",
     "slot": "cloak",
     "body_part": "back",
-    "ac": 1
+    "ac": 1,
+    "material_type": "cloth"
   },
   {
     "name": "Opera Cape",
     "slot": "cloak",
     "body_part": "back",
-    "ac": 1
+    "ac": 1,
+    "material_type": "cloth"
   },
   {
     "name": "Duster",
     "slot": "cloak",
     "body_part": "back",
-    "ac": 1
+    "ac": 1,
+    "material_type": "cloth"
   },
   {
     "name": "Pelerine",
     "slot": "cloak",
     "body_part": "back",
-    "ac": 1
+    "ac": 1,
+    "material_type": "cloth"
   },
   {
     "name": "Shroud",
     "slot": "cloak",
     "body_part": "back",
-    "ac": 1
+    "ac": 1,
+    "material_type": "cloth"
   },
   {
     "name": "Poncho",
     "slot": "cloak",
     "body_part": "back",
-    "ac": 1
+    "ac": 1,
+    "material_type": "cloth"
   }
 ]

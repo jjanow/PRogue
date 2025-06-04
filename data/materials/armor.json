@@ -1,0 +1,8 @@
+[
+  {"name": "Leather", "power": 1},
+  {"name": "Bronze", "power": 2},
+  {"name": "Iron", "power": 3},
+  {"name": "Steel", "power": 4},
+  {"name": "Mithril", "power": 5},
+  {"name": "Adamantine", "power": 6}
+]
