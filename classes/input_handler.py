@@ -50,6 +50,11 @@ class InputHandler:
             self.game.player_move_or_attack(dx, dy)
             return
 
+        if key in [ord('5'), curses.KEY_B2]:
+            # Passing a turn (numpad 5 or keypad center)
+            self.game.process_turn()
+            return
+
         if key == ord('i'):
             self.game.open_inventory()
         elif key == ord('c'):
