@@ -51,7 +51,7 @@ def choose_option_single_click(prompt, options):
                 return options[sel]
 
 
-def point_buy_curses(stdscr, stats, total_points=20):
+def point_buy_curses(stdscr, stats, race_bonuses, total_points=20):
     curses.curs_set(0)
     attributes = list(stats.keys())
     selected = 0
@@ -61,7 +61,11 @@ def point_buy_curses(stdscr, stats, total_points=20):
         stdscr.addstr(0, 0, "Point Buy - Arrows adjust, Enter to accept")
         for idx, attr in enumerate(attributes):
             marker = "->" if idx == selected else "  "
-            stdscr.addstr(idx + 2, 0, f"{marker} {attr.title():<12}: {stats[attr]:2d}")
+            base = stats[attr]
+            bonus = race_bonuses.get(attr, 0)
+            total = max(1, base + bonus)
+            stdscr.addstr(idx + 2, 0,
+                          f"{marker} {attr.title():<12}: {base:2d} {bonus:+2d} = {total:2d}")
         stdscr.addstr(len(attributes) + 3, 0, f"Remaining Points: {remaining:2d}")
         stdscr.refresh()
         key = stdscr.getch()
@@ -141,20 +145,11 @@ def character_creation_cli():
                 break
     else:
         stats = {attr: 10 for attr in attributes}
-        stats = wrapper(point_buy_curses, stats, 20)
+        stats = wrapper(point_buy_curses, stats, race.bonuses, 20)
 
-        # Apply race bonuses and display final values
-        clear_screen()
-        print("Point Buy results (base + racial bonus = total):")
+        # Apply race bonuses directly without an extra screen
         for attr in attributes:
-            base = stats[attr]
-            bonus = race.bonuses.get(attr, 0)
-            total = max(1, base + bonus)
-            stats[attr] = total
-            print(f"  {attr.title():<12}: {base:2d} + {bonus:+2d} = {total:2d}")
-        print("Press any key to continue")
-        get_single_key()
-        clear_screen()
+            stats[attr] = max(1, stats[attr] + race.bonuses.get(attr, 0))
 
     return {
         "name": name,
