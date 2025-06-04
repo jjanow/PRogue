@@ -6,7 +6,12 @@ import time
 from classes.entity import Entity
 from classes.item import Item, Equipment
 from classes.map_generator import MapGenerator
-from classes.item_loader import all_items, all_consumables, all_equipment
+from classes.item_loader import (
+    all_items,
+    all_consumables,
+    all_equipment,
+    all_materials,
+)
 from curses import KEY_NPAGE, KEY_PPAGE
 from classes.input_handler import InputHandler
 from classes.renderer import Renderer
@@ -80,11 +85,14 @@ class Game:
     def create_random_item(self):
         item_template = random.choice(all_items)
         if isinstance(item_template, Equipment):
+            material = random.choice(all_materials)
+            name = f"{material.name} {item_template.name}"
+            stat = material.power
             return Equipment(
-                item_template.name,
+                name,
                 item_template.char,
                 item_template.slot,
-                item_template.stat_boost,
+                stat,
                 accuracy_bonus=item_template.accuracy_bonus,
             )
         else:
@@ -106,11 +114,14 @@ class Game:
             template = random.choice(all_items)
 
         if isinstance(template, Equipment):
+            material = random.choice(all_materials)
+            name = f"{material.name} {template.name}"
+            stat = material.power
             return Equipment(
-                template.name,
+                name,
                 template.char,
                 template.slot,
-                template.stat_boost,
+                stat,
                 accuracy_bonus=template.accuracy_bonus,
             )
         else:

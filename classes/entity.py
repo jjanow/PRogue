@@ -1,7 +1,7 @@
 import random
 from collections import Counter
 from classes.item import Equipment, Item
-from classes.item_loader import all_consumables, all_equipment
+from classes.item_loader import all_consumables, all_equipment, all_materials
 
 
 class Entity:
@@ -155,15 +155,30 @@ class Entity:
             self.add_item(health_potion)
             self.add_item(health_potion)
 
-        # Equip the player with a dagger
-        dagger = next((item for item in all_equipment if item.name == "Dagger"), None)
-        if dagger:
-            self.equip(dagger, 'a')  # 'a' is the slot for weapon
+        # Equip the player with a basic dagger and robe
+        dagger_base = next((item for item in all_equipment if item.name == "Dagger"), None)
+        robe_base = next((item for item in all_equipment if item.name == "Robe"), None)
+        bronze = next((m for m in all_materials if m.name == "Bronze"), None)
+        cloth = next((m for m in all_materials if m.name == "Cloth"), None)
 
-        # Equip the player with leather armor
-        leather_armor = next((item for item in all_equipment if item.name == "Leather Armor"), None)
-        if leather_armor:
-            self.equip(leather_armor, 'f')  # 'f' is the slot for armor
+        if dagger_base and bronze:
+            dagger = Equipment(
+                f"{bronze.name} {dagger_base.name}",
+                dagger_base.char,
+                dagger_base.slot,
+                bronze.power,
+                accuracy_bonus=dagger_base.accuracy_bonus,
+            )
+            self.equip(dagger, 'a')  # 'a' is the weapon slot
+
+        if robe_base and cloth:
+            robe = Equipment(
+                f"{cloth.name} {robe_base.name}",
+                robe_base.char,
+                robe_base.slot,
+                cloth.power,
+            )
+            self.equip(robe, 'f')  # 'f' is the armor slot
 
     def heal(self, amount):
         self.health = min(self.max_health, self.health + amount)
