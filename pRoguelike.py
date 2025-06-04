@@ -125,10 +125,17 @@ def character_creation_cli():
     if method.startswith("r"):
         while True:
             clear_screen()
-            stats = {attr: random.randint(1, 20) for attr in attributes}
-            print("Rolled stats:")
+            base_stats = {attr: random.randint(1, 20) for attr in attributes}
+            stats = {
+                attr: base_stats[attr] + race.bonuses.get(attr, 0)
+                for attr in attributes
+            }
+            print("Rolled stats (base + racial bonus = total):")
             for attr in attributes:
-                print(f"  {attr.title()}: {stats[attr]}")
+                base = base_stats[attr]
+                bonus = race.bonuses.get(attr, 0)
+                total = stats[attr]
+                print(f"  {attr.title():<12}: {base:2d} + {bonus:+2d} = {total:2d}")
             print("Press 'r' to reroll or any other key to accept")
             choice = get_single_key().lower()
             if choice != "r":
@@ -138,9 +145,9 @@ def character_creation_cli():
         stats = {attr: 10 for attr in attributes}
         stats = wrapper(point_buy_curses, stats, 20)
 
-    # Apply race bonuses to stats
-    for attr, bonus in race.bonuses.items():
-        stats[attr] = stats.get(attr, 0) + bonus
+        # Apply race bonuses to stats after point buy
+        for attr, bonus in race.bonuses.items():
+            stats[attr] = stats.get(attr, 0) + bonus
 
     return {
         "name": name,
