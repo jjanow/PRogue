@@ -24,6 +24,9 @@ Use the arrow keys or the number pad for movement. Diagonal steps are mapped to
 `1`, `3`, `7`, and `9` on the number pad. Press `Q` during play to begin the
 quit process.
 
+Press `0` on the number pad to auto-explore the dungeon. Exploration will pause
+whenever you spot a monster so you can react.
+
 While in the dungeon, press `i` to open your inventory. Press the letter
 corresponding to an equipment item to wear or wield it. Any item already in that
 slot will be returned to your pack automatically.

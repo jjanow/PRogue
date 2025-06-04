@@ -61,6 +61,10 @@ class InputHandler:
                 self.game.messages.append("Walk to stairs: < or >")
             return
 
+        if key == ord('0'):
+            self.game.auto_explore()
+            return
+
         movement_keys = {
             ord('8'): (0, -1), ord('k'): (0, -1), curses.KEY_UP: (0, -1),
             ord('2'): (0, 1), ord('j'): (0, 1), curses.KEY_DOWN: (0, 1),
