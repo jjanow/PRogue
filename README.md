@@ -7,9 +7,11 @@ PRogue is a traditional roguelike game. This project is in its very early stages
 ## Features
 
 - Procedurally generated dungeons
-- Basic movement and combat mechanics
+- Turn-based combat with random enemies and loot
 - Diagonal movement using the number pad (1,3,7,9)
-- Randomly generated enemies and items
+- Auto-explore and walk-to-stairs commands
+- Inventory and equipment management screens
+- In-game help and options menus
 
 ## Getting Started
 
@@ -20,32 +22,14 @@ python pRoguelike.py
 ```
 
 Make sure to run the game in a terminal that supports `curses`.
-Use the arrow keys or the number pad for movement. Diagonal steps are mapped to
-`1`, `3`, `7`, and `9` on the number pad. Press `Q` during play to begin the
-quit process.
 
-Press `0` on the number pad to auto-explore the dungeon. The explorer always
-heads toward the closest unexplored location — including unrevealed walls —
-based on the shortest available path. Exploration pauses whenever you spot a
-monster, and pressing any key will
-immediately return control to you.
-
-While in the dungeon, press `i` to open your inventory. Press the letter
-corresponding to an equipment item to wear or wield it. Any item already in that
-slot will be returned to your pack automatically.
-
-Press `@` to view your character sheet, which lists your statistics and all
-currently equipped items.
-
-Press `=` to open the options menu.  Enter a value between `0` and `1000`
-to set how quickly auto-walking steps are animated.
-
-Press `?` at any time to see a quick reference of available commands.
-=======
-
-### Note on Escape Key Responsiveness
-
-By default, `curses` waits up to a second to decide whether an `ESC` press is
-part of a special key sequence. To make exiting menus feel snappier, PRogue sets
-the delay to 25&nbsp;ms. If you wish to change this value, set the `ESCDELAY`
-environment variable before launching the game.
+- Move with the arrow keys or number pad. Diagonals use `1`, `3`, `7`, and `9`.
+- `,` picks up an item on the ground.
+- `>` and `<` take you down or up a staircase.
+- Press `5` (or the keypad center) to wait a turn.
+- Press `0` to auto-explore the dungeon. Use `w` to walk to the nearest stairs.
+- Open the inventory with `i` and press the shown letter to equip or use an item. Drop items with `d`.
+- View your character sheet with `@`.
+- Open the options menu with `=` to adjust auto-walk speed and ESC key delay.
+- Press `?` to view this command list at any time.
+- Press `Q` to quit the game.
