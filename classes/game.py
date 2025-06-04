@@ -3,6 +3,7 @@ import heapq
 import random
 import sys
 import time
+from collections import deque
 from classes.entity import Entity
 from classes.item import Item, Equipment
 from classes.map_generator import MapGenerator
@@ -234,6 +235,7 @@ class Game:
         self.update_fov()
         self.spawn_enemies(len(self.rooms))
         self.spawn_items()
+        self.compute_all_shortest_paths()
 
     def spawn_enemies(self, num_enemies):
         for _ in range(num_enemies):
@@ -256,6 +258,63 @@ class Game:
 
     def is_valid_move(self, x, y):
         return 0 <= x < self.width and 0 <= y < self.height and self.map[y][x] in ['.', '>', '<']
+
+    def compute_all_shortest_paths(self):
+        """Precompute shortest paths between all walkable tiles on the map."""
+        walkable = [
+            (x, y)
+            for y in range(self.height)
+            for x in range(self.width)
+            if self.map[y][x] in ['.', '<', '>']
+        ]
+
+        self.path_cache = {}
+        directions = [
+            (1, 0), (-1, 0), (0, 1), (0, -1),
+            (1, 1), (1, -1), (-1, 1), (-1, -1)
+        ]
+
+        for start in walkable:
+            queue = deque([start])
+            visited = {start}
+            prev = {}
+            while queue:
+                x, y = queue.popleft()
+                for dx, dy in directions:
+                    nx, ny = x + dx, y + dy
+                    if (
+                        0 <= nx < self.width and 0 <= ny < self.height and
+                        self.map[ny][nx] in ['.', '<', '>'] and
+                        (nx, ny) not in visited
+                    ):
+                        visited.add((nx, ny))
+                        prev[(nx, ny)] = (x, y)
+                        queue.append((nx, ny))
+            self.path_cache[start] = prev
+
+    def get_cached_path(self, start, goal):
+        """Return a path from start to goal using the precomputed cache."""
+        if hasattr(start, 'x'):
+            start = (start.x, start.y)
+        if hasattr(goal, 'x'):
+            goal = (goal.x, goal.y)
+
+        if start == goal:
+            return [start]
+
+        prev = self.path_cache.get(start)
+        if not prev or goal not in prev:
+            return None
+
+        path = [goal]
+        current = goal
+        while current != start:
+            current = prev.get(current)
+            if current is None:
+                return None
+            path.append(current)
+        path.reverse()
+        return path
 
     def process_turn(self):
         # Remove any defeated enemies
@@ -296,9 +355,9 @@ class Game:
             if self.distance(enemy, self.player) <= 1:
                 self.combat(enemy, self.player)
             else:
-                path = self.find_path(enemy, self.player)
+                path = self.get_cached_path(enemy, self.player)
                 if path and len(path) > 1:
-                    next_pos = path[1]  # The next position in the path
+                    next_pos = path[1]
                     if not any(e.x == next_pos[0] and e.y == next_pos[1] for e in self.enemies):
                         enemy.x, enemy.y = next_pos
 
@@ -415,7 +474,7 @@ class Game:
 
         Returns True if the walk was interrupted by user input."""
         target = type('Target', (object,), {'x': x, 'y': y})()
-        path = self.find_path(self.player, target)
+        path = self.get_cached_path(self.player, target)
         if not path:
             self.messages.append("No path to destination.")
             return False
