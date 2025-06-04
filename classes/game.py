@@ -464,13 +464,51 @@ class Game:
     def distance(self, entity1, entity2):
         return max(abs(entity1.x - entity2.x), abs(entity1.y - entity2.y))
 
+    def line(self, x1, y1, x2, y2):
+        """Yield points on a Bresenham line from (x1, y1) to (x2, y2)."""
+        dx = abs(x2 - x1)
+        dy = abs(y2 - y1)
+        x, y = x1, y1
+        sx = 1 if x2 > x1 else -1
+        sy = 1 if y2 > y1 else -1
+
+        if dx > dy:
+            err = dx / 2.0
+            while x != x2:
+                yield x, y
+                err -= dy
+                if err < 0:
+                    y += sy
+                    err += dx
+                x += sx
+        else:
+            err = dy / 2.0
+            while y != y2:
+                yield x, y
+                err -= dx
+                if err < 0:
+                    x += sx
+                    err += dy
+                y += sy
+        yield x2, y2
+
+    def has_line_of_sight(self, x1, y1, x2, y2):
+        """Return True if there is a clear line of sight between two points."""
+        for x, y in self.line(x1, y1, x2, y2):
+            if (x, y) != (x1, y1) and (x, y) != (x2, y2) and self.map[y][x] == '#':
+                return False
+        return True
+
     def update_fov(self, radius=6):
-        """Update which tiles are visible and mark them as explored."""
+        """Update which tiles are visible using line of sight and mark them as explored."""
         self.visible = [[False for _ in range(self.width)] for _ in range(self.height)]
-        for y in range(max(0, self.player.y - radius), min(self.height, self.player.y + radius + 1)):
-            for x in range(max(0, self.player.x - radius), min(self.width, self.player.x + radius + 1)):
-                self.visible[y][x] = True
-                self.explored[y][x] = True
+        start_x, start_y = self.player.x, self.player.y
+        for y in range(max(0, start_y - radius), min(self.height, start_y + radius + 1)):
+            for x in range(max(0, start_x - radius), min(self.width, start_x + radius + 1)):
+                if max(abs(start_x - x), abs(start_y - y)) <= radius:
+                    if self.has_line_of_sight(start_x, start_y, x, y):
+                        self.visible[y][x] = True
+                        self.explored[y][x] = True
     
     def open_equipment_screen(self):
         self.equipment_mode = True
