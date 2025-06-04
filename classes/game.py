@@ -30,7 +30,8 @@ class Game:
         # Sync game dimensions with the actual map size generated
         self.height = self.map_generator.height
         self.width = self.map_generator.width
-        self.player = Entity(width // 2, height // 2, '@', "Player", 100, 10, 0)
+        # Player starts with no inherent damage or defense; stats and gear scale these
+        self.player = Entity(width // 2, height // 2, '@', "Player", 100, 0, 0)
         self.player.initialize_player()
         self.enemies = []
         self.inventory_page = 0
@@ -266,9 +267,18 @@ class Game:
             x, y = self.get_random_floor()
             difficulty_factor = min(2, 1 + (self.dungeon_level - 1) * 0.1)
             health = int((random.randint(20, 40) + self.dungeon_level * 5) * difficulty_factor)
-            damage = int((random.randint(5, 10) + self.dungeon_level) * difficulty_factor)
-            defense = int((random.randint(0, 3) + self.dungeon_level // 2) * difficulty_factor)
-            enemy = Entity(x, y, 'E', f"Enemy Lv{self.dungeon_level}", health, damage, defense)
+            base_damage = 0
+            base_defense = 0
+            enemy = Entity(x, y, 'E', f"Enemy Lv{self.dungeon_level}", health, base_damage, base_defense)
+
+            # Approximate attributes based on desired difficulty
+            raw_damage = int((random.randint(5, 10) + self.dungeon_level) * difficulty_factor)
+            raw_defense = int((random.randint(0, 3) + self.dungeon_level // 2) * difficulty_factor)
+
+            enemy.strength = raw_damage * 2
+            enemy.dexterity = max(1, raw_defense * 3)
+            enemy.constitution = max(1, raw_defense * 2)
+            enemy.level = self.dungeon_level
             if random.random() < 0.3:
                 enemy.add_item(
                     Item(
