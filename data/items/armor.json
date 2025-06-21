@@ -1,79 +1,90 @@
 [
   {
     "name": "Robe",
-    "slot": "armor",
+    "type": "armor",
     "body_part": "torso",
-    "ac": 3,
-    "material_type": "cloth"
+    "ac": 1,
+    "material_type": "cloth",
+    "weight": 1
   },
   {
     "name": "Chain Mail",
-    "slot": "armor",
+    "type": "armor",
     "body_part": "torso",
-    "ac": 3,
-    "material_type": "armor"
+    "ac": 5,
+    "material_type": "iron",
+    "weight": 25
   },
   {
-    "name": "Plate Armor",
-    "slot": "armor",
+    "name": "Plate Mail",
+    "type": "armor",
     "body_part": "torso",
-    "ac": 3,
-    "material_type": "armor"
+    "ac": 8,
+    "material_type": "steel",
+    "weight": 45
   },
   {
     "name": "Leather Armor",
-    "slot": "armor",
+    "type": "armor",
     "body_part": "torso",
-    "ac": 3,
-    "material_type": "armor"
+    "ac": 2,
+    "material_type": "leather",
+    "weight": 8
   },
   {
     "name": "Scale Mail",
-    "slot": "armor",
+    "type": "armor",
     "body_part": "torso",
-    "ac": 3,
-    "material_type": "armor"
+    "ac": 4,
+    "material_type": "bronze",
+    "weight": 20
   },
   {
     "name": "Breastplate",
-    "slot": "armor",
+    "type": "armor",
     "body_part": "torso",
-    "ac": 3,
-    "material_type": "armor"
+    "ac": 6,
+    "material_type": "steel",
+    "weight": 35
   },
   {
     "name": "Lamellar Armor",
-    "slot": "armor",
+    "type": "armor",
     "body_part": "torso",
-    "ac": 3,
-    "material_type": "armor"
+    "ac": 5,
+    "material_type": "iron",
+    "weight": 22
   },
   {
-    "name": "Quilted Armor",
-    "slot": "armor",
+    "name": "Quilted Chestpiece",
+    "type": "armor",
     "body_part": "torso",
-    "ac": 3,
-    "material_type": "cloth"
+    "ac": 2,
+    "material_type": "cloth",
+    "weight": 3
   },
   {
     "name": "Ring Mail",
-    "slot": "armor",
+    "type": "armor",
     "body_part": "torso",
     "ac": 3,
-    "material_type": "armor"
+    "material_type": "iron",
+    "weight": 18
   },
   {
     "name": "Banded Mail",
-    "slot": "armor",
+    "type": "armor",
     "body_part": "torso",
-    "ac": 3,
-    "material_type": "armor"
+    "ac": 6,
+    "material_type": "steel",
+    "weight": 30
   },
   {
-    "name": "Bone Armor",
-    "slot": "armor",
+    "name": "Bone Chestpiece",
+    "type": "armor",
     "body_part": "torso",
     "ac": 3,
-    "material_type": "armor"
+    "material_type": "leather",
+    "weight": 12
   }
 ]

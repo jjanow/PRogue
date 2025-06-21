@@ -62,9 +62,11 @@ class CombatSystem:
         return False  # Enemy not defeated
 
     def create_random_item(self):
-        from classes.item_loader import all_items
+        from classes.item_loader import all_consumables, all_equipment
         import random
-        return random.choice(all_items)
+        # Exclude misc items from random drops - they should only drop from monsters
+        ground_loot_pool = all_consumables + all_equipment
+        return random.choice(ground_loot_pool)
 
     def player_attack_enemy(self, player, enemy, messages):
         """Handle rewards when the player defeats an enemy."""

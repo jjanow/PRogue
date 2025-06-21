@@ -100,7 +100,9 @@ class Game:
             self.items.append(item)
 
     def create_random_item(self):
-        item_template = random.choice(all_items)
+        # Exclude misc items from ground loot - they should only drop from monsters
+        ground_loot_pool = all_consumables + all_equipment
+        item_template = random.choice(ground_loot_pool)
         if isinstance(item_template, Equipment):
             material_list = materials_by_type.get(
                 item_template.material_type, all_materials
