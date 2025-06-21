@@ -1,72 +1,82 @@
 [
   {
     "name": "Cap",
-    "slot": "helmet",
+    "type": "helmet",
     "body_part": "head",
     "ac": 1,
-    "material_type": "armor"
+    "material_type": "armor",
+    "weight": 1
   },
   {
     "name": "Helm",
-    "slot": "helmet",
+    "type": "helmet",
     "body_part": "head",
     "ac": 1,
-    "material_type": "armor"
+    "material_type": "armor",
+    "weight": 2
   },
   {
     "name": "Great Helm",
-    "slot": "helmet",
+    "type": "helmet",
     "body_part": "head",
     "ac": 1,
-    "material_type": "armor"
+    "material_type": "armor",
+    "weight": 3
   },
   {
     "name": "Hood",
-    "slot": "helmet",
+    "type": "helmet",
     "body_part": "head",
     "ac": 1,
-    "material_type": "armor"
+    "material_type": "armor",
+    "weight": 1
   },
   {
     "name": "Visored Helm",
-    "slot": "helmet",
+    "type": "helmet",
     "body_part": "head",
     "ac": 1,
-    "material_type": "armor"
+    "material_type": "armor",
+    "weight": 3
   },
   {
     "name": "Sallet",
-    "slot": "helmet",
+    "type": "helmet",
     "body_part": "head",
     "ac": 1,
-    "material_type": "armor"
+    "material_type": "armor",
+    "weight": 2
   },
   {
     "name": "Bascinet",
-    "slot": "helmet",
+    "type": "helmet",
     "body_part": "head",
     "ac": 1,
-    "material_type": "armor"
+    "material_type": "armor",
+    "weight": 2
   },
   {
     "name": "Barbute",
-    "slot": "helmet",
+    "type": "helmet",
     "body_part": "head",
     "ac": 1,
-    "material_type": "armor"
+    "material_type": "armor",
+    "weight": 2
   },
   {
     "name": "Kettle Helm",
-    "slot": "helmet",
+    "type": "helmet",
     "body_part": "head",
     "ac": 1,
-    "material_type": "armor"
+    "material_type": "armor",
+    "weight": 2
   },
   {
     "name": "Morion",
-    "slot": "helmet",
+    "type": "helmet",
     "body_part": "head",
     "ac": 1,
-    "material_type": "armor"
+    "material_type": "armor",
+    "weight": 2
   }
 ]

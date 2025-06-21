@@ -1,72 +1,82 @@
 [
   {
     "name": "Sandals",
-    "slot": "boots",
+    "type": "boots",
     "body_part": "feet",
     "ac": 1,
-    "material_type": "armor"
+    "material_type": "armor",
+    "weight": 1
   },
   {
     "name": "Boots",
-    "slot": "boots",
+    "type": "boots",
     "body_part": "feet",
     "ac": 1,
-    "material_type": "armor"
+    "material_type": "armor",
+    "weight": 2
   },
   {
     "name": "Greaves",
-    "slot": "boots",
+    "type": "boots",
     "body_part": "feet",
     "ac": 1,
-    "material_type": "armor"
+    "material_type": "armor",
+    "weight": 3
   },
   {
     "name": "Shoes",
-    "slot": "boots",
+    "type": "boots",
     "body_part": "feet",
     "ac": 1,
-    "material_type": "armor"
+    "material_type": "armor",
+    "weight": 1
   },
   {
     "name": "Sabatons",
-    "slot": "boots",
+    "type": "boots",
     "body_part": "feet",
     "ac": 1,
-    "material_type": "armor"
+    "material_type": "armor",
+    "weight": 4
   },
   {
     "name": "High Boots",
-    "slot": "boots",
+    "type": "boots",
     "body_part": "feet",
     "ac": 1,
-    "material_type": "armor"
+    "material_type": "armor",
+    "weight": 3
   },
   {
     "name": "Moccasins",
-    "slot": "boots",
+    "type": "boots",
     "body_part": "feet",
     "ac": 1,
-    "material_type": "armor"
+    "material_type": "armor",
+    "weight": 1
   },
   {
     "name": "Slippers",
-    "slot": "boots",
+    "type": "boots",
     "body_part": "feet",
     "ac": 1,
-    "material_type": "armor"
+    "material_type": "armor",
+    "weight": 1
   },
   {
     "name": "Waders",
-    "slot": "boots",
+    "type": "boots",
     "body_part": "feet",
     "ac": 1,
-    "material_type": "armor"
+    "material_type": "armor",
+    "weight": 2
   },
   {
     "name": "Riding Boots",
-    "slot": "boots",
+    "type": "boots",
     "body_part": "feet",
     "ac": 1,
-    "material_type": "armor"
+    "material_type": "armor",
+    "weight": 3
   }
 ]

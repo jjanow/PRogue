@@ -1,72 +1,114 @@
 [
   {
     "name": "Belt",
-    "slot": "girdle",
+    "type": "girdle",
     "body_part": "waist",
     "ac": 1,
-    "material_type": "armor"
+    "material_type": "armor",
+    "weight": 1
   },
   {
     "name": "Chain Belt",
-    "slot": "girdle",
+    "type": "girdle",
     "body_part": "waist",
     "ac": 1,
-    "material_type": "armor"
+    "material_type": "armor",
+    "weight": 1
   },
   {
     "name": "Girdle",
-    "slot": "girdle",
+    "type": "girdle",
     "body_part": "waist",
     "ac": 1,
-    "material_type": "armor"
+    "material_type": "armor",
+    "weight": 1
   },
   {
     "name": "Rope Belt",
-    "slot": "girdle",
+    "type": "girdle",
     "body_part": "waist",
     "ac": 1,
-    "material_type": "armor"
+    "material_type": "armor",
+    "weight": 1
   },
   {
     "name": "Leather Girdle",
-    "slot": "girdle",
+    "type": "girdle",
     "body_part": "waist",
     "ac": 1,
-    "material_type": "armor"
+    "material_type": "armor",
+    "weight": 1
   },
   {
     "name": "Studded Belt",
-    "slot": "girdle",
+    "type": "girdle",
     "body_part": "waist",
     "ac": 1,
-    "material_type": "armor"
+    "material_type": "armor",
+    "weight": 2
   },
   {
     "name": "Sash",
-    "slot": "girdle",
+    "type": "girdle",
     "body_part": "waist",
     "ac": 1,
-    "material_type": "armor"
+    "material_type": "armor",
+    "weight": 1
   },
   {
     "name": "Corded Belt",
-    "slot": "girdle",
+    "type": "girdle",
     "body_part": "waist",
     "ac": 1,
-    "material_type": "armor"
+    "material_type": "armor",
+    "weight": 1
   },
   {
     "name": "Reinforced Belt",
-    "slot": "girdle",
+    "type": "girdle",
     "body_part": "waist",
     "ac": 1,
-    "material_type": "armor"
+    "material_type": "armor",
+    "weight": 1
   },
   {
     "name": "Heavy Girdle",
-    "slot": "girdle",
+    "type": "girdle",
     "body_part": "waist",
     "ac": 1,
-    "material_type": "armor"
+    "material_type": "armor",
+    "weight": 1
+  },
+  {
+    "name": "Chain Girdle",
+    "type": "girdle",
+    "body_part": "waist",
+    "ac": 1,
+    "material_type": "armor",
+    "weight": 2
+  },
+  {
+    "name": "Plate Girdle",
+    "type": "girdle",
+    "body_part": "waist",
+    "ac": 1,
+    "material_type": "armor",
+    "weight": 3
+  },
+  {
+    "name": "Silk Sash",
+    "type": "girdle",
+    "body_part": "waist",
+    "ac": 1,
+    "material_type": "armor",
+    "weight": 1
+  },
+  {
+    "name": "Enchanted Girdle",
+    "type": "girdle",
+    "body_part": "waist",
+    "ac": 1,
+    "material_type": "armor",
+    "weight": 1
   }
 ]

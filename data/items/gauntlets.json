@@ -1,72 +1,82 @@
 [
   {
     "name": "Gloves",
-    "slot": "gauntlets",
+    "type": "gauntlets",
     "body_part": "hands",
     "ac": 1,
-    "material_type": "armor"
+    "material_type": "armor",
+    "weight": 1
   },
   {
     "name": "Gauntlets",
-    "slot": "gauntlets",
+    "type": "gauntlets",
     "body_part": "hands",
     "ac": 1,
-    "material_type": "armor"
+    "material_type": "armor",
+    "weight": 3
   },
   {
     "name": "Vambraces",
-    "slot": "gauntlets",
+    "type": "gauntlets",
     "body_part": "hands",
     "ac": 1,
-    "material_type": "armor"
+    "material_type": "armor",
+    "weight": 1
   },
   {
     "name": "Mitts",
-    "slot": "gauntlets",
+    "type": "gauntlets",
     "body_part": "hands",
     "ac": 1,
-    "material_type": "armor"
+    "material_type": "armor",
+    "weight": 1
   },
   {
     "name": "Plate Gauntlets",
-    "slot": "gauntlets",
+    "type": "gauntlets",
     "body_part": "hands",
     "ac": 1,
-    "material_type": "armor"
+    "material_type": "armor",
+    "weight": 4
   },
   {
     "name": "Chain Gauntlets",
-    "slot": "gauntlets",
+    "type": "gauntlets",
     "body_part": "hands",
     "ac": 1,
-    "material_type": "armor"
+    "material_type": "armor",
+    "weight": 2
   },
   {
     "name": "Leather Gloves",
-    "slot": "gauntlets",
+    "type": "gauntlets",
     "body_part": "hands",
     "ac": 1,
-    "material_type": "armor"
+    "material_type": "armor",
+    "weight": 1
   },
   {
     "name": "Battle Gauntlets",
-    "slot": "gauntlets",
+    "type": "gauntlets",
     "body_part": "hands",
     "ac": 1,
-    "material_type": "armor"
+    "material_type": "armor",
+    "weight": 1
   },
   {
     "name": "Spiked Gauntlets",
-    "slot": "gauntlets",
+    "type": "gauntlets",
     "body_part": "hands",
     "ac": 1,
-    "material_type": "armor"
+    "material_type": "armor",
+    "weight": 1
   },
   {
     "name": "Enchanted Gloves",
-    "slot": "gauntlets",
+    "type": "gauntlets",
     "body_part": "hands",
     "ac": 1,
-    "material_type": "armor"
+    "material_type": "armor",
+    "weight": 2
   }
 ]

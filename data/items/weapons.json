@@ -1,461 +1,509 @@
 [
   {
     "name": "Dagger",
-    "slot": "weapon",
+    "type": "weapon",
     "body_part": "hands",
     "damage": {
       "min": 1,
       "max": 4
     },
-    "material_type": "weapons"
+    "material_type": "weapons",
+    "weight": 1
   },
   {
     "name": "Arming Sword",
-    "slot": "weapon",
+    "type": "weapon",
     "body_part": "hands",
     "damage": {
       "min": 1,
       "max": 6
     },
-    "material_type": "weapons"
+    "material_type": "weapons",
+    "weight": 3
   },
   {
     "name": "Bastard Sword",
-    "slot": "weapon",
+    "type": "weapon",
     "body_part": "hands",
     "damage": {
       "min": 1,
       "max": 8
     },
-    "material_type": "weapons"
+    "material_type": "weapons",
+    "weight": 5
   },
   {
     "name": "Claymore",
-    "slot": "weapon",
+    "type": "weapon",
     "body_part": "hands",
     "damage": {
       "min": 1,
       "max": 8
     },
-    "material_type": "weapons"
+    "material_type": "weapons",
+    "weight": 6
   },
   {
     "name": "Flamberge",
-    "slot": "weapon",
+    "type": "weapon",
     "body_part": "hands",
     "damage": {
       "min": 1,
       "max": 8
     },
-    "material_type": "weapons"
+    "material_type": "weapons",
+    "weight": 6
   },
   {
     "name": "Katana",
-    "slot": "weapon",
+    "type": "weapon",
     "body_part": "hands",
     "damage": {
       "min": 1,
       "max": 8
     },
-    "material_type": "weapons"
+    "material_type": "weapons",
+    "weight": 4
   },
   {
     "name": "Gladius",
-    "slot": "weapon",
+    "type": "weapon",
     "body_part": "hands",
     "damage": {
       "min": 1,
       "max": 6
     },
-    "material_type": "weapons"
+    "material_type": "weapons",
+    "weight": 2
   },
   {
     "name": "Falchion",
-    "slot": "weapon",
+    "type": "weapon",
     "body_part": "hands",
     "damage": {
       "min": 1,
       "max": 6
     },
-    "material_type": "weapons"
+    "material_type": "weapons",
+    "weight": 3
   },
   {
     "name": "Cutlass",
-    "slot": "weapon",
+    "type": "weapon",
     "body_part": "hands",
     "damage": {
       "min": 1,
       "max": 6
     },
-    "material_type": "weapons"
+    "material_type": "weapons",
+    "weight": 3
   },
   {
     "name": "Sabre",
-    "slot": "weapon",
+    "type": "weapon",
     "body_part": "hands",
     "damage": {
       "min": 1,
       "max": 6
     },
-    "material_type": "weapons"
+    "material_type": "weapons",
+    "weight": 3
   },
   {
     "name": "Rapier",
-    "slot": "weapon",
+    "type": "weapon",
     "body_part": "hands",
     "damage": {
       "min": 1,
       "max": 6
     },
-    "material_type": "weapons"
+    "material_type": "weapons",
+    "weight": 2
   },
   {
     "name": "Stiletto",
-    "slot": "weapon",
+    "type": "weapon",
     "body_part": "hands",
     "damage": {
       "min": 1,
       "max": 4
     },
-    "material_type": "weapons"
+    "material_type": "weapons",
+    "weight": 1
   },
   {
     "name": "Dirk",
-    "slot": "weapon",
+    "type": "weapon",
     "body_part": "hands",
     "damage": {
       "min": 1,
       "max": 4
     },
-    "material_type": "weapons"
+    "material_type": "weapons",
+    "weight": 1
   },
   {
     "name": "Kris",
-    "slot": "weapon",
+    "type": "weapon",
     "body_part": "hands",
     "damage": {
       "min": 1,
       "max": 4
     },
-    "material_type": "weapons"
+    "material_type": "weapons",
+    "weight": 1
   },
   {
     "name": "Rondel",
-    "slot": "weapon",
+    "type": "weapon",
     "body_part": "hands",
     "damage": {
       "min": 1,
       "max": 4
     },
-    "material_type": "weapons"
+    "material_type": "weapons",
+    "weight": 1
   },
   {
     "name": "Cinquedea",
-    "slot": "weapon",
+    "type": "weapon",
     "body_part": "hands",
     "damage": {
       "min": 1,
       "max": 4
     },
-    "material_type": "weapons"
+    "material_type": "weapons",
+    "weight": 2
   },
   {
     "name": "Club",
-    "slot": "weapon",
+    "type": "weapon",
     "body_part": "hands",
     "damage": {
       "min": 1,
       "max": 4
     },
-    "material_type": "weapons"
+    "material_type": "weapons",
+    "weight": 3
   },
   {
     "name": "Morning Star",
-    "slot": "weapon",
+    "type": "weapon",
     "body_part": "hands",
     "damage": {
       "min": 1,
       "max": 6
     },
-    "material_type": "weapons"
+    "material_type": "weapons",
+    "weight": 4
   },
   {
     "name": "Flanged Mace",
-    "slot": "weapon",
+    "type": "weapon",
     "body_part": "hands",
     "damage": {
       "min": 1,
       "max": 6
     },
-    "material_type": "weapons"
+    "material_type": "weapons",
+    "weight": 4
   },
   {
     "name": "Holy Mace",
-    "slot": "weapon",
+    "type": "weapon",
     "body_part": "hands",
     "damage": {
       "min": 1,
       "max": 6
     },
-    "material_type": "weapons"
+    "material_type": "weapons",
+    "weight": 4
   },
   {
     "name": "War Mace",
-    "slot": "weapon",
+    "type": "weapon",
     "body_part": "hands",
     "damage": {
       "min": 1,
       "max": 6
     },
-    "material_type": "weapons"
+    "material_type": "weapons",
+    "weight": 4
   },
   {
     "name": "War Hammer",
-    "slot": "weapon",
+    "type": "weapon",
     "body_part": "hands",
     "damage": {
       "min": 1,
       "max": 8
     },
-    "material_type": "weapons"
+    "material_type": "weapons",
+    "weight": 6
   },
   {
     "name": "Maul",
-    "slot": "weapon",
+    "type": "weapon",
     "body_part": "hands",
     "damage": {
       "min": 1,
       "max": 8
     },
-    "material_type": "weapons"
+    "material_type": "weapons",
+    "weight": 6
   },
   {
     "name": "Sledge Hammer",
-    "slot": "weapon",
+    "type": "weapon",
     "body_part": "hands",
     "damage": {
       "min": 1,
       "max": 8
     },
-    "material_type": "weapons"
+    "material_type": "weapons",
+    "weight": 6
   },
   {
     "name": "Lucerne Hammer",
-    "slot": "weapon",
+    "type": "weapon",
     "body_part": "hands",
     "damage": {
       "min": 1,
       "max": 8
     },
-    "material_type": "weapons"
+    "material_type": "weapons",
+    "weight": 6
   },
   {
     "name": "Forge Hammer",
-    "slot": "weapon",
+    "type": "weapon",
     "body_part": "hands",
     "damage": {
       "min": 1,
       "max": 8
     },
-    "material_type": "weapons"
+    "material_type": "weapons",
+    "weight": 6
   },
   {
     "name": "Hand Axe",
-    "slot": "weapon",
+    "type": "weapon",
     "body_part": "hands",
     "damage": {
       "min": 1,
       "max": 6
     },
-    "material_type": "weapons"
+    "material_type": "weapons",
+    "weight": 3
   },
   {
     "name": "Battle Axe",
-    "slot": "weapon",
+    "type": "weapon",
     "body_part": "hands",
     "damage": {
       "min": 1,
       "max": 8
     },
-    "material_type": "weapons"
+    "material_type": "weapons",
+    "weight": 5
   },
   {
     "name": "Great Axe",
-    "slot": "weapon",
+    "type": "weapon",
     "body_part": "hands",
     "damage": {
       "min": 1,
       "max": 8
     },
-    "material_type": "weapons"
+    "material_type": "weapons",
+    "weight": 5
   },
   {
     "name": "Double Axe",
-    "slot": "weapon",
+    "type": "weapon",
     "body_part": "hands",
     "damage": {
       "min": 1,
       "max": 8
     },
-    "material_type": "weapons"
+    "material_type": "weapons",
+    "weight": 5
   },
   {
     "name": "Throwing Axe",
-    "slot": "weapon",
+    "type": "weapon",
     "body_part": "hands",
     "damage": {
       "min": 1,
       "max": 4
     },
-    "material_type": "weapons"
+    "material_type": "weapons",
+    "weight": 1
   },
   {
     "name": "Short Spear",
-    "slot": "weapon",
+    "type": "weapon",
     "body_part": "hands",
     "damage": {
       "min": 1,
       "max": 6
     },
-    "material_type": "weapons"
+    "material_type": "weapons",
+    "weight": 3
   },
   {
     "name": "Long Spear",
-    "slot": "weapon",
+    "type": "weapon",
     "body_part": "hands",
     "damage": {
       "min": 1,
       "max": 8
     },
-    "material_type": "weapons"
+    "material_type": "weapons",
+    "weight": 4
   },
   {
     "name": "Javelin",
-    "slot": "weapon",
+    "type": "weapon",
     "body_part": "hands",
     "damage": {
       "min": 1,
       "max": 4
     },
-    "material_type": "weapons"
+    "material_type": "weapons",
+    "weight": 1
   },
   {
     "name": "Pike",
-    "slot": "weapon",
+    "type": "weapon",
     "body_part": "hands",
     "damage": {
       "min": 1,
       "max": 8
     },
-    "material_type": "weapons"
+    "material_type": "weapons",
+    "weight": 5
   },
   {
     "name": "Trident",
-    "slot": "weapon",
+    "type": "weapon",
     "body_part": "hands",
     "damage": {
       "min": 1,
       "max": 6
     },
-    "material_type": "weapons"
+    "material_type": "weapons",
+    "weight": 3
   },
   {
     "name": "Halberd",
-    "slot": "weapon",
+    "type": "weapon",
     "body_part": "hands",
     "damage": {
       "min": 1,
       "max": 8
     },
-    "material_type": "weapons"
+    "material_type": "weapons",
+    "weight": 5
   },
   {
     "name": "Glaive",
-    "slot": "weapon",
+    "type": "weapon",
     "body_part": "hands",
     "damage": {
       "min": 1,
       "max": 8
     },
-    "material_type": "weapons"
+    "material_type": "weapons",
+    "weight": 5
   },
   {
     "name": "Naginata",
-    "slot": "weapon",
+    "type": "weapon",
     "body_part": "hands",
     "damage": {
       "min": 1,
       "max": 8
     },
-    "material_type": "weapons"
+    "material_type": "weapons",
+    "weight": 5
   },
   {
     "name": "Bardiche",
-    "slot": "weapon",
+    "type": "weapon",
     "body_part": "hands",
     "damage": {
       "min": 1,
       "max": 8
     },
-    "material_type": "weapons"
+    "material_type": "weapons",
+    "weight": 5
   },
   {
     "name": "Scythe",
-    "slot": "weapon",
+    "type": "weapon",
     "body_part": "hands",
     "damage": {
       "min": 1,
       "max": 8
     },
-    "material_type": "weapons"
+    "material_type": "weapons",
+    "weight": 5
   },
   {
     "name": "Flail",
-    "slot": "weapon",
+    "type": "weapon",
     "body_part": "hands",
     "damage": {"min": 1, "max": 6},
-    "material_type": "weapons"
+    "material_type": "weapons",
+    "weight": 4
   },
   {
     "name": "Ogre Maul",
-    "slot": "weapon",
+    "type": "weapon",
     "body_part": "hands",
     "damage": {"min": 1, "max": 8},
-    "material_type": "weapons"
+    "material_type": "weapons",
+    "weight": 6
   },
   {
     "name": "Poison Dagger",
-    "slot": "weapon",
+    "type": "weapon",
     "body_part": "hands",
     "damage": {"min": 1, "max": 4},
-    "material_type": "weapons"
+    "material_type": "weapons",
+    "weight": 1
   },
   {
     "name": "Rusty Sword",
-    "slot": "weapon",
+    "type": "weapon",
     "body_part": "hands",
     "damage": {"min": 1, "max": 6},
-    "material_type": "weapons"
+    "material_type": "weapons",
+    "weight": 3
   },
   {
     "name": "Short Sword",
-    "slot": "weapon",
+    "type": "weapon",
     "body_part": "hands",
     "damage": {"min": 1, "max": 6},
-    "material_type": "weapons"
+    "material_type": "weapons",
+    "weight": 2
   },
   {
     "name": "Spear",
-    "slot": "weapon",
+    "type": "weapon",
     "body_part": "hands",
     "damage": {"min": 1, "max": 6},
-    "material_type": "weapons"
+    "material_type": "weapons",
+    "weight": 3
   },
   {
     "name": "Shadow Blade",
-    "slot": "weapon",
+    "type": "weapon",
     "body_part": "hands",
     "damage": {"min": 1, "max": 8},
-    "material_type": "weapons"
+    "material_type": "weapons",
+    "weight": 5
   }
 ]

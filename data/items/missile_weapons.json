@@ -1,209 +1,230 @@
 [
   {
     "name": "Light Crossbow",
-    "slot": "missile weapon",
+    "type": "missile weapon",
     "body_part": "hands",
     "damage": {
       "min": 2,
       "max": 8
     },
-    "material_type": "weapons"
+    "material_type": "weapons",
+    "weight": 4
   },
   {
     "name": "Heavy Crossbow",
-    "slot": "missile weapon",
+    "type": "missile weapon",
     "body_part": "hands",
     "damage": {
       "min": 2,
       "max": 8
     },
-    "material_type": "weapons"
+    "material_type": "weapons",
+    "weight": 6
   },
   {
     "name": "Repeating Crossbow",
-    "slot": "missile weapon",
+    "type": "missile weapon",
     "body_part": "hands",
     "damage": {
       "min": 2,
       "max": 8
     },
-    "material_type": "weapons"
+    "material_type": "weapons",
+    "weight": 5
   },
   {
     "name": "Siege Crossbow",
-    "slot": "missile weapon",
+    "type": "missile weapon",
     "body_part": "hands",
     "damage": {
       "min": 2,
       "max": 8
     },
-    "material_type": "weapons"
+    "material_type": "weapons",
+    "weight": 8
   },
   {
     "name": "Arbalest",
-    "slot": "missile weapon",
+    "type": "missile weapon",
     "body_part": "hands",
     "damage": {
       "min": 2,
       "max": 8
     },
-    "material_type": "weapons"
+    "material_type": "weapons",
+    "weight": 7
   },
   {
     "name": "Simple Longbow",
-    "slot": "missile weapon",
+    "type": "missile weapon",
     "body_part": "hands",
     "damage": {
       "min": 1,
       "max": 6
     },
-    "material_type": "weapons"
+    "material_type": "weapons",
+    "weight": 2
   },
   {
     "name": "Composite Longbow",
-    "slot": "missile weapon",
+    "type": "missile weapon",
     "body_part": "hands",
     "damage": {
       "min": 1,
       "max": 6
     },
-    "material_type": "weapons"
+    "material_type": "weapons",
+    "weight": 3
   },
   {
     "name": "Recurve Longbow",
-    "slot": "missile weapon",
+    "type": "missile weapon",
     "body_part": "hands",
     "damage": {
       "min": 1,
       "max": 6
     },
-    "material_type": "weapons"
+    "material_type": "weapons",
+    "weight": 3
   },
   {
     "name": "Greatbow",
-    "slot": "missile weapon",
+    "type": "missile weapon",
     "body_part": "hands",
     "damage": {
       "min": 1,
       "max": 6
     },
-    "material_type": "weapons"
+    "material_type": "weapons",
+    "weight": 4
   },
   {
     "name": "Elven Longbow",
-    "slot": "missile weapon",
+    "type": "missile weapon",
     "body_part": "hands",
     "damage": {
       "min": 1,
       "max": 6
     },
-    "material_type": "weapons"
+    "material_type": "weapons",
+    "weight": 2
   },
   {
     "name": "Simple Shortbow",
-    "slot": "missile weapon",
+    "type": "missile weapon",
     "body_part": "hands",
     "damage": {
       "min": 1,
       "max": 6
     },
-    "material_type": "weapons"
+    "material_type": "weapons",
+    "weight": 1
   },
   {
     "name": "Composite Shortbow",
-    "slot": "missile weapon",
+    "type": "missile weapon",
     "body_part": "hands",
     "damage": {
       "min": 1,
       "max": 6
     },
-    "material_type": "weapons"
+    "material_type": "weapons",
+    "weight": 2
   },
   {
     "name": "Recurve Shortbow",
-    "slot": "missile weapon",
+    "type": "missile weapon",
     "body_part": "hands",
     "damage": {
       "min": 1,
       "max": 6
     },
-    "material_type": "weapons"
+    "material_type": "weapons",
+    "weight": 2
   },
   {
     "name": "Hunting Bow",
-    "slot": "missile weapon",
+    "type": "missile weapon",
     "body_part": "hands",
     "damage": {
       "min": 1,
       "max": 6
     },
-    "material_type": "weapons"
+    "material_type": "weapons",
+    "weight": 2
   },
   {
     "name": "Elven Shortbow",
-    "slot": "missile weapon",
+    "type": "missile weapon",
     "body_part": "hands",
     "damage": {
       "min": 1,
       "max": 6
     },
-    "material_type": "weapons"
+    "material_type": "weapons",
+    "weight": 1
   },
   {
     "name": "Simple Sling",
-    "slot": "missile weapon",
+    "type": "missile weapon",
     "body_part": "hands",
     "damage": {
       "min": 1,
       "max": 4
     },
-    "material_type": "weapons"
+    "material_type": "weapons",
+    "weight": 1
   },
   {
     "name": "Staff Sling",
-    "slot": "missile weapon",
+    "type": "missile weapon",
     "body_part": "hands",
     "damage": {
       "min": 1,
       "max": 4
     },
-    "material_type": "weapons"
+    "material_type": "weapons",
+    "weight": 2
   },
   {
     "name": "Heavy Sling",
-    "slot": "missile weapon",
+    "type": "missile weapon",
     "body_part": "hands",
     "damage": {
       "min": 1,
       "max": 4
     },
-    "material_type": "weapons"
+    "material_type": "weapons",
+    "weight": 1
   },
   {
     "name": "Whip Sling",
-    "slot": "missile weapon",
+    "type": "missile weapon",
     "body_part": "hands",
     "damage": {
       "min": 1,
       "max": 4
     },
-    "material_type": "weapons"
+    "material_type": "weapons",
+    "weight": 1
   },
   {
     "name": "Precision Sling",
-    "slot": "missile weapon",
+    "type": "missile weapon",
     "body_part": "hands",
     "damage": {
       "min": 1,
       "max": 4
     },
-    "material_type": "weapons"
+    "material_type": "weapons",
+    "weight": 1
   },
   {
     "name": "Sling",
-    "slot": "missile weapon",
+    "type": "missile weapon",
     "body_part": "hands",
     "damage": {"min": 1, "max": 4},
-    "material_type": "weapons"
+    "material_type": "weapons",
+    "weight": 1
   }
 ]

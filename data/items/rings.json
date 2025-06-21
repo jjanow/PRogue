@@ -1,72 +1,82 @@
 [
   {
     "name": "Ring",
-    "slot": "ring (right)",
+    "type": "ring",
     "body_part": "finger",
-    "ac": 1,
-    "material_type": "jewelry"
+    "ac": 0,
+    "material_type": "jewelry",
+    "weight": 1
   },
   {
     "name": "Band",
-    "slot": "ring (right)",
+    "type": "ring",
     "body_part": "finger",
-    "ac": 1,
-    "material_type": "jewelry"
+    "ac": 0,
+    "material_type": "jewelry",
+    "weight": 1
   },
   {
     "name": "Signet",
-    "slot": "ring (right)",
+    "type": "ring",
     "body_part": "finger",
-    "ac": 1,
-    "material_type": "jewelry"
+    "ac": 0,
+    "material_type": "jewelry",
+    "weight": 1
   },
   {
     "name": "Loop",
-    "slot": "ring (right)",
+    "type": "ring",
     "body_part": "finger",
-    "ac": 1,
-    "material_type": "jewelry"
+    "ac": 0,
+    "material_type": "jewelry",
+    "weight": 1
   },
   {
     "name": "Seal",
-    "slot": "ring (right)",
+    "type": "ring",
     "body_part": "finger",
-    "ac": 1,
-    "material_type": "jewelry"
+    "ac": 0,
+    "material_type": "jewelry",
+    "weight": 1
   },
   {
     "name": "Ring",
-    "slot": "ring (left)",
+    "type": "ring",
     "body_part": "finger",
-    "ac": 1,
-    "material_type": "jewelry"
+    "ac": 0,
+    "material_type": "jewelry",
+    "weight": 1
   },
   {
     "name": "Band",
-    "slot": "ring (left)",
+    "type": "ring",
     "body_part": "finger",
-    "ac": 1,
-    "material_type": "jewelry"
+    "ac": 0,
+    "material_type": "jewelry",
+    "weight": 1
   },
   {
     "name": "Signet",
-    "slot": "ring (left)",
+    "type": "ring",
     "body_part": "finger",
-    "ac": 1,
-    "material_type": "jewelry"
+    "ac": 0,
+    "material_type": "jewelry",
+    "weight": 1
   },
   {
     "name": "Loop",
-    "slot": "ring (left)",
+    "type": "ring",
     "body_part": "finger",
-    "ac": 1,
-    "material_type": "jewelry"
+    "ac": 0,
+    "material_type": "jewelry",
+    "weight": 1
   },
   {
     "name": "Seal",
-    "slot": "ring (left)",
+    "type": "ring",
     "body_part": "finger",
-    "ac": 1,
-    "material_type": "jewelry"
+    "ac": 0,
+    "material_type": "jewelry",
+    "weight": 1
   }
 ]

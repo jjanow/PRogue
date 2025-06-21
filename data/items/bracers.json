@@ -1,72 +1,82 @@
 [
   {
     "name": "Wristguards",
-    "slot": "bracers",
+    "type": "bracers",
     "body_part": "arms",
     "ac": 1,
-    "material_type": "armor"
+    "material_type": "armor",
+    "weight": 1
   },
   {
     "name": "Bracers",
-    "slot": "bracers",
+    "type": "bracers",
     "body_part": "arms",
     "ac": 1,
-    "material_type": "armor"
+    "material_type": "armor",
+    "weight": 1
   },
   {
     "name": "Armguards",
-    "slot": "bracers",
+    "type": "bracers",
     "body_part": "arms",
     "ac": 1,
-    "material_type": "armor"
+    "material_type": "armor",
+    "weight": 2
   },
   {
     "name": "Cuffs",
-    "slot": "bracers",
+    "type": "bracers",
     "body_part": "arms",
     "ac": 1,
-    "material_type": "armor"
+    "material_type": "armor",
+    "weight": 1
   },
   {
     "name": "Armlets",
-    "slot": "bracers",
+    "type": "bracers",
     "body_part": "arms",
     "ac": 1,
-    "material_type": "armor"
+    "material_type": "armor",
+    "weight": 1
   },
   {
     "name": "Leather Bracers",
-    "slot": "bracers",
+    "type": "bracers",
     "body_part": "arms",
     "ac": 1,
-    "material_type": "armor"
+    "material_type": "armor",
+    "weight": 1
   },
   {
     "name": "Plate Bracers",
-    "slot": "bracers",
+    "type": "bracers",
     "body_part": "arms",
     "ac": 1,
-    "material_type": "armor"
+    "material_type": "armor",
+    "weight": 3
   },
   {
     "name": "Studded Bracers",
-    "slot": "bracers",
+    "type": "bracers",
     "body_part": "arms",
     "ac": 1,
-    "material_type": "armor"
+    "material_type": "armor",
+    "weight": 2
   },
   {
     "name": "Forearm Guards",
-    "slot": "bracers",
+    "type": "bracers",
     "body_part": "arms",
     "ac": 1,
-    "material_type": "armor"
+    "material_type": "armor",
+    "weight": 2
   },
   {
     "name": "Enchanted Bracers",
-    "slot": "bracers",
+    "type": "bracers",
     "body_part": "arms",
     "ac": 1,
-    "material_type": "armor"
+    "material_type": "armor",
+    "weight": 1
   }
 ]

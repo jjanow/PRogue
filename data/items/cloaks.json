@@ -1,72 +1,82 @@
 [
   {
     "name": "Cloak",
-    "slot": "cloak",
-    "body_part": "back",
+    "type": "cloak",
+    "body_part": "shoulders",
     "ac": 1,
-    "material_type": "cloth"
+    "material_type": "cloth",
+    "weight": 2
   },
   {
     "name": "Cape",
-    "slot": "cloak",
-    "body_part": "back",
+    "type": "cloak",
+    "body_part": "shoulders",
     "ac": 1,
-    "material_type": "cloth"
+    "material_type": "cloth",
+    "weight": 2
   },
   {
     "name": "Mantle",
-    "slot": "cloak",
-    "body_part": "back",
+    "type": "cloak",
+    "body_part": "shoulders",
     "ac": 1,
-    "material_type": "cloth"
+    "material_type": "cloth",
+    "weight": 3
+  },
+  {
+    "name": "Shawl",
+    "type": "cloak",
+    "body_part": "shoulders",
+    "ac": 1,
+    "material_type": "cloth",
+    "weight": 1
+  },
+  {
+    "name": "Scarf",
+    "type": "cloak",
+    "body_part": "shoulders",
+    "ac": 1,
+    "material_type": "cloth",
+    "weight": 1
   },
   {
     "name": "Hooded Cloak",
-    "slot": "cloak",
-    "body_part": "back",
+    "type": "cloak",
+    "body_part": "shoulders",
     "ac": 1,
-    "material_type": "cloth"
+    "material_type": "cloth",
+    "weight": 3
   },
   {
     "name": "Traveling Cloak",
-    "slot": "cloak",
-    "body_part": "back",
+    "type": "cloak",
+    "body_part": "shoulders",
     "ac": 1,
-    "material_type": "cloth"
+    "material_type": "cloth",
+    "weight": 2
   },
   {
-    "name": "Opera Cape",
-    "slot": "cloak",
-    "body_part": "back",
+    "name": "Noble Cloak",
+    "type": "cloak",
+    "body_part": "shoulders",
     "ac": 1,
-    "material_type": "cloth"
+    "material_type": "cloth",
+    "weight": 2
   },
   {
-    "name": "Duster",
-    "slot": "cloak",
-    "body_part": "back",
+    "name": "Wool Cloak",
+    "type": "cloak",
+    "body_part": "shoulders",
     "ac": 1,
-    "material_type": "cloth"
+    "material_type": "cloth",
+    "weight": 3
   },
   {
-    "name": "Pelerine",
-    "slot": "cloak",
-    "body_part": "back",
+    "name": "Silk Cloak",
+    "type": "cloak",
+    "body_part": "shoulders",
     "ac": 1,
-    "material_type": "cloth"
-  },
-  {
-    "name": "Shroud",
-    "slot": "cloak",
-    "body_part": "back",
-    "ac": 1,
-    "material_type": "cloth"
-  },
-  {
-    "name": "Poncho",
-    "slot": "cloak",
-    "body_part": "back",
-    "ac": 1,
-    "material_type": "cloth"
+    "material_type": "cloth",
+    "weight": 1
   }
 ]

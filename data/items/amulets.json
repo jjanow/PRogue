@@ -1,72 +1,82 @@
 [
   {
-    "name": "Pendant",
-    "slot": "amulet",
-    "body_part": "neck",
-    "ac": 1,
-    "material_type": "jewelry"
-  },
-  {
     "name": "Amulet",
-    "slot": "amulet",
+    "type": "amulet",
     "body_part": "neck",
-    "ac": 1,
-    "material_type": "jewelry"
+    "ac": 0,
+    "material_type": "jewelry",
+    "weight": 1
   },
   {
-    "name": "Talisman",
-    "slot": "amulet",
+    "name": "Necklace",
+    "type": "amulet",
     "body_part": "neck",
-    "ac": 1,
-    "material_type": "jewelry"
+    "ac": 0,
+    "material_type": "jewelry",
+    "weight": 1
   },
   {
-    "name": "Charm",
-    "slot": "amulet",
+    "name": "Pendant",
+    "type": "amulet",
     "body_part": "neck",
-    "ac": 1,
-    "material_type": "jewelry"
-  },
-  {
-    "name": "Medallion",
-    "slot": "amulet",
-    "body_part": "neck",
-    "ac": 1,
-    "material_type": "jewelry"
-  },
-  {
-    "name": "Torque",
-    "slot": "amulet",
-    "body_part": "neck",
-    "ac": 1,
-    "material_type": "jewelry"
+    "ac": 0,
+    "material_type": "jewelry",
+    "weight": 1
   },
   {
     "name": "Locket",
-    "slot": "amulet",
+    "type": "amulet",
     "body_part": "neck",
-    "ac": 1,
-    "material_type": "jewelry"
+    "ac": 0,
+    "material_type": "jewelry",
+    "weight": 1
   },
   {
-    "name": "Phylactery",
-    "slot": "amulet",
+    "name": "Medallion",
+    "type": "amulet",
     "body_part": "neck",
-    "ac": 1,
-    "material_type": "jewelry"
+    "ac": 0,
+    "material_type": "jewelry",
+    "weight": 1
   },
   {
-    "name": "Gorget",
-    "slot": "amulet",
+    "name": "Talisman",
+    "type": "amulet",
     "body_part": "neck",
-    "ac": 1,
-    "material_type": "jewelry"
+    "ac": 0,
+    "material_type": "jewelry",
+    "weight": 1
   },
   {
-    "name": "Collar",
-    "slot": "amulet",
+    "name": "Charm",
+    "type": "amulet",
     "body_part": "neck",
-    "ac": 1,
-    "material_type": "jewelry"
+    "ac": 0,
+    "material_type": "jewelry",
+    "weight": 1
+  },
+  {
+    "name": "Relic",
+    "type": "amulet",
+    "body_part": "neck",
+    "ac": 0,
+    "material_type": "jewelry",
+    "weight": 1
+  },
+  {
+    "name": "Trinket",
+    "type": "amulet",
+    "body_part": "neck",
+    "ac": 0,
+    "material_type": "jewelry",
+    "weight": 1
+  },
+  {
+    "name": "Enchanted Amulet",
+    "type": "amulet",
+    "body_part": "neck",
+    "ac": 0,
+    "material_type": "jewelry",
+    "weight": 1
   }
 ]
