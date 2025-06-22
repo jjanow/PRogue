@@ -357,9 +357,11 @@ class Renderer:
         height, width = stdscr.getmaxyx()
 
         menu_text = [
-            "Cheat Menu (press escape to exit):",
+            "Debug Menu (press escape to exit):",
+            "",
+            "Item Creation:",
             "a) Create weapon",
-            "b) Create missile weapon",
+            "b) Create missile weapon", 
             "c) Create helmet",
             "d) Create amulet",
             "e) Create shield",
@@ -371,11 +373,23 @@ class Renderer:
             "k) Create ring",
             "l) Create bracers",
             "m) Create potion",
-            "n) Map level",
-            "o) Level up",
+            "",
+            "Game Functions:",
+            "n) Map current level",
+            "o) Level up player",
+            "s) Spawn random item",
+            "",
+            "Debug Functions:",
+            "t) Add 1000 time units",
+            "w) Decrease walk speed",
+            "e) Increase walk speed",
         ]
 
         for i, line in enumerate(menu_text):
+            if i >= height - 1:  # Leave room for potential messages
+                break
+            if line == "":
+                continue  # Skip empty lines if we're running out of space
             color = curses.color_pair(7) if i == 0 else curses.color_pair(4)
             stdscr.addstr(i, 0, line[:width-1], color)
 
@@ -388,12 +402,158 @@ class Renderer:
         lines = [
             "Options (press escape to exit):",
             f"Walking speed: {self.game.walk_speed} ms (enter 0-1000)",
+            "",
+            "Press ESC for save/load operations",
         ]
 
         if self.game.speed_input:
             lines.append(f"New speed: {self.game.speed_input}")
 
         for i, line in enumerate(lines):
+            color = curses.color_pair(7) if i == 0 else curses.color_pair(4)
+            stdscr.addstr(i, 0, line[:width-1], color)
+
+        stdscr.refresh()
+
+    def draw_save_screen(self, stdscr):
+        """Draw the save game screen."""
+        stdscr.clear()
+        height, width = stdscr.getmaxyx()
+
+        header = "Save Game (press escape to exit)"
+        stdscr.addstr(0, 0, header[:width-1], curses.color_pair(7))
+
+        if self.game.save_slot is None:
+            # Show available save slots
+            saves = self.game.save_manager.get_all_save_info()
+            stdscr.addstr(2, 0, "Select a save slot (1-0):", curses.color_pair(4))
+            
+            for i, save in enumerate(saves, 1):
+                if save['exists']:
+                    timestamp = save['timestamp'][:19] if save['timestamp'] != 'Unknown' else 'Unknown'
+                    line = f"{i}) {save['character_name']} - Level {save['player_level']} (Dungeon {save['level']}) - {timestamp}"
+                else:
+                    line = f"{i}) Empty slot"
+                
+                color = curses.color_pair(4)
+                if i == 10:  # Slot 10
+                    stdscr.addstr(i + 2, 0, f"0) {line[3:]}", color)
+                else:
+                    stdscr.addstr(i + 2, 0, line, color)
+        else:
+            # Confirm save
+            save_info = self.game.save_manager.get_save_info(self.game.save_slot)
+            if save_info['exists']:
+                stdscr.addstr(2, 0, f"Overwrite save slot {self.game.save_slot}?", curses.color_pair(4))
+                stdscr.addstr(3, 0, f"Character: {save_info['character_name']}", curses.color_pair(4))
+                stdscr.addstr(4, 0, f"Level: {save_info['player_level']} (Dungeon {save_info['level']})", curses.color_pair(4))
+            else:
+                stdscr.addstr(2, 0, f"Save to slot {self.game.save_slot}?", curses.color_pair(4))
+            
+            stdscr.addstr(6, 0, "Press Y to confirm, N to cancel", curses.color_pair(4))
+
+        stdscr.refresh()
+
+    def draw_load_screen(self, stdscr):
+        """Draw the load game screen."""
+        stdscr.clear()
+        height, width = stdscr.getmaxyx()
+
+        header = "Load Game (press escape to exit)"
+        stdscr.addstr(0, 0, header[:width-1], curses.color_pair(7))
+
+        if self.game.save_slot is None:
+            # Show available save slots
+            saves = self.game.save_manager.get_all_save_info()
+            stdscr.addstr(2, 0, "Select a save slot to load (1-0):", curses.color_pair(4))
+            
+            for i, save in enumerate(saves, 1):
+                if save['exists']:
+                    timestamp = save['timestamp'][:19] if save['timestamp'] != 'Unknown' else 'Unknown'
+                    line = f"{i}) {save['character_name']} - Level {save['player_level']} (Dungeon {save['level']}) - {timestamp}"
+                    color = curses.color_pair(4)
+                else:
+                    line = f"{i}) Empty slot"
+                    color = curses.color_pair(6)  # Dimmed for empty slots
+                
+                if i == 10:  # Slot 10
+                    stdscr.addstr(i + 2, 0, f"0) {line[3:]}", color)
+                else:
+                    stdscr.addstr(i + 2, 0, line, color)
+        else:
+            # Confirm load
+            save_info = self.game.save_manager.get_save_info(self.game.save_slot)
+            if save_info['exists']:
+                stdscr.addstr(2, 0, f"Load save slot {self.game.save_slot}?", curses.color_pair(4))
+                stdscr.addstr(3, 0, f"Character: {save_info['character_name']}", curses.color_pair(4))
+                stdscr.addstr(4, 0, f"Level: {save_info['player_level']} (Dungeon {save_info['level']})", curses.color_pair(4))
+                stdscr.addstr(6, 0, "Press Y to confirm, N to cancel", curses.color_pair(4))
+            else:
+                stdscr.addstr(2, 0, f"Save slot {self.game.save_slot} is empty!", curses.color_pair(3))
+                stdscr.addstr(4, 0, "Press any key to continue", curses.color_pair(4))
+
+        stdscr.refresh()
+
+    def draw_delete_screen(self, stdscr):
+        """Draw the delete save screen."""
+        stdscr.clear()
+        height, width = stdscr.getmaxyx()
+
+        header = "Delete Save (press escape to exit)"
+        stdscr.addstr(0, 0, header[:width-1], curses.color_pair(7))
+
+        if self.game.save_slot is None:
+            # Show available save slots
+            saves = self.game.save_manager.get_all_save_info()
+            stdscr.addstr(2, 0, "Select a save slot to delete (1-0):", curses.color_pair(4))
+            
+            for i, save in enumerate(saves, 1):
+                if save['exists']:
+                    timestamp = save['timestamp'][:19] if save['timestamp'] != 'Unknown' else 'Unknown'
+                    line = f"{i}) {save['character_name']} - Level {save['player_level']} (Dungeon {save['level']}) - {timestamp}"
+                    color = curses.color_pair(4)
+                else:
+                    line = f"{i}) Empty slot"
+                    color = curses.color_pair(6)  # Dimmed for empty slots
+                
+                if i == 10:  # Slot 10
+                    stdscr.addstr(i + 2, 0, f"0) {line[3:]}", color)
+                else:
+                    stdscr.addstr(i + 2, 0, line, color)
+        else:
+            # Confirm delete
+            save_info = self.game.save_manager.get_save_info(self.game.save_slot)
+            if save_info['exists']:
+                stdscr.addstr(2, 0, f"Delete save slot {self.game.save_slot}?", curses.color_pair(3))
+                stdscr.addstr(3, 0, f"Character: {save_info['character_name']}", curses.color_pair(4))
+                stdscr.addstr(4, 0, f"Level: {save_info['player_level']} (Dungeon {save_info['level']})", curses.color_pair(4))
+                stdscr.addstr(6, 0, "Press Y to confirm, N to cancel", curses.color_pair(4))
+            else:
+                stdscr.addstr(2, 0, f"Save slot {self.game.save_slot} is already empty!", curses.color_pair(3))
+                stdscr.addstr(4, 0, "Press any key to continue", curses.color_pair(4))
+
+        stdscr.refresh()
+
+    def draw_save_load_menu(self, stdscr):
+        """Draw the save/load menu accessed by pressing ESC."""
+        stdscr.clear()
+        height, width = stdscr.getmaxyx()
+
+        header = "Save/Load Menu (press escape to exit)"
+        stdscr.addstr(0, 0, header[:width-1], curses.color_pair(7))
+        
+        lines = [
+            "",
+            "s) Save game",
+            "l) Load game", 
+            "d) Delete save",
+            "",
+            "Press the letter of your choice or ESC to exit."
+        ]
+
+        for i, line in enumerate(lines):
+            if i >= height:
+                break
             color = curses.color_pair(7) if i == 0 else curses.color_pair(4)
             stdscr.addstr(i, 0, line[:width-1], color)
 
@@ -414,6 +574,7 @@ class Renderer:
             "Walk to stairs: w",
             "Combat stats: Ctrl+W",
             "Options menu: =",
+            "Save/Load menu: ESC",
             "Quit game: Q",
             "Show this help: ?",
         ]

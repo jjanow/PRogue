@@ -59,6 +59,10 @@ class Entity:
         self.gender = ""
         self.sex = ""
         self.race = ""
+        # Monster-specific attributes
+        self.xp_reward = 0
+        self.gold_reward = 0
+        self.loot = []
     
     @property
     def damage(self):

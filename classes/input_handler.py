@@ -19,6 +19,22 @@ class InputHandler:
             self.handle_options_input(key)
             return False
 
+        if self.game.save_load_menu_mode:
+            self.handle_save_load_menu_input(key)
+            return False
+
+        if self.game.save_mode:
+            self.handle_save_input(key)
+            return False
+
+        if self.game.load_mode:
+            self.handle_load_input(key)
+            return False
+
+        if self.game.delete_mode:
+            self.handle_delete_input(key)
+            return False
+
         if self.game.inventory_mode:
             self.handle_inventory_input(key)
         elif self.game.backpack_mode:
@@ -36,6 +52,10 @@ class InputHandler:
             self.game.open_character_stats_screen()
         elif key == ord('Q'):
             return self.handle_quit()
+        elif key == ord('!'):  # Debug menu toggle
+            self.game.debug_mode = True
+        elif key == 27:  # ESC key
+            self.game.save_load_menu_mode = True
         else:
             self.handle_main_game_input(key)
         return False  # Don't exit the game
@@ -198,68 +218,214 @@ class InputHandler:
             self.game.use_backpack_item(chr(key))
 
     def handle_options_input(self, key):
-        if key == 27:  # ESC
+        if key == 27:  # ESC key
             self.game.options_mode = False
             self.game.speed_input = ""
             return
 
-        if key in [ord('+'), curses.KEY_RIGHT]:
-            self.game.walk_speed = min(1000, self.game.walk_speed + 10)
-        elif key in [ord('-'), curses.KEY_LEFT]:
-            self.game.walk_speed = max(0, self.game.walk_speed - 10)
-        elif ord('0') <= key <= ord('9'):
-            self.game.speed_input += chr(key)
-            if len(self.game.speed_input) > 4:
-                self.game.speed_input = self.game.speed_input[-4:]
-        elif key in (curses.KEY_BACKSPACE, 127, 8):
-            self.game.speed_input = self.game.speed_input[:-1]
-        elif key in [10, 13]:
+        if key == 10:  # Enter key
             if self.game.speed_input:
-                value = int(self.game.speed_input)
-                self.game.walk_speed = max(0, min(1000, value))
-            self.game.speed_input = ""
-            self.game.options_mode = False
+                try:
+                    new_speed = int(self.game.speed_input)
+                    if 0 <= new_speed <= 1000:
+                        self.game.walk_speed = new_speed
+                        self.game.messages.append(f"Walking speed set to {new_speed} ms.")
+                    else:
+                        self.game.messages.append("Speed must be between 0 and 1000 ms.")
+                except ValueError:
+                    self.game.messages.append("Invalid speed value.")
+                self.game.speed_input = ""
+            return
+
+        # Handle speed input
+        if 48 <= key <= 57:  # 0-9
+            self.game.speed_input += chr(key)
+        elif key == 8 or key == 127:  # Backspace
+            self.game.speed_input = self.game.speed_input[:-1]
 
     def handle_help_input(self, key):
         if key in (27, ord('q')):
             self.game.help_mode = False
 
-
     def handle_debug_input(self, key):
-        # If the menu isn't open yet, hitting '!' will open it
-        if not self.game.debug_mode and key == ord('!'):
-            self.game.debug_mode = True
-            return
-
+        # Handle debug menu options
         if key == 27:  # ESC key
             self.game.debug_mode = False
-            return
-
-        item_keys = {
-            'a': 'weapon',
-            'b': 'missile weapon',
-            'c': 'helmet',
-            'd': 'amulet',
-            'e': 'shield',
-            'f': 'armor',
-            'g': 'cloak',
-            'h': 'girdle',
-            'i': 'gauntlets',
-            'j': 'boots',
-            'k': 'ring',
-            'l': 'bracers',
-            'm': 'potion',
-        }
-
-        if chr(key) in item_keys:
-            category = item_keys[chr(key)]
-            item = self.game.create_specific_item(category)
-            self.game.player.add_item(item)
-            self.game.messages.append(f"Created {item.name} in your inventory.")
-            self.game.debug_mode = False
-        elif key == ord('n'):
+        elif key == ord('a'):  # Create weapon
+            item = self.game.create_specific_item('weapon')
+            if item:
+                self.game.player.add_item(item)
+                self.game.messages.append(f"Created {item.name} in your inventory.")
+        elif key == ord('b'):  # Create missile weapon
+            item = self.game.create_specific_item('missile_weapon')
+            if item:
+                self.game.player.add_item(item)
+                self.game.messages.append(f"Created {item.name} in your inventory.")
+        elif key == ord('c'):  # Create helmet
+            item = self.game.create_specific_item('helmet')
+            if item:
+                self.game.player.add_item(item)
+                self.game.messages.append(f"Created {item.name} in your inventory.")
+        elif key == ord('d'):  # Create amulet
+            item = self.game.create_specific_item('amulet')
+            if item:
+                self.game.player.add_item(item)
+                self.game.messages.append(f"Created {item.name} in your inventory.")
+        elif key == ord('e'):  # Create shield
+            item = self.game.create_specific_item('shield')
+            if item:
+                self.game.player.add_item(item)
+                self.game.messages.append(f"Created {item.name} in your inventory.")
+        elif key == ord('f'):  # Create armor
+            item = self.game.create_specific_item('armor')
+            if item:
+                self.game.player.add_item(item)
+                self.game.messages.append(f"Created {item.name} in your inventory.")
+        elif key == ord('g'):  # Create cloak
+            item = self.game.create_specific_item('cloak')
+            if item:
+                self.game.player.add_item(item)
+                self.game.messages.append(f"Created {item.name} in your inventory.")
+        elif key == ord('h'):  # Create girdle
+            item = self.game.create_specific_item('girdle')
+            if item:
+                self.game.player.add_item(item)
+                self.game.messages.append(f"Created {item.name} in your inventory.")
+        elif key == ord('i'):  # Create gauntlets
+            item = self.game.create_specific_item('gauntlets')
+            if item:
+                self.game.player.add_item(item)
+                self.game.messages.append(f"Created {item.name} in your inventory.")
+        elif key == ord('j'):  # Create boots
+            item = self.game.create_specific_item('boots')
+            if item:
+                self.game.player.add_item(item)
+                self.game.messages.append(f"Created {item.name} in your inventory.")
+        elif key == ord('k'):  # Create ring
+            item = self.game.create_specific_item('ring')
+            if item:
+                self.game.player.add_item(item)
+                self.game.messages.append(f"Created {item.name} in your inventory.")
+        elif key == ord('l'):  # Create bracers
+            item = self.game.create_specific_item('bracers')
+            if item:
+                self.game.player.add_item(item)
+                self.game.messages.append(f"Created {item.name} in your inventory.")
+        elif key == ord('m'):  # Create potion
+            item = self.game.create_specific_item('potion')
+            if item:
+                self.game.player.add_item(item)
+                self.game.messages.append(f"Created {item.name} in your inventory.")
+        elif key == ord('n'):  # Map level
             self.game.map_current_level()
-            self.game.debug_mode = False
-        elif key == ord('o'):
+        elif key == ord('o'):  # Level up
             self.game.level_up_player()
-            self.game.debug_mode = False
+        elif key == ord('s'):  # Spawn random item (legacy)
+            self.game.spawn_item_in_inventory()
+        elif key == ord('t'):  # Add time
+            self.game.time += 1000
+            self.game.messages.append("Added 1000 time units.")
+        elif key == ord('w'):  # Decrease walk speed
+            self.game.walk_speed = max(1, self.game.walk_speed - 1)
+            self.game.messages.append(f"Walk speed decreased to {self.game.walk_speed} ms.")
+        elif key == ord('e'):  # Increase walk speed
+            self.game.walk_speed = min(100, self.game.walk_speed + 1)
+            self.game.messages.append(f"Walk speed increased to {self.game.walk_speed} ms.")
+
+    def handle_save_input(self, key):
+        """Handle input for save game mode."""
+        if key == 27:  # ESC key
+            self.game.save_mode = False
+            self.game.save_slot = None
+            return
+        
+        if self.game.save_slot is None:
+            if 49 <= key <= 57:  # '1' to '9'
+                self.game.save_slot = key - ord('0')
+            elif key == ord('0'):  # '0' for slot 10
+                self.game.save_slot = 10
+        else:
+            if key == ord('y') or key == ord('Y'):
+                try:
+                    self.game.save_manager.save_game(self.game, self.game.save_slot)
+                    self.game.messages.append(f"Game saved to slot {self.game.save_slot}.")
+                except Exception as e:
+                    self.game.messages.append(f"Failed to save game: {e}")
+                self.game.save_mode = False
+                self.game.save_slot = None
+            elif key == ord('n') or key == ord('N') or key == 27:
+                self.game.save_mode = False
+                self.game.save_slot = None
+
+    def handle_load_input(self, key):
+        """Handle input for load game mode."""
+        if key == 27:  # ESC key
+            self.game.load_mode = False
+            self.game.save_slot = None
+            return
+        
+        if self.game.save_slot is None:
+            if 49 <= key <= 57:  # '1' to '9'
+                self.game.save_slot = key - ord('0')
+            elif key == ord('0'):  # '0' for slot 10
+                self.game.save_slot = 10
+        else:
+            if key == ord('y') or key == ord('Y'):
+                try:
+                    self.game.save_manager.load_game(self.game, self.game.save_slot)
+                    self.game.messages.append(f"Game loaded from slot {self.game.save_slot}.")
+                except Exception as e:
+                    self.game.messages.append(f"Failed to load game: {e}")
+                self.game.load_mode = False
+                self.game.save_slot = None
+            elif key == ord('n') or key == ord('N') or key == 27:
+                self.game.load_mode = False
+                self.game.save_slot = None
+
+    def handle_delete_input(self, key):
+        """Handle input for delete save mode."""
+        if key == 27:  # ESC key
+            self.game.delete_mode = False
+            self.game.save_slot = None
+            return
+        
+        if self.game.save_slot is None:
+            if 49 <= key <= 57:  # '1' to '9'
+                self.game.save_slot = key - ord('0')
+            elif key == ord('0'):  # '0' for slot 10
+                self.game.save_slot = 10
+        else:
+            if key == ord('y') or key == ord('Y'):
+                try:
+                    if self.game.save_manager.delete_save(self.game.save_slot):
+                        self.game.messages.append(f"Save slot {self.game.save_slot} deleted.")
+                    else:
+                        self.game.messages.append(f"Save slot {self.game.save_slot} was already empty.")
+                except Exception as e:
+                    self.game.messages.append(f"Failed to delete save: {e}")
+                self.game.delete_mode = False
+                self.game.save_slot = None
+            elif key == ord('n') or key == ord('N') or key == 27:
+                self.game.delete_mode = False
+                self.game.save_slot = None
+
+    def handle_save_load_menu_input(self, key):
+        """Handle input for the save/load menu accessed by pressing ESC."""
+        if key == 27:  # ESC key
+            self.game.save_load_menu_mode = False
+            return
+        
+        if key == ord('s'):
+            self.game.save_mode = True
+            self.game.save_load_menu_mode = False
+            return
+        
+        if key == ord('l'):
+            self.game.load_mode = True
+            self.game.save_load_menu_mode = False
+            return
+        
+        if key == ord('d'):
+            self.game.delete_mode = True
+            self.game.save_load_menu_mode = False
+            return

@@ -66,10 +66,12 @@ def load_items():
         for item_data in items:
             accuracy = item_data.get('accuracy', 0)
             material_type = item_data.get('material_type')
-            if 'slot' in item_data:
+            # Check for either 'slot' or 'type' field to determine if it's equipment
+            slot = item_data.get('slot') or item_data.get('type')
+            if slot:
                 item = Equipment(
                     item_data['name'],
-                    item_data['slot'],
+                    slot,  # Use the slot/type as the equipment slot
                     item_data.get('body_part', 'unknown'),
                     0,
                     damage=item_data.get('damage'),
@@ -124,6 +126,26 @@ def create_effect(effect_type, value, duration):
         return lambda e: e.take_damage(value)
     else:
         return lambda e: f"Unknown effect: {effect_type}"
+
+def get_effect_function(effect_name):
+    """Get an effect function by name for loading saved items."""
+    # For now, return a simple lambda that does nothing
+    # In a full implementation, you might want to store effect parameters
+    # and recreate the full effect function
+    if effect_name == 'heal':
+        return lambda e: e.heal(10)  # Default heal value
+    elif effect_name == 'restore_mana':
+        return lambda e: e.restore_mana(10)  # Default mana value
+    elif effect_name == 'cure_poison':
+        return lambda e: e.cure_poison()
+    elif effect_name == 'identify':
+        return lambda e: e.identify_item()
+    elif effect_name == 'detect_magic':
+        return lambda e: e.detect_magic()
+    elif effect_name == 'light':
+        return lambda e: e.cast_light()
+    else:
+        return lambda e: f"Unknown effect: {effect_name}"
 
 (
     all_consumables,

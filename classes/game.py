@@ -19,6 +19,7 @@ from classes.input_handler import InputHandler
 from classes.renderer import Renderer
 from classes.combat_system import CombatSystem
 from classes.monster_loader import all_monsters
+from classes.save_manager import SaveManager
 
 class Game:
     def __init__(self, height, width, stdscr):
@@ -75,6 +76,92 @@ class Game:
         self.help_mode = False
         self.speed_input = ""
         self.combat_stats_mode = False
+        self.save_manager = SaveManager()
+        self.save_mode = False
+        self.load_mode = False
+        self.delete_mode = False
+        self.save_load_menu_mode = False
+        self.save_slot = None
+        self.playtime = 0
+        self.start_time = time.time()
+        self.path_cache = {}  # Initialize path_cache to prevent AttributeError
+
+    @classmethod
+    def create_minimal(cls, height, width, stdscr):
+        """Create a minimal game instance for loading saves without generating content."""
+        game = cls.__new__(cls)
+        game.height = height
+        game.width = width
+        game.stdscr = stdscr
+        game.screen_height, game.screen_width = stdscr.getmaxyx()
+        
+        # Create minimal player (will be overwritten by save data)
+        game.player = Entity(width // 2, height // 2, '@', "Player", 100, 0, 0)
+        game.player.initialize_player()
+        
+        # Initialize empty containers
+        game.enemies = []
+        game.items = []
+        game.messages = []
+        game.rooms = []
+        game.map = []
+        game.visible = []
+        game.explored = []
+        
+        # Initialize game state variables
+        game.turn_count = 0
+        game.last_spawn_turn = 0
+        game.dungeon_level = 1
+        game.stairs_x = None
+        game.stairs_y = None
+        game.stairs_up_x = None
+        game.stairs_up_y = None
+        game.inventory_page = 0
+        game.items_per_page = 26
+        game.inventory_mode = False
+        game.character_screen_mode = False
+        game.character_stats_mode = False
+        game.equipment_mode = False
+        game.equipment_slot = None
+        game.backpack_mode = False
+        game.backpack_page = 0
+        game.drop_mode = False
+        game.time = 0
+        game.selected_slot = None
+        game.debug_mode = False
+        game.quit = False
+        game.game_over = False
+        game.walk_mode = False
+        game.auto_explore_mode = False
+        game.options_mode = False
+        game.walk_speed = 5
+        game.help_mode = False
+        game.speed_input = ""
+        game.combat_stats_mode = False
+        game.save_manager = SaveManager()
+        game.save_mode = False
+        game.load_mode = False
+        game.delete_mode = False
+        game.save_load_menu_mode = False
+        game.save_slot = None
+        game.playtime = 0
+        game.start_time = time.time()
+        game.path_cache = {}  # Initialize path_cache to prevent AttributeError
+        
+        # Initialize systems
+        game.input_handler = InputHandler(game)
+        game.renderer = Renderer(game)
+        game.combat_system = CombatSystem()
+        
+        return game
+
+    def _serialize_rooms(self, rooms):
+        """Serialize rooms for saving."""
+        return [list(room) for room in rooms]
+    
+    def _deserialize_rooms(self, serialized_rooms):
+        """Deserialize rooms from save data."""
+        return [tuple(room) for room in serialized_rooms]
 
     def open_character_stats_screen(self):
         self.character_stats_mode = True
@@ -136,6 +223,9 @@ class Game:
 
     def create_specific_item(self, category):
         if category == 'potion':
+            if not all_consumables:
+                self.messages.append("Error: No consumables available.")
+                return None
             template = random.choice(all_consumables)
         else:
             if category == 'ring':
@@ -143,13 +233,21 @@ class Game:
             else:
                 pool = [e for e in all_equipment if e.slot == category]
             if not pool:
+                # Fallback to all equipment if no specific category found
+                if not all_equipment:
+                    self.messages.append(f"Error: No equipment available for category '{category}' and no equipment loaded.")
+                    return None
                 pool = all_equipment
+                self.messages.append(f"Warning: No specific items found for '{category}', using random equipment.")
             template = random.choice(pool)
 
         if isinstance(template, Equipment):
             material_list = materials_by_type.get(
                 template.material_type, all_materials
             )
+            if not material_list:
+                self.messages.append(f"Warning: No materials found for type '{template.material_type}', using default materials.")
+                material_list = all_materials
             material = random.choice(material_list)
             name = f"{material.name} {template.name}"
             stat = material.power
@@ -233,8 +331,6 @@ class Game:
             self.open_character_stats_screen()
         elif key == ord('Q'):
             return self.input_handler.handle_quit()
-        elif key == ord('!'):  # Ensure this line is present
-            self.input_handler.handle_debug_input(key)
         else:
             self.input_handler.handle_input(key)
         return False  # Don't exit the game
@@ -399,7 +495,15 @@ class Game:
         path.reverse()
         return path
 
+    def update_playtime(self):
+        """Update the playtime counter."""
+        current_time = time.time()
+        self.playtime = current_time - self.start_time
+
     def process_turn(self):
+        # Update playtime
+        self.update_playtime()
+        
         # Remove any defeated enemies
         self.enemies = [enemy for enemy in self.enemies if enemy.health > 0]
         
@@ -546,9 +650,13 @@ class Game:
         Returns True if the walk was interrupted by user input."""
         target = type('Target', (object,), {'x': x, 'y': y})()
         path = self.get_cached_path(self.player, target)
-        if not path:
-            self.messages.append("No path to destination.")
-            return False
+        
+        # Fallback to find_path if cached path fails
+        if not path or len(path) < 2:
+            path = self.find_path(self.player, target)
+            if not path or len(path) < 2:
+                self.messages.append("No path to destination.")
+                return False
 
         interrupted = False
         draw_steps = animate and self.stdscr and self.walk_speed > 0
@@ -558,7 +666,7 @@ class Game:
             self.stdscr.nodelay(True)
 
         try:
-            for step in path[1:]:
+            for step in path[1:]:  # Skip the starting position
                 if check_keys:
                     key = self.stdscr.getch()
                     if key != -1:
@@ -580,9 +688,12 @@ class Game:
                     self.renderer.draw(self.stdscr)
                     time.sleep(self.walk_speed / 1000.0)
 
+                # Check if we actually moved or reached the target
                 if (self.player.x, self.player.y) == (prev_x, prev_y):
+                    # Player didn't move, might be blocked
                     break
                 if (self.player.x, self.player.y) == (x, y):
+                    # Reached the target
                     break
         finally:
             if check_keys:
@@ -645,7 +756,10 @@ class Game:
     def auto_explore(self):
         """Automatically explore the dungeon until a monster is seen."""
         self.auto_explore_mode = True
-        while self.auto_explore_mode:
+        attempts_without_progress = 0
+        max_attempts = 10  # Prevent infinite loops
+        
+        while self.auto_explore_mode and attempts_without_progress < max_attempts:
             if any(self.visible[e.y][e.x] for e in self.enemies):
                 self.messages.append("Monster spotted!")
                 break
@@ -655,10 +769,25 @@ class Game:
                 self.messages.append("Nothing left to explore.")
                 break
 
+            # Store current position to detect if we made progress
+            start_x, start_y = self.player.x, self.player.y
+            
             interrupted = self.walk_to(target[0], target[1], animate=True)
             if interrupted:
                 break
+                
+            # Check if we actually moved
+            if (self.player.x, self.player.y) == (start_x, start_y):
+                attempts_without_progress += 1
+                # Process a turn if we didn't move to update game state
+                self.process_turn()
+            else:
+                attempts_without_progress = 0
+                # No need to process turn here as walk_to already did it
 
+        if attempts_without_progress >= max_attempts:
+            self.messages.append("Auto-explore stopped: no progress made.")
+            
         self.auto_explore_mode = False
     
     def exit_game(self):
@@ -955,7 +1084,7 @@ class Game:
             if self.handle_input(key):
                 self.quit = True
                 break
-            if hasattr(self, 'render'):
-                self.render()
+            if hasattr(self, 'renderer') and hasattr(self, 'stdscr'):
+                self.renderer.draw(self.stdscr)
             self.display_messages()
 
