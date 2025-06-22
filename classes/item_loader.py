@@ -41,7 +41,7 @@ def load_items():
 
     consumables = []
     for item_data in consumable_data:
-        effect = create_effect(item_data['effect'], item_data['value'])
+        effect = create_effect(item_data['effect'], item_data['value'], item_data.get('duration', None))
         item = Item(
             item_data['name'],
             effect,
@@ -93,19 +93,37 @@ def load_items():
     all_items = consumables + equipment + misc_items
     return consumables, equipment, misc_items, materials_by_type, all_materials, all_items
 
-def create_effect(effect_type, value):
+def create_effect(effect_type, value, duration):
     if effect_type == 'heal':
         return lambda e: e.heal(value)
     elif effect_type == 'restore_mana':
         return lambda e: e.restore_mana(value)
     elif effect_type == 'boost_strength':
-        return lambda e: e.apply_temporary_boost('strength', value, 50)  # 50 turns duration
+        return lambda e: e.apply_temporary_boost('strength', value, duration)
     elif effect_type == 'boost_dexterity':
-        return lambda e: e.apply_temporary_boost('dexterity', value, 50)  # 50 turns duration
+        return lambda e: e.apply_temporary_boost('dexterity', value, duration)
+    elif effect_type == 'boost_constitution':
+        return lambda e: e.apply_temporary_boost('constitution', value, duration)
+    elif effect_type == 'boost_intelligence':
+        return lambda e: e.apply_temporary_boost('intelligence', value, duration)
+    elif effect_type == 'boost_speed':
+        return lambda e: e.apply_temporary_boost('speed', value, duration)
+    elif effect_type == 'boost_charisma':
+        return lambda e: e.apply_temporary_boost('charisma', value, duration)
+    elif effect_type == 'cure_poison':
+        return lambda e: e.cure_poison()
+    elif effect_type == 'satiate':
+        return lambda e: e.satiate(value)
+    elif effect_type == 'identify':
+        return lambda e: e.identify_item()
+    elif effect_type == 'detect_magic':
+        return lambda e: e.detect_magic()
+    elif effect_type == 'light':
+        return lambda e: e.cast_light()
     elif effect_type in ('poison', 'damage'):
         return lambda e: e.take_damage(value)
     else:
-        return lambda e: None  # Null effect if not recognized
+        return lambda e: f"Unknown effect: {effect_type}"
 
 (
     all_consumables,

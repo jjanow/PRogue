@@ -1,101 +1,378 @@
 [
   {
+    "name": "Minor Health Potion",
+    "type": "consumable",
+    "body_part": "inventory",
+    "effect": "heal",
+    "value": 15,
+    "material_type": "potion",
+    "weight": 1,
+    "gold": 25
+  },
+  {
     "name": "Health Potion",
     "type": "consumable",
     "body_part": "inventory",
     "effect": "heal",
-    "value": 20,
+    "value": 35,
     "material_type": "potion",
-    "weight": 1
+    "weight": 1,
+    "gold": 50
   },
   {
     "name": "Greater Health Potion",
     "type": "consumable",
     "body_part": "inventory",
     "effect": "heal",
-    "value": 50,
+    "value": 60,
     "material_type": "potion",
-    "weight": 1
+    "weight": 1,
+    "gold": 100
+  },
+  {
+    "name": "Major Health Potion",
+    "type": "consumable",
+    "body_part": "inventory",
+    "effect": "heal",
+    "value": 100,
+    "material_type": "potion",
+    "weight": 1,
+    "gold": 200
+  },
+  {
+    "name": "Minor Mana Potion",
+    "type": "consumable",
+    "body_part": "inventory",
+    "effect": "restore_mana",
+    "value": 15,
+    "material_type": "potion",
+    "weight": 1,
+    "gold": 30
   },
   {
     "name": "Mana Potion",
     "type": "consumable",
     "body_part": "inventory",
     "effect": "restore_mana",
-    "value": 20,
+    "value": 35,
     "material_type": "potion",
-    "weight": 1
+    "weight": 1,
+    "gold": 60
   },
   {
     "name": "Greater Mana Potion",
     "type": "consumable",
     "body_part": "inventory",
     "effect": "restore_mana",
-    "value": 50,
+    "value": 60,
     "material_type": "potion",
-    "weight": 1
-  },
-  {
-    "name": "Strength Elixir",
-    "type": "consumable",
-    "body_part": "inventory",
-    "effect": "boost_strength",
-    "value": 2,
-    "material_type": "potion",
-    "weight": 1
-  },
-  {
-    "name": "Dexterity Elixir",
-    "type": "consumable",
-    "body_part": "inventory",
-    "effect": "boost_dexterity",
-    "value": 2,
-    "material_type": "potion",
-    "weight": 1
-  },
-  {
-    "name": "Minor Health Potion",
-    "type": "consumable",
-    "body_part": "inventory",
-    "effect": "heal",
-    "value": 10,
-    "material_type": "potion",
-    "weight": 1
+    "weight": 1,
+    "gold": 120
   },
   {
     "name": "Major Mana Potion",
     "type": "consumable",
     "body_part": "inventory",
     "effect": "restore_mana",
-    "value": 75,
+    "value": 100,
     "material_type": "potion",
-    "weight": 1
+    "weight": 1,
+    "gold": 250
   },
   {
-    "name": "Strength Draught",
+    "name": "Minor Strength Elixir",
+    "type": "consumable",
+    "body_part": "inventory",
+    "effect": "boost_strength",
+    "value": 2,
+    "duration": 30,
+    "material_type": "potion",
+    "weight": 1,
+    "gold": 75
+  },
+  {
+    "name": "Strength Elixir",
+    "type": "consumable",
+    "body_part": "inventory",
+    "effect": "boost_strength",
+    "value": 4,
+    "duration": 50,
+    "material_type": "potion",
+    "weight": 1,
+    "gold": 150
+  },
+  {
+    "name": "Greater Strength Elixir",
+    "type": "consumable",
+    "body_part": "inventory",
+    "effect": "boost_strength",
+    "value": 6,
+    "duration": 75,
+    "material_type": "potion",
+    "weight": 1,
+    "gold": 300
+  },
+  {
+    "name": "Minor Dexterity Elixir",
+    "type": "consumable",
+    "body_part": "inventory",
+    "effect": "boost_dexterity",
+    "value": 2,
+    "duration": 30,
+    "material_type": "potion",
+    "weight": 1,
+    "gold": 75
+  },
+  {
+    "name": "Dexterity Elixir",
+    "type": "consumable",
+    "body_part": "inventory",
+    "effect": "boost_dexterity",
+    "value": 4,
+    "duration": 50,
+    "material_type": "potion",
+    "weight": 1,
+    "gold": 150
+  },
+  {
+    "name": "Greater Dexterity Elixir",
+    "type": "consumable",
+    "body_part": "inventory",
+    "effect": "boost_dexterity",
+    "value": 6,
+    "duration": 75,
+    "material_type": "potion",
+    "weight": 1,
+    "gold": 300
+  },
+  {
+    "name": "Minor Constitution Elixir",
+    "type": "consumable",
+    "body_part": "inventory",
+    "effect": "boost_constitution",
+    "value": 2,
+    "duration": 30,
+    "material_type": "potion",
+    "weight": 1,
+    "gold": 75
+  },
+  {
+    "name": "Constitution Elixir",
+    "type": "consumable",
+    "body_part": "inventory",
+    "effect": "boost_constitution",
+    "value": 4,
+    "duration": 50,
+    "material_type": "potion",
+    "weight": 1,
+    "gold": 150
+  },
+  {
+    "name": "Greater Constitution Elixir",
+    "type": "consumable",
+    "body_part": "inventory",
+    "effect": "boost_constitution",
+    "value": 6,
+    "duration": 75,
+    "material_type": "potion",
+    "weight": 1,
+    "gold": 300
+  },
+  {
+    "name": "Minor Intelligence Elixir",
+    "type": "consumable",
+    "body_part": "inventory",
+    "effect": "boost_intelligence",
+    "value": 2,
+    "duration": 30,
+    "material_type": "potion",
+    "weight": 1,
+    "gold": 75
+  },
+  {
+    "name": "Intelligence Elixir",
+    "type": "consumable",
+    "body_part": "inventory",
+    "effect": "boost_intelligence",
+    "value": 4,
+    "duration": 50,
+    "material_type": "potion",
+    "weight": 1,
+    "gold": 150
+  },
+  {
+    "name": "Greater Intelligence Elixir",
+    "type": "consumable",
+    "body_part": "inventory",
+    "effect": "boost_intelligence",
+    "value": 6,
+    "duration": 75,
+    "material_type": "potion",
+    "weight": 1,
+    "gold": 300
+  },
+  {
+    "name": "Speed Potion",
+    "type": "consumable",
+    "body_part": "inventory",
+    "effect": "boost_speed",
+    "value": 50,
+    "duration": 40,
+    "material_type": "potion",
+    "weight": 1,
+    "gold": 200
+  },
+  {
+    "name": "Greater Speed Potion",
+    "type": "consumable",
+    "body_part": "inventory",
+    "effect": "boost_speed",
+    "value": 100,
+    "duration": 60,
+    "material_type": "potion",
+    "weight": 1,
+    "gold": 400
+  },
+  {
+    "name": "Antidote",
+    "type": "consumable",
+    "body_part": "inventory",
+    "effect": "cure_poison",
+    "value": 1,
+    "material_type": "potion",
+    "weight": 1,
+    "gold": 100
+  },
+  {
+    "name": "Cure Light Wounds",
+    "type": "consumable",
+    "body_part": "inventory",
+    "effect": "heal",
+    "value": 25,
+    "material_type": "scroll",
+    "weight": 1,
+    "gold": 40
+  },
+  {
+    "name": "Cure Serious Wounds",
+    "type": "consumable",
+    "body_part": "inventory",
+    "effect": "heal",
+    "value": 50,
+    "material_type": "scroll",
+    "weight": 1,
+    "gold": 80
+  },
+  {
+    "name": "Cure Critical Wounds",
+    "type": "consumable",
+    "body_part": "inventory",
+    "effect": "heal",
+    "value": 80,
+    "material_type": "scroll",
+    "weight": 1,
+    "gold": 150
+  },
+  {
+    "name": "Heal",
+    "type": "consumable",
+    "body_part": "inventory",
+    "effect": "heal",
+    "value": 120,
+    "material_type": "scroll",
+    "weight": 1,
+    "gold": 300
+  },
+  {
+    "name": "Restore Mana",
+    "type": "consumable",
+    "body_part": "inventory",
+    "effect": "restore_mana",
+    "value": 80,
+    "material_type": "scroll",
+    "weight": 1,
+    "gold": 200
+  },
+  {
+    "name": "Greater Restore Mana",
+    "type": "consumable",
+    "body_part": "inventory",
+    "effect": "restore_mana",
+    "value": 150,
+    "material_type": "scroll",
+    "weight": 1,
+    "gold": 400
+  },
+  {
+    "name": "Identify",
+    "type": "consumable",
+    "body_part": "inventory",
+    "effect": "identify",
+    "value": 1,
+    "material_type": "scroll",
+    "weight": 1,
+    "gold": 50
+  },
+  {
+    "name": "Detect Magic",
+    "type": "consumable",
+    "body_part": "inventory",
+    "effect": "detect_magic",
+    "value": 1,
+    "material_type": "scroll",
+    "weight": 1,
+    "gold": 75
+  },
+  {
+    "name": "Light",
+    "type": "consumable",
+    "body_part": "inventory",
+    "effect": "light",
+    "value": 1,
+    "material_type": "scroll",
+    "weight": 1,
+    "gold": 25
+  },
+  {
+    "name": "Food Ration",
+    "type": "consumable",
+    "body_part": "inventory",
+    "effect": "satiate",
+    "value": 50,
+    "material_type": "food",
+    "weight": 2,
+    "gold": 10
+  },
+  {
+    "name": "Elven Waybread",
+    "type": "consumable",
+    "body_part": "inventory",
+    "effect": "satiate",
+    "value": 100,
+    "material_type": "food",
+    "weight": 1,
+    "gold": 25
+  },
+  {
+    "name": "Dwarven Ale",
     "type": "consumable",
     "body_part": "inventory",
     "effect": "boost_strength",
     "value": 3,
-    "material_type": "potion",
-    "weight": 1
+    "duration": 20,
+    "material_type": "drink",
+    "weight": 1,
+    "gold": 15
   },
   {
-    "name": "Dexterity Draught",
+    "name": "Wine",
     "type": "consumable",
     "body_part": "inventory",
-    "effect": "boost_dexterity",
-    "value": 3,
-    "material_type": "potion",
-    "weight": 1
-  },
-  {
-    "name": "Poison Potion",
-    "type": "consumable",
-    "body_part": "inventory",
-    "effect": "poison",
-    "value": 10,
-    "material_type": "potion",
-    "weight": 1
+    "effect": "boost_charisma",
+    "value": 2,
+    "duration": 15,
+    "material_type": "drink",
+    "weight": 1,
+    "gold": 20
   }
 ]

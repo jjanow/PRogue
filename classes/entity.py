@@ -172,7 +172,11 @@ class Entity:
     def use_item(self, item):
         if item in self.inventory:
             if isinstance(item, Equipment):
-                return self.equip(item)
+                # Find the appropriate slot for this equipment
+                for slot_key, slot in self.equipment.items():
+                    if slot['name'] == item.slot:
+                        return self.equip(item, slot_key)
+                return f"No suitable slot found for {item.name}"
             else:
                 effect_result = item.effect(self)
                 self.remove_item(item)
@@ -352,3 +356,32 @@ class Entity:
 
     def get_equipped_items(self):
         return {key: slot['item'] for key, slot in self.equipment.items() if slot['item']}
+
+    def cure_poison(self):
+        """Cure any poison effects on the entity."""
+        if hasattr(self, 'poisoned') and self.poisoned:
+            self.poisoned = False
+            return "You feel the poison leave your body."
+        return "You are not poisoned."
+
+    def satiate(self, amount):
+        """Satiate hunger/thirst."""
+        if not hasattr(self, 'hunger'):
+            self.hunger = 0
+        self.hunger = max(0, self.hunger - amount)
+        return f"You feel less hungry. (-{amount} hunger)"
+
+    def identify_item(self):
+        """Identify an unknown item in inventory."""
+        # This would need to be implemented with the game's item identification system
+        return "You identify an item in your inventory."
+
+    def detect_magic(self):
+        """Detect magical items in the area."""
+        # This would need to be implemented with the game's magic detection system
+        return "You sense magical auras in the area."
+
+    def cast_light(self):
+        """Cast a light spell to illuminate the area."""
+        # This would need to be implemented with the game's lighting system
+        return "The area is illuminated with magical light."
