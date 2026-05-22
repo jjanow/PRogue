@@ -898,8 +898,6 @@ class Game:
                     self.renderer.draw(self.stdscr)
                     need_draw = False
 
-                time.sleep(0.02)
-
             if self.stdscr and need_draw:
                 self.renderer.draw(self.stdscr)
         finally:
