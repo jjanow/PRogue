@@ -3,10 +3,8 @@ import random
 
 class MapGenerator:
     def __init__(self, height, width, screen_height, screen_width):
-        # Map fills the usable screen area exactly.
-        # 6 rows reserved for UI chrome at the bottom (2 status + 1 gap + 3 messages).
-        self.height = max(10, screen_height - 6)
-        self.width = max(20, screen_width - 1)
+        self.height = max(10, min(height, screen_height - 6))
+        self.width = max(20, min(width, screen_width - 5))
 
     def generate(self):
         self.map, self.rooms = self._generate_map_and_rooms()
