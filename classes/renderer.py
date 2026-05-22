@@ -97,7 +97,9 @@ class Renderer:
                 if cell == '#':
                     stdscr.addch(y, x, cell, curses.color_pair(5) | attr)  # Walls
                 elif cell == '+':
-                    stdscr.addch(y, x, cell, curses.color_pair(6) | attr)  # Doors
+                    stdscr.addch(y, x, cell, curses.color_pair(6) | attr)  # Closed door
+                elif cell == '/':
+                    stdscr.addch(y, x, cell, curses.color_pair(6) | attr)  # Open door
                 elif cell == 'T':
                     stdscr.addch(y, x, cell, curses.color_pair(8) | attr)  # Trees
                 elif cell == '~':
@@ -570,6 +572,7 @@ class Renderer:
             "Movement: hjkl or arrow keys; diagonals yubn",
             "Wait: 5",
             "Pick up item: ','",
+            "Open door: o (or walk into it)",
             "Open inventory: i",
             "Character info: @",
             "Auto-explore: 0",

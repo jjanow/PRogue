@@ -46,6 +46,7 @@ _DEFAULTS = {
     "combat_stats":  ["CTRL_W"],
     "quit":          ["Q"],
     "debug":         ["!"],
+    "open_door":     ["o"],
 }
 
 
@@ -72,6 +73,7 @@ class Keybindings:
     combat_stats: frozenset = field(default_factory=frozenset)
     quit: frozenset = field(default_factory=frozenset)
     debug: frozenset = field(default_factory=frozenset)
+    open_door: frozenset = field(default_factory=frozenset)
 
 
 def _parse_key(s):

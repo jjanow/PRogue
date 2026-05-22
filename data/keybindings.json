@@ -19,5 +19,6 @@
   "character_stats": ["@"],
   "combat_stats":  ["CTRL_W"],
   "quit":          ["Q"],
-  "debug":         ["!"]
+  "debug":         ["!"],
+  "open_door":     ["o"]
 }

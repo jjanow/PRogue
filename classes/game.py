@@ -94,6 +94,7 @@ class Game:
         self.save_load_menu_mode = False
         self.save_slot = None
         self.save_info_cache = None
+        self.open_mode = False
         self.start_time = time.time()
         self.path_cache = {}
 
@@ -160,6 +161,7 @@ class Game:
         game.save_load_menu_mode = False
         game.save_slot = None
         game.save_info_cache = None
+        game.open_mode = False
         game.start_time = time.time()
         game.path_cache = {}
         
@@ -504,7 +506,7 @@ class Game:
         return None
 
     def is_valid_move(self, x, y):
-        return 0 <= x < self.width and 0 <= y < self.height and self.map[y][x] in ['.', '>', '<', '+', '^']
+        return 0 <= x < self.width and 0 <= y < self.height and self.map[y][x] in ['.', '>', '<', '/', '^']
 
     def compute_all_shortest_paths(self):
         """Precompute shortest paths between all walkable tiles on the map."""
@@ -514,7 +516,7 @@ class Game:
             (x, y)
             for y in range(map_height)
             for x in range(map_width)
-            if self.map[y][x] in ['.', '<', '>', '+', '^']
+            if self.map[y][x] in ['.', '<', '>', '+', '/', '^']
         ]
 
         self.path_cache = {}
@@ -533,7 +535,7 @@ class Game:
                     nx, ny = x + dx, y + dy
                     if (
                         0 <= nx < map_width and 0 <= ny < map_height and
-                        self.map[ny][nx] in ['.', '<', '>', '+', '^'] and
+                        self.map[ny][nx] in ['.', '<', '>', '+', '/', '^'] and
                         (nx, ny) not in visited
                     ):
                         visited.add((nx, ny))
@@ -775,7 +777,7 @@ class Game:
                            (-1,-1), (1,-1), (-1,1), (1,1)]:
                 nx, ny = x + dx, y + dy
                 if (0 <= nx < self.width and 0 <= ny < self.height and
-                        self.map[ny][nx] in ['.', '<', '>', '+', '^'] and
+                        self.map[ny][nx] in ['.', '<', '>', '+', '/', '^'] and
                         (nx, ny) not in visited):
                     heappush(heap, (dist + 1, (nx, ny)))
         return None
@@ -999,7 +1001,7 @@ class Game:
             if x != prev_x and y != prev_y and (x, y) != (x2, y2):
                 if self.map[prev_y][x] == '#' and self.map[y][prev_x] == '#':
                     return False
-            if (x, y) != (x2, y2) and self.map[y][x] == '#':
+            if (x, y) != (x2, y2) and self.map[y][x] in ('#', '+'):
                 return False
             prev_x, prev_y = x, y
         return True
@@ -1090,10 +1092,17 @@ class Game:
 
     def player_move_or_attack(self, dx, dy):
         new_x, new_y = self.player.x + dx, self.player.y + dy
+        if not (0 <= new_x < self.width and 0 <= new_y < self.height):
+            return
         enemy_at_position = next((e for e in self.enemies if e.x == new_x and e.y == new_y), None)
 
         if enemy_at_position:
             self.combat(self.player, enemy_at_position)
+        elif self.map[new_y][new_x] == '+':
+            self.map[new_y][new_x] = '/'
+            self.messages.append("You open the door.")
+            self.update_fov()
+            self.process_turn()
         elif self.is_valid_move(new_x, new_y):
             self.player.x, self.player.y = new_x, new_y
             if self.map[new_y][new_x] == '^':
@@ -1102,6 +1111,21 @@ class Game:
                 self.messages.append(f"You triggered a trap! -{dmg} HP")
                 self.map[new_y][new_x] = '.'  # disarm after triggering
             self.process_turn()
+
+    def open_door(self, dx, dy):
+        tx, ty = self.player.x + dx, self.player.y + dy
+        if not (0 <= tx < self.width and 0 <= ty < self.height):
+            self.messages.append("There is no door there.")
+            return
+        if self.map[ty][tx] == '+':
+            self.map[ty][tx] = '/'
+            self.messages.append("You open the door.")
+            self.update_fov()
+            self.process_turn()
+        elif self.map[ty][tx] == '/':
+            self.messages.append("The door is already open.")
+        else:
+            self.messages.append("There is no door there.")
 
     def handle_equipment_input(self, key):
         if key in range(ord('a'), ord('m') + 1):

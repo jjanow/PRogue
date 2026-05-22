@@ -9,4 +9,7 @@ class AISystem:
             path = game.find_path(enemy, game.player, consider_enemies=True)
             if path and len(path) > 1:
                 next_pos = path[1]
-                enemy.x, enemy.y = next_pos
+                if game.map[next_pos[1]][next_pos[0]] == '+':
+                    game.map[next_pos[1]][next_pos[0]] = '/'
+                else:
+                    enemy.x, enemy.y = next_pos

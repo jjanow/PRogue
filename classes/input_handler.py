@@ -63,6 +63,27 @@ class InputHandler:
         return False  # Don't exit the game
 
     def handle_main_game_input(self, key):
+        if self.game.open_mode:
+            self.game.open_mode = False
+            kb = self.kb
+            direction_keys = {}
+            for k in kb.move_n:  direction_keys[k] = (0, -1)
+            for k in kb.move_s:  direction_keys[k] = (0, 1)
+            for k in kb.move_w:  direction_keys[k] = (-1, 0)
+            for k in kb.move_e:  direction_keys[k] = (1, 0)
+            for k in kb.move_nw: direction_keys[k] = (-1, -1)
+            for k in kb.move_ne: direction_keys[k] = (1, -1)
+            for k in kb.move_sw: direction_keys[k] = (-1, 1)
+            for k in kb.move_se: direction_keys[k] = (1, 1)
+            if key == 27:  # ESC cancels
+                return
+            if key in direction_keys:
+                dx, dy = direction_keys[key]
+                self.game.open_door(dx, dy)
+            else:
+                self.game.messages.append("Open cancelled.")
+            return
+
         if self.game.walk_mode:
             if key in self.kb.stairs_up:
                 if not self.game.explored[self.game.stairs_up_y][self.game.stairs_up_x]:
@@ -83,6 +104,11 @@ class InputHandler:
 
         if key in self.kb.combat_stats:
             self.game.open_combat_stats_screen()
+            return
+
+        if key in self.kb.open_door:
+            self.game.open_mode = True
+            self.game.messages.append("Open in which direction?")
             return
 
         if key in self.kb.walk_mode:
