@@ -842,21 +842,30 @@ class Game:
             self.stdscr.nodelay(True)
 
         try:
+            last_health = p.health
+            last_mana = p.mana
+            last_psi = p.psi
+            last_msg_count = len(self.messages)
+            need_draw = True  # always draw once to show "You begin to rest..."
+
             while True:
                 p = self.player
 
                 if p.health >= p.max_health and p.mana >= p.max_mana and p.psi >= p.max_psi:
                     self.messages.append("You wake feeling fully rested.")
+                    need_draw = True
                     break
 
                 if any(self.visible[e.y][e.x] for e in self.enemies):
                     self.messages.append("Your rest is interrupted by a nearby enemy!")
+                    need_draw = True
                     break
 
                 if self.stdscr:
                     key = self.stdscr.getch()
                     if key != -1:
                         self.messages.append("Rest interrupted.")
+                        need_draw = True
                         break
 
                 health_before = p.health
@@ -865,6 +874,7 @@ class Game:
 
                 if p.health < health_before:
                     self.messages.append("Your rest is interrupted!")
+                    need_draw = True
                     break
 
                 if self.quit:
@@ -876,8 +886,22 @@ class Game:
                     if p.psi < p.max_psi:
                         p.psi = min(p.max_psi, p.psi + 1)
 
-                if self.stdscr:
+                if (p.health != last_health or p.mana != last_mana or
+                        p.psi != last_psi or len(self.messages) != last_msg_count):
+                    need_draw = True
+                    last_health = p.health
+                    last_mana = p.mana
+                    last_psi = p.psi
+                    last_msg_count = len(self.messages)
+
+                if self.stdscr and need_draw:
                     self.renderer.draw(self.stdscr)
+                    need_draw = False
+
+                time.sleep(0.02)
+
+            if self.stdscr and need_draw:
+                self.renderer.draw(self.stdscr)
         finally:
             self.rest_mode = False
             if self.stdscr:
