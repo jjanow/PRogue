@@ -1,10 +1,12 @@
 import curses
 
 from classes.item import Equipment
+from classes.keybindings_loader import load_keybindings
 
 class InputHandler:
-    def __init__(self, game):
+    def __init__(self, game, keybindings=None):
         self.game = game
+        self.kb = keybindings if keybindings is not None else load_keybindings()
 
     def handle_input(self, key):
         if self.game.debug_mode:
@@ -45,16 +47,16 @@ class InputHandler:
             self.handle_character_stats_input(key)
         elif self.game.combat_stats_mode:
             self.handle_combat_stats_input(key)
-        elif key == ord('i'):
+        elif key in self.kb.inventory:
             self.game.inventory_mode = True
             self.game.inventory_page = 0
-        elif key == ord('@'):
+        elif key in self.kb.character_stats:
             self.game.open_character_stats_screen()
-        elif key == ord('Q'):
+        elif key in self.kb.quit:
             return self.handle_quit()
-        elif key == ord('!'):  # Debug menu toggle
+        elif key in self.kb.debug:
             self.game.debug_mode = True
-        elif key == 27:  # ESC key
+        elif key == 27:  # ESC key — not rebindable
             self.game.save_load_menu_mode = True
         else:
             self.handle_main_game_input(key)
@@ -62,14 +64,14 @@ class InputHandler:
 
     def handle_main_game_input(self, key):
         if self.game.walk_mode:
-            if key == ord('<'):
+            if key in self.kb.stairs_up:
                 if not self.game.explored[self.game.stairs_up_y][self.game.stairs_up_x]:
                     self.game.messages.append("You don't know where the upstairs are.")
                 else:
                     self.game.walk_to_stairs('up')
                 self.game.walk_mode = False
                 return
-            elif key == ord('>'):
+            elif key in self.kb.stairs_down:
                 if not self.game.explored[self.game.stairs_y][self.game.stairs_x]:
                     self.game.messages.append("You don't know where the downstairs are.")
                 else:
@@ -79,11 +81,11 @@ class InputHandler:
             else:
                 self.game.walk_mode = False
 
-        if key == 23:  # CTRL+W
+        if key in self.kb.combat_stats:
             self.game.open_combat_stats_screen()
             return
 
-        if key == ord('w'):
+        if key in self.kb.walk_mode:
             if not (self.game.explored[self.game.stairs_y][self.game.stairs_x] or
                     self.game.explored[self.game.stairs_up_y][self.game.stairs_up_x]):
                 self.game.messages.append("You haven't found any stairs yet.")
@@ -92,45 +94,44 @@ class InputHandler:
                 self.game.messages.append("Walk to stairs: < or >")
             return
 
-        if key == ord('0'):
+        if key in self.kb.auto_explore:
             self.game.auto_explore()
             return
 
-        if key == ord('='):
+        if key in self.kb.options:
             self.game.options_mode = True
             return
-        if key == ord('?'):
+        if key in self.kb.help:
             self.game.help_mode = True
             return
 
-        movement_keys = {
-            ord('8'): (0, -1), ord('k'): (0, -1), curses.KEY_UP: (0, -1),
-            ord('2'): (0, 1), ord('j'): (0, 1), curses.KEY_DOWN: (0, 1),
-            ord('4'): (-1, 0), ord('h'): (-1, 0), curses.KEY_LEFT: (-1, 0),
-            ord('6'): (1, 0), ord('l'): (1, 0), curses.KEY_RIGHT: (1, 0),
-            ord('7'): (-1, -1), ord('y'): (-1, -1), curses.KEY_HOME: (-1, -1), curses.KEY_A1: (-1, -1),
-            ord('9'): (1, -1), ord('u'): (1, -1), curses.KEY_PPAGE: (1, -1), curses.KEY_A3: (1, -1),
-            ord('1'): (-1, 1), ord('b'): (-1, 1), curses.KEY_END: (-1, 1), curses.KEY_C1: (-1, 1),
-            ord('3'): (1, 1), ord('n'): (1, 1), curses.KEY_NPAGE: (1, 1), curses.KEY_C3: (1, 1),
-        }
+        kb = self.kb
+        movement_keys = {}
+        for k in kb.move_n:  movement_keys[k] = (0, -1)
+        for k in kb.move_s:  movement_keys[k] = (0, 1)
+        for k in kb.move_w:  movement_keys[k] = (-1, 0)
+        for k in kb.move_e:  movement_keys[k] = (1, 0)
+        for k in kb.move_nw: movement_keys[k] = (-1, -1)
+        for k in kb.move_ne: movement_keys[k] = (1, -1)
+        for k in kb.move_sw: movement_keys[k] = (-1, 1)
+        for k in kb.move_se: movement_keys[k] = (1, 1)
 
         if key in movement_keys:
             dx, dy = movement_keys[key]
             self.game.player_move_or_attack(dx, dy)
             return
 
-        if key in [ord('5'), curses.KEY_B2]:
-            # Passing a turn (numpad 5 or keypad center)
+        if key in self.kb.wait:
             self.game.process_turn()
             return
 
-        if key == ord('i'):
+        if key in self.kb.inventory:
             self.game.open_inventory()
-        elif key == ord(','):
+        elif key in self.kb.pickup:
             self.game.pickup_item()
-        elif key == ord('>'):
+        elif key in self.kb.stairs_down:
             self.game.use_stairs('down')
-        elif key == ord('<'):
+        elif key in self.kb.stairs_up:
             self.game.use_stairs('up')
         else:
             return  # Invalid key, don't process the turn

@@ -1,0 +1,23 @@
+{
+  "move_n":        ["k", "8", "KEY_UP"],
+  "move_s":        ["j", "2", "KEY_DOWN"],
+  "move_w":        ["h", "4", "KEY_LEFT"],
+  "move_e":        ["l", "6", "KEY_RIGHT"],
+  "move_nw":       ["y", "7", "KEY_HOME", "KEY_A1"],
+  "move_ne":       ["u", "9", "KEY_PPAGE", "KEY_A3"],
+  "move_sw":       ["b", "1", "KEY_END", "KEY_C1"],
+  "move_se":       ["n", "3", "KEY_NPAGE", "KEY_C3"],
+  "wait":          ["5", "KEY_B2"],
+  "inventory":     ["i"],
+  "pickup":        [","],
+  "stairs_down":   [">"],
+  "stairs_up":     ["<"],
+  "walk_mode":     ["w"],
+  "auto_explore":  ["0"],
+  "options":       ["="],
+  "help":          ["?"],
+  "character_stats": ["@"],
+  "combat_stats":  ["CTRL_W"],
+  "quit":          ["Q"],
+  "debug":         ["!"]
+}
