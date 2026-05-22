@@ -98,6 +98,7 @@ class StaticMapLoader:
         metadata = {
             "name": data.get("name", "Unknown"),
             "fov_mode": fov_mode,
+            "enemy_spawning": data.get("enemy_spawning", True),
         }
 
         return map_grid, rooms, spawns, metadata

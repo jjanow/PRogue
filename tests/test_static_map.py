@@ -138,6 +138,21 @@ class TestStaticMapLoaderBasic:
         assert meta["name"] == "Test Town"
         assert meta["fov_mode"] == "outdoor"
 
+    def test_enemy_spawning_false_read_from_json(self, tmp_path):
+        data = {"tiles": ["#.#"], "legend": {}, "fov_mode": "dungeon",
+                "enemy_spawning": False}
+        p = tmp_path / "m.json"
+        p.write_text(json.dumps(data))
+        _grid, _rooms, _spawns, meta = StaticMapLoader().load(p)
+        assert meta["enemy_spawning"] is False
+
+    def test_enemy_spawning_defaults_to_true(self, tmp_path):
+        data = {"tiles": ["#.#"], "legend": {}, "fov_mode": "dungeon"}
+        p = tmp_path / "m.json"
+        p.write_text(json.dumps(data))
+        _grid, _rooms, _spawns, meta = StaticMapLoader().load(p)
+        assert meta["enemy_spawning"] is True
+
 
 class TestStaticMapLoaderRooms:
     def test_outdoor_creates_single_interior_room(self, tmp_path):
@@ -266,6 +281,10 @@ class TestGameStartsInTown:
     def test_dungeon_entrance_tile_is_valid_move(self, mock_stdscr):
         game = _make_town_game(mock_stdscr)
         assert game.is_valid_move(game.stairs_x, game.stairs_y) is True
+
+    def test_allow_enemy_spawning_false_in_town(self, mock_stdscr):
+        game = _make_town_game(mock_stdscr)
+        assert game.allow_enemy_spawning is False
 
 
 # ---------------------------------------------------------------------------
@@ -518,6 +537,30 @@ class TestSaveLoadTownState:
         loaded = Game.create_minimal(24, 80, mock_stdscr)
         sm.load_game(loaded, 1)
         assert any(i.name == 'Persisted Gem' for i in loaded._town_items)
+
+    def test_allow_enemy_spawning_false_survives_save_load(self, tmp_path, mock_stdscr):
+        from classes.game import Game
+        from classes.save_manager import SaveManager
+        game = _make_town_game(mock_stdscr)
+        assert game.allow_enemy_spawning is False
+        sm = SaveManager(save_dir=str(tmp_path))
+        sm.save_game(game, 1)
+        loaded = Game.create_minimal(24, 80, mock_stdscr)
+        sm.load_game(loaded, 1)
+        assert loaded.allow_enemy_spawning is False
+
+    def test_allow_enemy_spawning_true_survives_save_load(self, tmp_path, mock_stdscr):
+        from classes.game import Game
+        from classes.save_manager import SaveManager
+        game = _make_town_game(mock_stdscr)
+        game.player.x, game.player.y = game.stairs_x, game.stairs_y
+        game.enter_dungeon()
+        assert game.allow_enemy_spawning is True
+        sm = SaveManager(save_dir=str(tmp_path))
+        sm.save_game(game, 1)
+        loaded = Game.create_minimal(24, 80, mock_stdscr)
+        sm.load_game(loaded, 1)
+        assert loaded.allow_enemy_spawning is True
 
     def test_no_town_explored_in_old_save_does_not_crash(self, tmp_path, mock_stdscr):
         """Saves that pre-date town_explored key should load without error."""

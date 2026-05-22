@@ -58,6 +58,7 @@ class Game:
         # Town state preserved across dungeon trips
         self._town_explored = None   # cached FOV exploration grid
         self._town_items = []        # cached ground items left in town
+        self.allow_enemy_spawning = True  # overwritten by map metadata on load
         self.generate_level()
         self.inventory_page = 0
         self.inventory_mode = False
@@ -125,6 +126,7 @@ class Game:
         game.dungeon_level = 1
         game._town_explored = None
         game._town_items = []
+        game.allow_enemy_spawning = True  # overwritten from save
         game.stairs_x = None
         game.stairs_y = None
         game.stairs_up_x = None
@@ -391,9 +393,11 @@ class Game:
 
     def _load_town_map(self):
         loader = StaticMapLoader()
-        self.map, self.rooms, spawns, _meta = loader.load(_TOWN_MAP_PATH)
+        self.map, self.rooms, spawns, meta = loader.load(_TOWN_MAP_PATH)
         self.height = len(self.map)
         self.width = len(self.map[0]) if self.map else 0
+
+        self.allow_enemy_spawning = meta.get("enemy_spawning", True)
 
         if "player_start" in spawns:
             self.player.x, self.player.y = spawns["player_start"]
@@ -409,9 +413,11 @@ class Game:
         self.visible = [[False for _ in range(self.width)] for _ in range(self.height)]
         self.explored = [[False for _ in range(self.width)] for _ in range(self.height)]
         self.update_fov()
-        # No enemies or items in town
+        if self.allow_enemy_spawning:
+            self.spawn_enemies(len(self.rooms))
 
     def _generate_random_level(self):
+        self.allow_enemy_spawning = True
         self.map, self.rooms, self.stairs_up_x, self.stairs_up_y, self.stairs_x, self.stairs_y = \
             self.map_generator.generate_level(self.player)
         self.height = len(self.map)

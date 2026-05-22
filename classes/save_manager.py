@@ -120,6 +120,7 @@ class SaveManager:
             'player_level': game.player.level,
             'dungeon_level': game.dungeon_level,
             'in_town': game.in_town,
+            'allow_enemy_spawning': game.allow_enemy_spawning,
             'timestamp': datetime.now().isoformat(),
             'playtime': time.time() - getattr(game, 'start_time', time.time()),
             'map_dimensions': {
@@ -283,6 +284,7 @@ class SaveManager:
         game.messages = game_state['messages']
         game.dungeon_level = save_data['dungeon_level']
         game.in_town = save_data.get('in_town', False)
+        game.allow_enemy_spawning = save_data.get('allow_enemy_spawning', True)
         game.time = game_state.get('time', 0)
 
         # Restore cached town state (may be absent in older saves).

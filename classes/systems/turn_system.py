@@ -29,7 +29,7 @@ class TurnSystem:
             if heal_amount > 0:
                 game.messages.append(f"You feel a bit better. (+{heal_amount} HP)")
 
-        if not game.in_town and game.turn_count - game.last_spawn_turn >= 50:
+        if game.allow_enemy_spawning and game.turn_count - game.last_spawn_turn >= 50:
             game.spawn_enemies(1)
             game.last_spawn_turn = game.turn_count
 
