@@ -133,6 +133,23 @@ class TestTurnSystem:
         # After process: turn_count=21, 21-15=6 < 50 → no spawn
         assert len(minimal_game.enemies) == initial
 
+    def test_no_ambient_spawn_in_town(self, minimal_game):
+        minimal_game.in_town = True
+        initial = len(minimal_game.enemies)
+        minimal_game.turn_count = 49
+        minimal_game.last_spawn_turn = 0
+        minimal_game.turn_system.process(minimal_game)
+        # 50-turn threshold reached but in_town=True → no spawn
+        assert len(minimal_game.enemies) == initial
+
+    def test_ambient_spawn_resumes_in_dungeon(self, minimal_game):
+        minimal_game.in_town = False
+        initial = len(minimal_game.enemies)
+        minimal_game.turn_count = 49
+        minimal_game.last_spawn_turn = 0
+        minimal_game.turn_system.process(minimal_game)
+        assert len(minimal_game.enemies) > initial
+
     def test_floor_items_at_player_position_messaged(self, minimal_game):
         from classes.item import Item
         item = Item('Shiny Coin', lambda e: None)
