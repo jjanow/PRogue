@@ -95,6 +95,8 @@ class Game:
         self.save_slot = None
         self.save_info_cache = None
         self.open_mode = False
+        self.close_mode = False
+        self.rest_mode = False
         self.start_time = time.time()
         self.path_cache = {}
 
@@ -162,6 +164,8 @@ class Game:
         game.save_slot = None
         game.save_info_cache = None
         game.open_mode = False
+        game.close_mode = False
+        game.rest_mode = False
         game.start_time = time.time()
         game.path_cache = {}
         
@@ -818,9 +822,67 @@ class Game:
 
         if attempts_without_progress >= max_attempts:
             self.messages.append("Auto-explore stopped: no progress made.")
-            
+
         self.auto_explore_mode = False
-    
+
+    def rest_until_healed(self):
+        p = self.player
+        if p.health >= p.max_health and p.mana >= p.max_mana and p.psi >= p.max_psi:
+            self.messages.append("You are already fully rested.")
+            return
+
+        if any(self.visible[e.y][e.x] for e in self.enemies):
+            self.messages.append("You cannot rest with enemies nearby.")
+            return
+
+        self.messages.append("You begin to rest...")
+        self.rest_mode = True
+
+        if self.stdscr:
+            self.stdscr.nodelay(True)
+
+        try:
+            while True:
+                p = self.player
+
+                if p.health >= p.max_health and p.mana >= p.max_mana and p.psi >= p.max_psi:
+                    self.messages.append("You wake feeling fully rested.")
+                    break
+
+                if any(self.visible[e.y][e.x] for e in self.enemies):
+                    self.messages.append("Your rest is interrupted by a nearby enemy!")
+                    break
+
+                if self.stdscr:
+                    key = self.stdscr.getch()
+                    if key != -1:
+                        self.messages.append("Rest interrupted.")
+                        break
+
+                health_before = p.health
+
+                self.process_turn()
+
+                if p.health < health_before:
+                    self.messages.append("Your rest is interrupted!")
+                    break
+
+                if self.quit:
+                    break
+
+                if self.turn_count % 10 == 0:
+                    if p.mana < p.max_mana:
+                        p.mana = min(p.max_mana, p.mana + 1)
+                    if p.psi < p.max_psi:
+                        p.psi = min(p.max_psi, p.psi + 1)
+
+                if self.stdscr:
+                    self.renderer.draw(self.stdscr)
+        finally:
+            self.rest_mode = False
+            if self.stdscr:
+                self.stdscr.nodelay(False)
+
     def exit_game(self):
         try:
             total_value = sum(item.stat_boost for item in self.player.inventory if isinstance(item, Equipment))
@@ -1124,6 +1186,24 @@ class Game:
             self.process_turn()
         elif self.map[ty][tx] == '/':
             self.messages.append("The door is already open.")
+        else:
+            self.messages.append("There is no door there.")
+
+    def close_door(self, dx, dy):
+        tx, ty = self.player.x + dx, self.player.y + dy
+        if not (0 <= tx < self.width and 0 <= ty < self.height):
+            self.messages.append("There is no door there.")
+            return
+        if self.map[ty][tx] == '/':
+            if any(e.x == tx and e.y == ty for e in self.enemies):
+                self.messages.append("Something is blocking the door.")
+                return
+            self.map[ty][tx] = '+'
+            self.messages.append("You close the door.")
+            self.update_fov()
+            self.process_turn()
+        elif self.map[ty][tx] == '+':
+            self.messages.append("The door is already closed.")
         else:
             self.messages.append("There is no door there.")
 

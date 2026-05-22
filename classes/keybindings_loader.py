@@ -47,6 +47,8 @@ _DEFAULTS = {
     "quit":          ["Q"],
     "debug":         ["!"],
     "open_door":     ["o"],
+    "close_door":    ["c"],
+    "rest":          ["r"],
 }
 
 
@@ -74,6 +76,8 @@ class Keybindings:
     quit: frozenset = field(default_factory=frozenset)
     debug: frozenset = field(default_factory=frozenset)
     open_door: frozenset = field(default_factory=frozenset)
+    close_door: frozenset = field(default_factory=frozenset)
+    rest: frozenset = field(default_factory=frozenset)
 
 
 def _parse_key(s):

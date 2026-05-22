@@ -84,6 +84,27 @@ class InputHandler:
                 self.game.messages.append("Open cancelled.")
             return
 
+        if self.game.close_mode:
+            self.game.close_mode = False
+            kb = self.kb
+            direction_keys = {}
+            for k in kb.move_n:  direction_keys[k] = (0, -1)
+            for k in kb.move_s:  direction_keys[k] = (0, 1)
+            for k in kb.move_w:  direction_keys[k] = (-1, 0)
+            for k in kb.move_e:  direction_keys[k] = (1, 0)
+            for k in kb.move_nw: direction_keys[k] = (-1, -1)
+            for k in kb.move_ne: direction_keys[k] = (1, -1)
+            for k in kb.move_sw: direction_keys[k] = (-1, 1)
+            for k in kb.move_se: direction_keys[k] = (1, 1)
+            if key == 27:  # ESC cancels
+                return
+            if key in direction_keys:
+                dx, dy = direction_keys[key]
+                self.game.close_door(dx, dy)
+            else:
+                self.game.messages.append("Close cancelled.")
+            return
+
         if self.game.walk_mode:
             if key in self.kb.stairs_up:
                 if not self.game.explored[self.game.stairs_up_y][self.game.stairs_up_x]:
@@ -111,6 +132,11 @@ class InputHandler:
             self.game.messages.append("Open in which direction?")
             return
 
+        if key in self.kb.close_door:
+            self.game.close_mode = True
+            self.game.messages.append("Close in which direction?")
+            return
+
         if key in self.kb.walk_mode:
             if not (self.game.explored[self.game.stairs_y][self.game.stairs_x] or
                     self.game.explored[self.game.stairs_up_y][self.game.stairs_up_x]):
@@ -122,6 +148,10 @@ class InputHandler:
 
         if key in self.kb.auto_explore:
             self.game.auto_explore()
+            return
+
+        if key in self.kb.rest:
+            self.game.rest_until_healed()
             return
 
         if key in self.kb.options:

@@ -136,6 +136,9 @@ class Renderer:
         location = "Millhaven (Town)" if self.game.in_town else f"Dungeon Level {self.game.dungeon_level}"
         stdscr.addstr(height - 5, 0, f"Level: {self.game.player.level} | XP: {self.game.player.xp}/{self.game.player.xp_to_next_level} | Location: {location}")
 
+        if self.game.rest_mode:
+            stdscr.addstr(height - 4, 0, "Resting..."[:width-1], curses.color_pair(6))
+
         # Messages
         for i, message in enumerate(self.game.messages[-3:]):
             if message is not None and height - 3 + i < height:  # Ensure we don't write outside the window height
@@ -573,9 +576,11 @@ class Renderer:
             "Wait: 5",
             "Pick up item: ','",
             "Open door: o (or walk into it)",
+            "Close door: c",
             "Open inventory: i",
             "Character info: @",
             "Auto-explore: 0",
+            "Rest until healed: r",
             "Walk to stairs: w",
             "Combat stats: Ctrl+W",
             "Options menu: =",

@@ -97,6 +97,9 @@ class TestLoadKeybindingsFromFile:
         assert 23 in kb.combat_stats       # CTRL_W
         assert ord("Q") in kb.quit
         assert ord("!") in kb.debug
+        assert ord("o") in kb.open_door
+        assert ord("c") in kb.close_door
+        assert ord("r") in kb.rest
 
     def test_wait_contains_numpad_5_and_b2(self):
         kb = load_keybindings()

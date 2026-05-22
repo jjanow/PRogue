@@ -366,3 +366,144 @@ class TestCheckCollisions:
         minimal_game.items.append(item)
         minimal_game.check_collisions()
         assert item in minimal_game.items
+
+
+# ---------------------------------------------------------------------------
+# close_door
+# ---------------------------------------------------------------------------
+
+class TestCloseDoor:
+    def _place_open_door(self, game, dx, dy):
+        tx, ty = game.player.x + dx, game.player.y + dy
+        game.map[ty][tx] = '/'
+        return tx, ty
+
+    def test_closes_open_door(self, minimal_game):
+        tx, ty = self._place_open_door(minimal_game, 1, 0)
+        minimal_game.close_door(1, 0)
+        assert minimal_game.map[ty][tx] == '+'
+        assert any("close" in m.lower() for m in minimal_game.messages)
+
+    def test_already_closed_door(self, minimal_game):
+        tx, ty = minimal_game.player.x + 1, minimal_game.player.y
+        minimal_game.map[ty][tx] = '+'
+        minimal_game.close_door(1, 0)
+        assert minimal_game.map[ty][tx] == '+'
+        assert any("already closed" in m.lower() for m in minimal_game.messages)
+
+    def test_no_door_there(self, minimal_game):
+        # Target is a plain floor tile
+        minimal_game.close_door(1, 0)
+        assert any("no door" in m.lower() for m in minimal_game.messages)
+
+    def test_out_of_bounds(self, minimal_game):
+        # Move player to top-left corner of the room so closing north hits a wall/OOB
+        minimal_game.player.x = 2
+        minimal_game.player.y = 2
+        minimal_game.close_door(0, -1)
+        assert any("no door" in m.lower() for m in minimal_game.messages)
+
+    def test_blocked_by_enemy(self, minimal_game):
+        tx, ty = self._place_open_door(minimal_game, 1, 0)
+        blocker = Entity(tx, ty, 'E', 'Rat', 10, 0, 0)
+        minimal_game.enemies.append(blocker)
+        minimal_game.close_door(1, 0)
+        assert minimal_game.map[ty][tx] == '/'  # still open
+        assert any("blocking" in m.lower() for m in minimal_game.messages)
+
+    def test_close_door_processes_turn(self, minimal_game):
+        self._place_open_door(minimal_game, 1, 0)
+        before = minimal_game.turn_count
+        minimal_game.close_door(1, 0)
+        assert minimal_game.turn_count > before
+
+
+# ---------------------------------------------------------------------------
+# rest_until_healed
+# ---------------------------------------------------------------------------
+
+class TestRestUntilHealed:
+    def test_already_full_does_not_rest(self, minimal_game):
+        p = minimal_game.player
+        p.health = p.max_health
+        p.mana = p.max_mana
+        p.psi = p.max_psi
+        minimal_game.rest_until_healed()
+        assert any("already fully rested" in m.lower() for m in minimal_game.messages)
+
+    def test_enemy_in_view_prevents_rest(self, minimal_game):
+        p = minimal_game.player
+        p.health = 1.0
+        # Place an enemy in the player's visible area
+        from classes.entity import Entity
+        enemy = Entity(p.x + 1, p.y, 'E', 'Rat', 10, 0, 0)
+        minimal_game.enemies.append(enemy)
+        minimal_game.visible[enemy.y][enemy.x] = True
+        minimal_game.rest_until_healed()
+        assert any("cannot rest" in m.lower() for m in minimal_game.messages)
+
+    def test_rest_heals_hp(self, minimal_game):
+        p = minimal_game.player
+        p.health = p.max_health - 1
+        p.mana = p.max_mana
+        p.psi = p.max_psi
+        minimal_game.enemies.clear()
+        minimal_game.allow_enemy_spawning = False
+        minimal_game.stdscr = None  # skip curses key polling in tests
+        minimal_game.rest_until_healed()
+        assert p.health == p.max_health
+        assert any("fully rested" in m.lower() for m in minimal_game.messages)
+
+    def test_rest_recovers_mana(self, minimal_game):
+        p = minimal_game.player
+        p.health = p.max_health
+        p.mana = p.max_mana - 1
+        p.psi = p.max_psi
+        minimal_game.enemies.clear()
+        minimal_game.allow_enemy_spawning = False
+        minimal_game.stdscr = None
+        minimal_game.rest_until_healed()
+        assert p.mana == p.max_mana
+
+    def test_rest_recovers_psi(self, minimal_game):
+        p = minimal_game.player
+        p.health = p.max_health
+        p.mana = p.max_mana
+        p.psi = p.max_psi - 1
+        minimal_game.enemies.clear()
+        minimal_game.allow_enemy_spawning = False
+        minimal_game.stdscr = None
+        minimal_game.rest_until_healed()
+        assert p.psi == p.max_psi
+
+    def test_rest_interrupted_by_attack(self, minimal_game):
+        p = minimal_game.player
+        p.health = 50.0
+        p.mana = p.max_mana
+        p.psi = p.max_psi
+        original_process = minimal_game.process_turn
+        call_count = [0]
+
+        def patched_process():
+            call_count[0] += 1
+            original_process()
+            minimal_game.player.health -= 5  # simulate hit
+
+        minimal_game.process_turn = patched_process
+        minimal_game.enemies.clear()
+        minimal_game.allow_enemy_spawning = False
+        minimal_game.stdscr = None
+        minimal_game.rest_until_healed()
+        assert any("interrupted" in m.lower() for m in minimal_game.messages)
+        assert call_count[0] >= 1
+
+    def test_rest_mode_flag_cleared_after_rest(self, minimal_game):
+        p = minimal_game.player
+        p.health = p.max_health - 1
+        p.mana = p.max_mana
+        p.psi = p.max_psi
+        minimal_game.enemies.clear()
+        minimal_game.allow_enemy_spawning = False
+        minimal_game.stdscr = None
+        minimal_game.rest_until_healed()
+        assert minimal_game.rest_mode is False
