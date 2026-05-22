@@ -98,7 +98,7 @@ class Game:
         self.close_mode = False
         self.rest_mode = False
         self.start_time = time.time()
-        self.path_cache = {}
+        self._flow_field = None
 
     @classmethod
     def create_minimal(cls, height, width, stdscr):
@@ -167,7 +167,7 @@ class Game:
         game.close_mode = False
         game.rest_mode = False
         game.start_time = time.time()
-        game.path_cache = {}
+        game._flow_field = None
         
         # Initialize systems
         game.input_handler = InputHandler(game)
@@ -418,6 +418,7 @@ class Game:
 
         self.visible = [[False for _ in range(self.width)] for _ in range(self.height)]
         self.explored = [[False for _ in range(self.width)] for _ in range(self.height)]
+        self.invalidate_flow_field()
         self.update_fov()
         if self.allow_enemy_spawning:
             self.spawn_enemies(len(self.rooms))
@@ -430,6 +431,7 @@ class Game:
         self.width = len(self.map[0]) if self.map else 0
         self.visible = [[False for _ in range(self.width)] for _ in range(self.height)]
         self.explored = [[False for _ in range(self.width)] for _ in range(self.height)]
+        self.invalidate_flow_field()
         self.update_fov()
         self.spawn_enemies(len(self.rooms))
         self.spawn_items()
@@ -512,64 +514,50 @@ class Game:
     def is_valid_move(self, x, y):
         return 0 <= x < self.width and 0 <= y < self.height and self.map[y][x] in ['.', '>', '<', '/', '^']
 
-    def compute_all_shortest_paths(self):
-        """Precompute shortest paths between all walkable tiles on the map."""
-        map_height = len(self.map)
-        map_width = len(self.map[0]) if self.map else 0
-        walkable = [
-            (x, y)
-            for y in range(map_height)
-            for x in range(map_width)
-            if self.map[y][x] in ['.', '<', '>', '+', '/', '^']
-        ]
+    def invalidate_flow_field(self):
+        self._flow_field = None
 
-        self.path_cache = {}
-        directions = [
-            (1, 0), (-1, 0), (0, 1), (0, -1),
-            (1, 1), (1, -1), (-1, 1), (-1, -1)
-        ]
-
-        for start in walkable:
-            queue = deque([start])
-            visited = {start}
-            prev = {}
-            while queue:
-                x, y = queue.popleft()
-                for dx, dy in directions:
-                    nx, ny = x + dx, y + dy
-                    if (
-                        0 <= nx < map_width and 0 <= ny < map_height and
-                        self.map[ny][nx] in ['.', '<', '>', '+', '/', '^'] and
-                        (nx, ny) not in visited
-                    ):
-                        visited.add((nx, ny))
+    def _compute_flow_field(self):
+        """BFS from the player outward; stores (distance, predecessor) per tile."""
+        px, py = self.player.x, self.player.y
+        passable = {'.', '<', '>', '+', '/', '^'}
+        dist = {(px, py): 0}
+        prev = {(px, py): None}
+        queue = deque([(px, py)])
+        directions = [(0,1),(0,-1),(1,0),(-1,0),(1,1),(1,-1),(-1,1),(-1,-1)]
+        while queue:
+            x, y = queue.popleft()
+            for dx, dy in directions:
+                nx, ny = x + dx, y + dy
+                if (nx, ny) not in dist and 0 <= nx < self.width and 0 <= ny < self.height:
+                    if self.map[ny][nx] in passable:
+                        dist[(nx, ny)] = dist[(x, y)] + 1
                         prev[(nx, ny)] = (x, y)
                         queue.append((nx, ny))
-            self.path_cache[start] = prev
+        self._flow_field = (dist, prev)
 
-    def get_cached_path(self, start, goal):
-        """Return a path from start to goal using the precomputed cache."""
-        if hasattr(start, 'x'):
-            start = (start.x, start.y)
-        if hasattr(goal, 'x'):
-            goal = (goal.x, goal.y)
+    def get_flow_field(self):
+        if self._flow_field is None:
+            self._compute_flow_field()
+        return self._flow_field
 
-        if start == goal:
-            return [start]
-
-        prev = self.path_cache.get(start)
-        if not prev or goal not in prev:
-            return None
-
-        path = [goal]
-        current = goal
-        while current != start:
-            current = prev.get(current)
-            if current is None:
-                return None
-            path.append(current)
-        path.reverse()
-        return path
+    def get_flow_next_step(self, enemy):
+        """Return the next tile the enemy should move to in order to approach the player."""
+        dist, _ = self.get_flow_field()
+        ex, ey = enemy.x, enemy.y
+        occupied = {(e.x, e.y) for e in self.enemies if e is not enemy and e.health > 0}
+        directions = [(0,1),(0,-1),(1,0),(-1,0),(1,1),(1,-1),(-1,1),(-1,-1)]
+        current_dist = dist.get((ex, ey), float('inf'))
+        best = None
+        for dx, dy in directions:
+            nx, ny = ex + dx, ey + dy
+            if (nx, ny) in occupied:
+                continue
+            nd = dist.get((nx, ny), float('inf'))
+            if nd < current_dist:
+                current_dist = nd
+                best = (nx, ny)
+        return best
 
     def process_turn(self):
         self.turn_system.process(self)
@@ -676,15 +664,34 @@ class Game:
         """Automatically walk the player to the given coordinates using pathfinding.
 
         Returns True if the walk was interrupted by user input."""
-        target = type('Target', (object,), {'x': x, 'y': y})()
-        path = self.get_cached_path(self.player, target)
-        
-        # Fallback to find_path if cached path fails
-        if not path or len(path) < 2:
+        target_pos = (x, y)
+        player_pos = (self.player.x, self.player.y)
+        dist, prev = self.get_flow_field()
+
+        if target_pos not in dist:
+            target = type('Target', (object,), {'x': x, 'y': y})()
             path = self.find_path(self.player, target)
             if not path or len(path) < 2:
                 self.messages.append("No path to destination.")
                 return False
+        else:
+            path = [target_pos]
+            current = target_pos
+            ok = True
+            while current != player_pos:
+                current = prev.get(current)
+                if current is None:
+                    ok = False
+                    break
+                path.append(current)
+            if ok:
+                path.reverse()
+            else:
+                target = type('Target', (object,), {'x': x, 'y': y})()
+                path = self.find_path(self.player, target)
+                if not path or len(path) < 2:
+                    self.messages.append("No path to destination.")
+                    return False
 
         interrupted = False
         draw_steps = animate and self.stdscr and self.walk_speed > 0
@@ -992,14 +999,11 @@ class Game:
 
                     tentative_g_score = gscore[current] + 1
 
-                    if neighbor not in [n[1] for n in open_heap]:
-                        heapq.heappush(open_heap, (fscore.get(neighbor, float('inf')), neighbor))
-                    elif tentative_g_score >= gscore.get(neighbor, float('inf')):
-                        continue
-
-                    came_from[neighbor] = current
-                    gscore[neighbor] = tentative_g_score
-                    fscore[neighbor] = gscore[neighbor] + self.heuristic(neighbor, goal_pos)
+                    if tentative_g_score < gscore.get(neighbor, float('inf')):
+                        came_from[neighbor] = current
+                        gscore[neighbor] = tentative_g_score
+                        fscore[neighbor] = tentative_g_score + self.heuristic(neighbor, goal_pos)
+                        heapq.heappush(open_heap, (fscore[neighbor], neighbor))
 
         return None
 
@@ -1185,10 +1189,12 @@ class Game:
         elif self.map[new_y][new_x] == '+':
             self.map[new_y][new_x] = '/'
             self.messages.append("You open the door.")
+            self.invalidate_flow_field()
             self.update_fov()
             self.process_turn()
         elif self.is_valid_move(new_x, new_y):
             self.player.x, self.player.y = new_x, new_y
+            self.invalidate_flow_field()
             if self.map[new_y][new_x] == '^':
                 dmg = random.randint(1, 6)
                 self.player.health -= dmg
@@ -1204,6 +1210,7 @@ class Game:
         if self.map[ty][tx] == '+':
             self.map[ty][tx] = '/'
             self.messages.append("You open the door.")
+            self.invalidate_flow_field()
             self.update_fov()
             self.process_turn()
         elif self.map[ty][tx] == '/':
@@ -1222,6 +1229,7 @@ class Game:
                 return
             self.map[ty][tx] = '+'
             self.messages.append("You close the door.")
+            self.invalidate_flow_field()
             self.update_fov()
             self.process_turn()
         elif self.map[ty][tx] == '+':

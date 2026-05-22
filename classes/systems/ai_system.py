@@ -6,10 +6,10 @@ class AISystem:
             if defeated:
                 game.handle_player_death()
         else:
-            path = game.find_path(enemy, game.player, consider_enemies=True)
-            if path and len(path) > 1:
-                next_pos = path[1]
+            next_pos = game.get_flow_next_step(enemy)
+            if next_pos:
                 if game.map[next_pos[1]][next_pos[0]] == '+':
                     game.map[next_pos[1]][next_pos[0]] = '/'
+                    game.invalidate_flow_field()
                 else:
                     enemy.x, enemy.y = next_pos
