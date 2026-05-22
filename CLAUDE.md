@@ -8,7 +8,28 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 python pRoguelike.py
 ```
 
-Requires a terminal that supports `curses` and is at least 80 columns wide. On Windows, `pip install windows-curses` first. There is no test suite or linter configured.
+Requires a terminal that supports `curses` and is at least 80 columns wide. On Windows, `pip install windows-curses` first. There is no linter configured.
+
+## Tests and Documentation Maintenance
+
+Whenever you make changes to the game, you must keep tests and documentation in sync:
+
+### Unit Tests (`tests/`)
+
+- **New function or method**: create a corresponding test in `tests/` (mirror the `classes/` structure, e.g. `tests/test_combat_system.py`). Use the standard `unittest` module — no third-party test framework is installed.
+- **Changed behavior**: update any existing tests that cover the modified code so they reflect the new behavior.
+- **Deleted code**: remove the corresponding tests so the suite stays green.
+- Run the full suite with `python -m pytest tests/` (or `python -m unittest discover tests/` if pytest is unavailable) after every change and fix any failures before finishing.
+
+### Documentation (`CLAUDE.md`)
+
+- **New class or file**: add a row to the "Other Key Classes" table with the file path and its responsibility.
+- **Renamed or removed file**: update or delete the corresponding row in that table.
+- **New data file or data directory**: add a bullet under "Data Files (`data/`)".
+- **New content type** (new monster field, item slot, material category, etc.): update the relevant bullet under "Adding Content".
+- **Architectural change** (new system, new ECS component, changes to the `Game` object): update the relevant section ("ECS Architecture" or "Game Object") to reflect the new structure.
+
+Keep documentation edits minimal and factual — describe what exists, not intent or history.
 
 ## Architecture
 
