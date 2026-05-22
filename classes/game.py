@@ -504,7 +504,7 @@ class Game:
         return None
 
     def is_valid_move(self, x, y):
-        return 0 <= x < self.width and 0 <= y < self.height and self.map[y][x] in ['.', '>', '<']
+        return 0 <= x < self.width and 0 <= y < self.height and self.map[y][x] in ['.', '>', '<', '+', '^']
 
     def compute_all_shortest_paths(self):
         """Precompute shortest paths between all walkable tiles on the map."""
@@ -514,7 +514,7 @@ class Game:
             (x, y)
             for y in range(map_height)
             for x in range(map_width)
-            if self.map[y][x] in ['.', '<', '>']
+            if self.map[y][x] in ['.', '<', '>', '+', '^']
         ]
 
         self.path_cache = {}
@@ -533,7 +533,7 @@ class Game:
                     nx, ny = x + dx, y + dy
                     if (
                         0 <= nx < map_width and 0 <= ny < map_height and
-                        self.map[ny][nx] in ['.', '<', '>'] and
+                        self.map[ny][nx] in ['.', '<', '>', '+', '^'] and
                         (nx, ny) not in visited
                     ):
                         visited.add((nx, ny))
@@ -775,7 +775,7 @@ class Game:
                            (-1,-1), (1,-1), (-1,1), (1,1)]:
                 nx, ny = x + dx, y + dy
                 if (0 <= nx < self.width and 0 <= ny < self.height and
-                        self.map[ny][nx] in ['.', '<', '>'] and
+                        self.map[ny][nx] in ['.', '<', '>', '+', '^'] and
                         (nx, ny) not in visited):
                     heappush(heap, (dist + 1, (nx, ny)))
         return None
@@ -1096,6 +1096,11 @@ class Game:
             self.combat(self.player, enemy_at_position)
         elif self.is_valid_move(new_x, new_y):
             self.player.x, self.player.y = new_x, new_y
+            if self.map[new_y][new_x] == '^':
+                dmg = random.randint(1, 6)
+                self.player.health -= dmg
+                self.messages.append(f"You triggered a trap! -{dmg} HP")
+                self.map[new_y][new_x] = '.'  # disarm after triggering
             self.process_turn()
 
     def handle_equipment_input(self, key):

@@ -1,110 +1,232 @@
 import random
 
+
 class MapGenerator:
     def __init__(self, height, width, screen_height, screen_width):
-        # Reserve six lines at the bottom of the screen for the UI.  Using
-        # ``screen_height - 6`` keeps the generated map fully visible.
-        self.height = min(max(10, height), screen_height - 6)
-
-        # Reserve a few columns on the right so the map never exceeds the
-        # available width.  ``max`` ensures a sensible minimum size.
-        self.width = min(max(20, width), screen_width - 5)
+        # Map fills the usable screen area exactly.
+        # 6 rows reserved for UI chrome at the bottom (2 status + 1 gap + 3 messages).
+        self.height = max(10, screen_height - 6)
+        self.width = max(20, screen_width - 1)
 
     def generate(self):
-        # Existing map generation logic
         self.map, self.rooms = self._generate_map_and_rooms()
-        
-        # Ensure the bottom row is always a wall
-        for x in range(self.width):
-            self.map[self.height - 1][x] = '#'
-        
         return self.map, self.rooms
 
-    def _generate_map_and_rooms(self):
+    # ------------------------------------------------------------------
+    # Map construction
+    # ------------------------------------------------------------------
+
+    def _generate_map_and_rooms(self, _attempt=0):
         self.map = [['#' for _ in range(self.width)] for _ in range(self.height)]
         rooms = []
-        max_rooms = min(10, (self.height * self.width) // 100)  # Adjust max rooms based on map size
-        
-        for _ in range(max_rooms):
-            room_height = max(3, min(5, random.randint(3, self.height // 3)))
-            room_width = max(5, min(7, random.randint(5, self.width // 3)))
-            
-            # Ensure there's space for the room
-            if self.height - room_height - 1 <= 1 or self.width - room_width - 1 <= 1:
-                continue
-            
-            x = random.randint(1, self.width - room_width - 1)
-            y = random.randint(1, self.height - room_height - 1)
-            
-            # Check if the room overlaps with any existing room
-            if not any(self.rooms_overlap(x, y, room_width, room_height, r) for r in rooms):
-                self.create_room(x, y, room_width, room_height)
-                rooms.append((x, y, room_width, room_height))
-        
-        # Connect rooms
-        for i in range(len(rooms) - 1):
-            self.create_corridor(rooms[i], rooms[i+1])
 
+        target = random.randint(4, 8)
+        room_h_max = max(3, min(8, (self.height - 2) // 3))
+        room_w_max = max(3, min(12, (self.width - 2) // 5))
+
+        for _ in range(300):
+            if len(rooms) >= target:
+                break
+
+            rh = random.randint(3, room_h_max)
+            rw = random.randint(3, room_w_max)
+
+            if self.width - 2 < rw or self.height - 2 < rh:
+                continue
+
+            x = random.randint(1, self.width - rw - 1)
+            y = random.randint(1, self.height - rh - 1)
+
+            if not any(self._rooms_overlap(x, y, rw, rh, r) for r in rooms):
+                self._create_room(x, y, rw, rh)
+                rooms.append((x, y, rw, rh))
+
+        # Need at least two rooms; retry up to 5 times with fresh randomness.
+        if len(rooms) < 2:
+            if _attempt < 5:
+                return self._generate_map_and_rooms(_attempt + 1)
+            # Absolute fallback: two minimal rooms in opposite corners.
+            self.map = [['#' for _ in range(self.width)] for _ in range(self.height)]
+            rooms = [(1, 1, 3, 3), (self.width - 4, self.height - 4, 3, 3)]
+            for r in rooms:
+                self._create_room(*r)
+
+        self._connect_rooms(rooms)
         return self.map, rooms
 
-    def create_room(self, x, y, w, h):
-        for i in range(y, y + h):
-            for j in range(x, x + w):
-                self.map[i][j] = '.'
-
-    def create_corridor(self, room1, room2):
-        x1, y1 = room1[0] + room1[2] // 2, room1[1] + room1[3] // 2
-        x2, y2 = room2[0] + room2[2] // 2, room2[1] + room2[3] // 2
-
-        if random.random() < 0.5:
-            self.create_h_tunnel(x1, x2, y1)
-            self.create_v_tunnel(y1, y2, x2)
-        else:
-            self.create_v_tunnel(y1, y2, x1)
-            self.create_h_tunnel(x1, x2, y2)
-
-    def create_h_tunnel(self, x1, x2, y):
-        """Dig a horizontal corridor exactly one tile wide."""
-        step = 1 if x2 >= x1 else -1
-        for x in range(x1, x2 + step, step):
-            self.map[y][x] = '.'
-
-    def create_v_tunnel(self, y1, y2, x):
-        """Dig a vertical corridor exactly one tile wide."""
-        step = 1 if y2 >= y1 else -1
-        for y in range(y1, y2 + step, step):
-            self.map[y][x] = '.'
-
-    def rooms_overlap(self, x, y, w, h, room):
-        # Expand the existing room's footprint by 1 tile in every direction so
-        # rooms are always separated by at least one wall tile.  Without this
-        # buffer two rooms can share a border with no wall between them, which
-        # causes the FOV logic to treat them as separate rooms even though the
-        # player can walk directly between them.
+    def _rooms_overlap(self, x, y, w, h, room):
+        # Enforces a 1-tile gap: rooms must not share a border tile.
         rx, ry, rw, rh = room
         return (x <= rx + rw and x + w >= rx and
                 y <= ry + rh and y + h >= ry)
 
+    def _create_room(self, x, y, w, h):
+        for row in range(y, y + h):
+            for col in range(x, x + w):
+                self.map[row][col] = '.'
+
+    # ------------------------------------------------------------------
+    # Corridor connection (Prim's spanning tree)
+    # ------------------------------------------------------------------
+
+    def _connect_rooms(self, rooms):
+        """Connect all rooms via a minimum spanning tree of L-shaped corridors.
+
+        Prefers orientations that avoid traversing a third room's interior.
+        Falls back to force-carving if no clean path exists for a given edge."""
+        connected = [rooms[0]]
+        unconnected = list(rooms[1:])
+
+        while unconnected:
+            _, rc, ru = min(
+                ((self._center_dist(rc, ru), rc, ru)
+                 for rc in connected for ru in unconnected),
+                key=lambda t: t[0],
+            )
+
+            # Try every already-connected room in proximity order.
+            for rc_try in sorted(connected, key=lambda r: self._center_dist(r, ru)):
+                if self._carve_corridor(rc_try, ru, rooms):
+                    break
+            else:
+                # Last resort: H-then-V regardless of room overlap.
+                self._force_carve(rc, ru)
+
+            connected.append(ru)
+            unconnected.remove(ru)
+
+    def _center_dist(self, r1, r2):
+        cx1, cy1 = r1[0] + r1[2] // 2, r1[1] + r1[3] // 2
+        cx2, cy2 = r2[0] + r2[2] // 2, r2[1] + r2[3] // 2
+        return abs(cx1 - cx2) + abs(cy1 - cy2)
+
+    def _in_other_room(self, x, y, room_a, room_b, rooms):
+        """True if (x, y) falls inside any room that is not room_a or room_b."""
+        for r in rooms:
+            if r == room_a or r == room_b:
+                continue
+            rx, ry, rw, rh = r
+            if rx <= x < rx + rw and ry <= y < ry + rh:
+                return True
+        return False
+
+    def _carve_corridor(self, room1, room2, all_rooms):
+        """Try H-then-V and V-then-H; carve the first orientation that avoids
+        all third rooms.  Returns True if carved, False if both orientations fail."""
+        cx1 = room1[0] + room1[2] // 2
+        cy1 = room1[1] + room1[3] // 2
+        cx2 = room2[0] + room2[2] // 2
+        cy2 = room2[1] + room2[3] // 2
+
+        for h_first in (True, False):
+            tiles = self._l_tiles(cx1, cy1, cx2, cy2, h_first)
+            if not any(
+                self._in_other_room(x, y, room1, room2, all_rooms)
+                for x, y in tiles
+            ):
+                for x, y in tiles:
+                    self.map[y][x] = '.'
+                return True
+        return False
+
+    def _force_carve(self, room1, room2):
+        """Unconditionally carve H-then-V from room1 center to room2 center."""
+        cx1 = room1[0] + room1[2] // 2
+        cy1 = room1[1] + room1[3] // 2
+        cx2 = room2[0] + room2[2] // 2
+        cy2 = room2[1] + room2[3] // 2
+        for x, y in self._l_tiles(cx1, cy1, cx2, cy2, True):
+            self.map[y][x] = '.'
+
+    # ------------------------------------------------------------------
+    # Path helpers
+    # ------------------------------------------------------------------
+
+    def _l_tiles(self, x1, y1, x2, y2, h_first):
+        """All tiles on an L-shaped path; corner tile not duplicated."""
+        tx, ty = (x2, y1) if h_first else (x1, y2)
+        seg1 = list(self._straight(x1, y1, tx, ty))
+        seg2 = list(self._straight(tx, ty, x2, y2))
+        return seg1 + seg2[1:]
+
+    def _straight(self, x1, y1, x2, y2):
+        """Yield tiles along a purely horizontal or vertical line."""
+        if x1 == x2:
+            step = 1 if y2 >= y1 else -1
+            for y in range(y1, y2 + step, step):
+                yield x1, y
+        else:
+            step = 1 if x2 >= x1 else -1
+            for x in range(x1, x2 + step, step):
+                yield x, y1
+
+    # ------------------------------------------------------------------
+    # Sparse feature placement
+    # ------------------------------------------------------------------
+
+    def _in_room(self, x, y, rooms):
+        return any(rx <= x < rx + rw and ry <= y < ry + rh
+                   for rx, ry, rw, rh in rooms)
+
+    def _place_doors(self, rooms):
+        """Place '+' doors at corridor tiles immediately adjacent to room interiors
+        with ~50 % probability each."""
+        for y in range(1, self.height - 1):
+            for x in range(1, self.width - 1):
+                if self.map[y][x] != '.':
+                    continue
+                if self._in_room(x, y, rooms):
+                    continue
+                adj_room = any(
+                    self._in_room(x + dx, y + dy, rooms)
+                    for dx, dy in ((-1, 0), (1, 0), (0, -1), (0, 1))
+                )
+                if adj_room and random.random() < 0.5:
+                    self.map[y][x] = '+'
+
+    def _place_traps(self, rooms):
+        """Scatter 1–3 trap tiles ('^') on random floor tiles."""
+        candidates = [
+            (x, y)
+            for y in range(1, self.height - 1)
+            for x in range(1, self.width - 1)
+            if self.map[y][x] == '.'
+        ]
+        random.shuffle(candidates)
+        for x, y in candidates[:random.randint(1, 3)]:
+            self.map[y][x] = '^'
+
+    # ------------------------------------------------------------------
+    # Public entry point
+    # ------------------------------------------------------------------
+
     def generate_level(self, player):
         self.map, self.rooms = self.generate()
-        
-        # Ensure the bottom row is always a wall
+
+        # Reinforce outer border as solid wall.
         for x in range(self.width):
+            self.map[0][x] = '#'
             self.map[self.height - 1][x] = '#'
-        
-        # Place stairs up (entry point)
-        entry_room = self.rooms[0]
-        stairs_up_x = entry_room[0] + entry_room[2] // 2
-        stairs_up_y = entry_room[1] + entry_room[3] // 2
+        for y in range(self.height):
+            self.map[y][0] = '#'
+            self.map[y][self.width - 1] = '#'
+
+        # Stairs go in the first and last rooms (always separate when ≥ 2 rooms).
+        up_room = self.rooms[0]
+        down_room = self.rooms[-1]
+
+        stairs_up_x = up_room[0] + up_room[2] // 2
+        stairs_up_y = up_room[1] + up_room[3] // 2
         self.map[stairs_up_y][stairs_up_x] = '<'
-        
-        # Place stairs down (exit to next level)
-        exit_room = self.rooms[-1]
-        stairs_x = exit_room[0] + exit_room[2] // 2
-        stairs_y = exit_room[1] + exit_room[3] // 2
+
+        stairs_x = down_room[0] + down_room[2] // 2
+        stairs_y = down_room[1] + down_room[3] // 2
         self.map[stairs_y][stairs_x] = '>'
-        
-        # Place player at the up stairs
+
+        # Doors and traps placed after stairs so they never overwrite stair tiles.
+        self._place_doors(self.rooms)
+        self._place_traps(self.rooms)
+
         player.x, player.y = stairs_up_x, stairs_up_y
-        
+
         return self.map, self.rooms, stairs_up_x, stairs_up_y, stairs_x, stairs_y
