@@ -2,10 +2,14 @@ import json
 import os
 import pickle
 import base64
+import time
 import zlib
 from datetime import datetime
 from pathlib import Path
 from classes.map_generator import MapGenerator
+
+
+SAVE_VERSION = '2.0'
 
 
 class SaveManager:
@@ -30,7 +34,7 @@ class SaveManager:
                     'timestamp': data.get('timestamp', 'Unknown'),
                     'playtime': data.get('playtime', 0)
                 }
-            except:
+            except Exception:
                 return {'slot': slot, 'exists': False}
         return {'slot': slot, 'exists': False}
     
@@ -111,12 +115,12 @@ class SaveManager:
         
         # Create save data with compact format
         save_data = {
-            'version': '2.0',  # New compact format version
+            'version': SAVE_VERSION,
             'character_name': game.player.name,
             'player_level': game.player.level,
             'dungeon_level': game.dungeon_level,
             'timestamp': datetime.now().isoformat(),
-            'playtime': getattr(game, 'playtime', 0),
+            'playtime': time.time() - getattr(game, 'start_time', time.time()),
             'map_dimensions': {
                 'width': game.width,
                 'height': game.height
@@ -199,9 +203,8 @@ class SaveManager:
         with open(save_file, 'r') as f:
             save_data = json.load(f)
         
-        # Check if this is the new compact format
         version = save_data.get('version', '1.0')
-        
+
         # Restore player data
         player_data = save_data['player']
         game.player.x = player_data['x']
@@ -245,8 +248,7 @@ class SaveManager:
         # Restore game state
         game_state = save_data['game_state']
         
-        if version == '2.0':
-            # New compact format
+        if version == SAVE_VERSION:
             game.map = self._deserialize_map(game_state['map'])
             game.rooms = game._deserialize_rooms(game_state['rooms'])
             game.items = self._deserialize_items(game_state['items'])
@@ -323,10 +325,10 @@ class SaveManager:
         
         inventory = Counter()
         for item_data in serialized_inventory:
-            count = item_data.pop('count', 1)
-            if item_data.get('slot'):  # Equipment
+            count = item_data.get('count', 1)
+            if item_data.get('slot'):
                 item = Equipment.from_dict(item_data)
-            else:  # Regular item
+            else:
                 item = Item.from_dict(item_data)
             inventory[item] = count
         return inventory
@@ -358,10 +360,7 @@ class SaveManager:
         serialized = []
         for item in items:
             if hasattr(item, 'to_dict'):
-                item_data = item.to_dict()
-                item_data['x'] = item.x
-                item_data['y'] = item.y
-                serialized.append(item_data)
+                serialized.append(item.to_dict())
         return serialized
     
     def _deserialize_items(self, serialized_items):
@@ -370,14 +369,12 @@ class SaveManager:
         
         items = []
         for item_data in serialized_items:
-            x = item_data.pop('x')
-            y = item_data.pop('y')
-            if item_data.get('slot'):  # Equipment
+            if item_data.get('slot'):
                 item = Equipment.from_dict(item_data)
-            else:  # Regular item
+            else:
                 item = Item.from_dict(item_data)
-            item.x = x
-            item.y = y
+            item.x = item_data['x']
+            item.y = item_data['y']
             items.append(item)
         return items
     
@@ -419,6 +416,8 @@ class SaveManager:
                 'gender': enemy.gender,
                 'sex': enemy.sex,
                 'race': enemy.race,
+                'xp_reward': enemy.xp_reward,
+                'gold_reward': enemy.gold_reward,
                 'inventory': self._serialize_inventory(enemy.inventory),
                 'equipment': self._serialize_equipment(enemy.equipment)
             }
@@ -441,12 +440,10 @@ class SaveManager:
                 enemy_data['base_defense']
             )
             
-            # Restore all enemy attributes
+            _skip = {'x', 'y', 'char', 'name', 'max_health', 'base_damage', 'base_defense', 'inventory', 'equipment'}
             for key, value in enemy_data.items():
-                if key not in ['x', 'y', 'char', 'name', 'max_health', 'base_damage', 'base_defense']:
+                if key not in _skip:
                     setattr(enemy, key, value)
-            
-            # Restore inventory and equipment
             enemy.inventory = self._deserialize_inventory(enemy_data['inventory'])
             enemy.equipment = self._deserialize_equipment(enemy_data['equipment'])
             

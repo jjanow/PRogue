@@ -4,7 +4,6 @@
     "type": "amulet",
     "body_part": "neck",
     "ac": 0,
-    "material_type": "jewelry",
     "weight": 1
   },
   {
@@ -12,7 +11,6 @@
     "type": "amulet",
     "body_part": "neck",
     "ac": 0,
-    "material_type": "jewelry",
     "weight": 1
   },
   {
@@ -20,7 +18,6 @@
     "type": "amulet",
     "body_part": "neck",
     "ac": 0,
-    "material_type": "jewelry",
     "weight": 1
   },
   {
@@ -28,7 +25,6 @@
     "type": "amulet",
     "body_part": "neck",
     "ac": 0,
-    "material_type": "jewelry",
     "weight": 1
   },
   {
@@ -36,7 +32,6 @@
     "type": "amulet",
     "body_part": "neck",
     "ac": 0,
-    "material_type": "jewelry",
     "weight": 1
   },
   {
@@ -44,7 +39,6 @@
     "type": "amulet",
     "body_part": "neck",
     "ac": 0,
-    "material_type": "jewelry",
     "weight": 1
   },
   {
@@ -52,7 +46,6 @@
     "type": "amulet",
     "body_part": "neck",
     "ac": 0,
-    "material_type": "jewelry",
     "weight": 1
   },
   {
@@ -60,7 +53,6 @@
     "type": "amulet",
     "body_part": "neck",
     "ac": 0,
-    "material_type": "jewelry",
     "weight": 1
   },
   {
@@ -68,7 +60,6 @@
     "type": "amulet",
     "body_part": "neck",
     "ac": 0,
-    "material_type": "jewelry",
     "weight": 1
   },
   {
@@ -76,7 +67,6 @@
     "type": "amulet",
     "body_part": "neck",
     "ac": 0,
-    "material_type": "jewelry",
     "weight": 1
   }
 ]

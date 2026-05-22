@@ -382,7 +382,7 @@ class Renderer:
             "Debug Functions:",
             "t) Add 1000 time units",
             "w) Decrease walk speed",
-            "e) Increase walk speed",
+            "p) Increase walk speed",
         ]
 
         for i, line in enumerate(menu_text):
@@ -424,19 +424,18 @@ class Renderer:
         stdscr.addstr(0, 0, header[:width-1], curses.color_pair(7))
 
         if self.game.save_slot is None:
-            # Show available save slots
-            saves = self.game.save_manager.get_all_save_info()
+            saves = self.game.save_info_cache or self.game.save_manager.get_all_save_info()
             stdscr.addstr(2, 0, "Select a save slot (1-0):", curses.color_pair(4))
-            
+
             for i, save in enumerate(saves, 1):
                 if save['exists']:
                     timestamp = save['timestamp'][:19] if save['timestamp'] != 'Unknown' else 'Unknown'
                     line = f"{i}) {save['character_name']} - Level {save['player_level']} (Dungeon {save['level']}) - {timestamp}"
                 else:
                     line = f"{i}) Empty slot"
-                
+
                 color = curses.color_pair(4)
-                if i == 10:  # Slot 10
+                if i == 10:
                     stdscr.addstr(i + 2, 0, f"0) {line[3:]}", color)
                 else:
                     stdscr.addstr(i + 2, 0, line, color)
@@ -463,10 +462,9 @@ class Renderer:
         stdscr.addstr(0, 0, header[:width-1], curses.color_pair(7))
 
         if self.game.save_slot is None:
-            # Show available save slots
-            saves = self.game.save_manager.get_all_save_info()
+            saves = self.game.save_info_cache or self.game.save_manager.get_all_save_info()
             stdscr.addstr(2, 0, "Select a save slot to load (1-0):", curses.color_pair(4))
-            
+
             for i, save in enumerate(saves, 1):
                 if save['exists']:
                     timestamp = save['timestamp'][:19] if save['timestamp'] != 'Unknown' else 'Unknown'
@@ -474,9 +472,9 @@ class Renderer:
                     color = curses.color_pair(4)
                 else:
                     line = f"{i}) Empty slot"
-                    color = curses.color_pair(6)  # Dimmed for empty slots
-                
-                if i == 10:  # Slot 10
+                    color = curses.color_pair(6)
+
+                if i == 10:
                     stdscr.addstr(i + 2, 0, f"0) {line[3:]}", color)
                 else:
                     stdscr.addstr(i + 2, 0, line, color)
@@ -503,10 +501,9 @@ class Renderer:
         stdscr.addstr(0, 0, header[:width-1], curses.color_pair(7))
 
         if self.game.save_slot is None:
-            # Show available save slots
-            saves = self.game.save_manager.get_all_save_info()
+            saves = self.game.save_info_cache or self.game.save_manager.get_all_save_info()
             stdscr.addstr(2, 0, "Select a save slot to delete (1-0):", curses.color_pair(4))
-            
+
             for i, save in enumerate(saves, 1):
                 if save['exists']:
                     timestamp = save['timestamp'][:19] if save['timestamp'] != 'Unknown' else 'Unknown'
@@ -514,9 +511,9 @@ class Renderer:
                     color = curses.color_pair(4)
                 else:
                     line = f"{i}) Empty slot"
-                    color = curses.color_pair(6)  # Dimmed for empty slots
-                
-                if i == 10:  # Slot 10
+                    color = curses.color_pair(6)
+
+                if i == 10:
                     stdscr.addstr(i + 2, 0, f"0) {line[3:]}", color)
                 else:
                     stdscr.addstr(i + 2, 0, line, color)

@@ -76,8 +76,14 @@ class MapGenerator:
             self.map[y][x] = '.'
 
     def rooms_overlap(self, x, y, w, h, room):
-        return (x < room[0] + room[2] and x + w > room[0] and
-                y < room[1] + room[3] and y + h > room[1])
+        # Expand the existing room's footprint by 1 tile in every direction so
+        # rooms are always separated by at least one wall tile.  Without this
+        # buffer two rooms can share a border with no wall between them, which
+        # causes the FOV logic to treat them as separate rooms even though the
+        # player can walk directly between them.
+        rx, ry, rw, rh = room
+        return (x <= rx + rw and x + w >= rx and
+                y <= ry + rh and y + h >= ry)
 
     def generate_level(self, player):
         self.map, self.rooms = self.generate()

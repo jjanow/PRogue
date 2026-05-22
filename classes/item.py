@@ -44,13 +44,12 @@ class Item:
     @classmethod
     def from_dict(cls, data):
         """Create item from dictionary."""
-        # Import effect functions dynamically
-        if data.get('effect'):
-            from classes.item_loader import get_effect_function
-            effect = get_effect_function(data['effect'])
+        if data.get('effect_type'):
+            from classes.item_loader import create_effect
+            effect = create_effect(data['effect_type'], data.get('value'), data.get('duration'))
         else:
             effect = None
-            
+
         item = cls(
             name=data['name'],
             effect=effect,

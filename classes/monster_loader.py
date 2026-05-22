@@ -2,7 +2,7 @@ import os
 import json
 import random
 from classes.item import Item, Equipment
-from classes.item_loader import all_items, materials_by_type, all_materials
+from classes.item_loader import all_items, all_materials
 
 class MonsterTemplate:
     def __init__(self, name, xp, gold, items, challenge_rating, archetype):
@@ -19,8 +19,7 @@ class MonsterTemplate:
             template = next((i for i in all_items if i.name == item_name), None)
             if template:
                 if isinstance(template, Equipment):
-                    mats = materials_by_type.get(template.material_type, all_materials)
-                    mat = random.choice(mats)
+                    mat = random.choice(all_materials)
                     loot_item = Equipment(
                         f"{mat.name} {template.name}",
                         template.slot,
@@ -30,7 +29,7 @@ class MonsterTemplate:
                         ac=template.ac,
                         accuracy_bonus=template.accuracy_bonus,
                         weight=template.weight,
-                        material_type=template.material_type,
+                        material_type=mat.name,
                         gold_value=template.gold_value * mat.value_multiplier,
                     )
                 else:

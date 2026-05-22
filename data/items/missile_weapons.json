@@ -7,7 +7,6 @@
       "min": 2,
       "max": 8
     },
-    "material_type": "weapons",
     "weight": 4
   },
   {
@@ -18,7 +17,6 @@
       "min": 2,
       "max": 8
     },
-    "material_type": "weapons",
     "weight": 6
   },
   {
@@ -29,7 +27,6 @@
       "min": 2,
       "max": 8
     },
-    "material_type": "weapons",
     "weight": 5
   },
   {
@@ -40,7 +37,6 @@
       "min": 2,
       "max": 8
     },
-    "material_type": "weapons",
     "weight": 8
   },
   {
@@ -51,7 +47,6 @@
       "min": 2,
       "max": 8
     },
-    "material_type": "weapons",
     "weight": 7
   },
   {
@@ -62,7 +57,6 @@
       "min": 1,
       "max": 6
     },
-    "material_type": "weapons",
     "weight": 2
   },
   {
@@ -73,7 +67,6 @@
       "min": 1,
       "max": 6
     },
-    "material_type": "weapons",
     "weight": 3
   },
   {
@@ -84,7 +77,6 @@
       "min": 1,
       "max": 6
     },
-    "material_type": "weapons",
     "weight": 3
   },
   {
@@ -95,7 +87,6 @@
       "min": 1,
       "max": 6
     },
-    "material_type": "weapons",
     "weight": 4
   },
   {
@@ -106,7 +97,6 @@
       "min": 1,
       "max": 6
     },
-    "material_type": "weapons",
     "weight": 2
   },
   {
@@ -117,7 +107,6 @@
       "min": 1,
       "max": 6
     },
-    "material_type": "weapons",
     "weight": 1
   },
   {
@@ -128,7 +117,6 @@
       "min": 1,
       "max": 6
     },
-    "material_type": "weapons",
     "weight": 2
   },
   {
@@ -139,7 +127,6 @@
       "min": 1,
       "max": 6
     },
-    "material_type": "weapons",
     "weight": 2
   },
   {
@@ -150,7 +137,6 @@
       "min": 1,
       "max": 6
     },
-    "material_type": "weapons",
     "weight": 2
   },
   {
@@ -161,7 +147,6 @@
       "min": 1,
       "max": 6
     },
-    "material_type": "weapons",
     "weight": 1
   },
   {
@@ -172,7 +157,6 @@
       "min": 1,
       "max": 4
     },
-    "material_type": "weapons",
     "weight": 1
   },
   {
@@ -183,7 +167,6 @@
       "min": 1,
       "max": 4
     },
-    "material_type": "weapons",
     "weight": 2
   },
   {
@@ -194,7 +177,6 @@
       "min": 1,
       "max": 4
     },
-    "material_type": "weapons",
     "weight": 1
   },
   {
@@ -205,7 +187,6 @@
       "min": 1,
       "max": 4
     },
-    "material_type": "weapons",
     "weight": 1
   },
   {
@@ -216,15 +197,16 @@
       "min": 1,
       "max": 4
     },
-    "material_type": "weapons",
     "weight": 1
   },
   {
     "name": "Sling",
     "type": "missile weapon",
     "body_part": "hands",
-    "damage": {"min": 1, "max": 4},
-    "material_type": "weapons",
+    "damage": {
+      "min": 1,
+      "max": 4
+    },
     "weight": 1
   }
 ]

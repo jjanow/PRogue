@@ -7,7 +7,6 @@
       "min": 1,
       "max": 4
     },
-    "material_type": "weapons",
     "weight": 1
   },
   {
@@ -18,7 +17,6 @@
       "min": 1,
       "max": 6
     },
-    "material_type": "weapons",
     "weight": 3
   },
   {
@@ -29,7 +27,6 @@
       "min": 1,
       "max": 8
     },
-    "material_type": "weapons",
     "weight": 5
   },
   {
@@ -40,7 +37,6 @@
       "min": 1,
       "max": 8
     },
-    "material_type": "weapons",
     "weight": 6
   },
   {
@@ -51,7 +47,6 @@
       "min": 1,
       "max": 8
     },
-    "material_type": "weapons",
     "weight": 6
   },
   {
@@ -62,7 +57,6 @@
       "min": 1,
       "max": 8
     },
-    "material_type": "weapons",
     "weight": 4
   },
   {
@@ -73,7 +67,6 @@
       "min": 1,
       "max": 6
     },
-    "material_type": "weapons",
     "weight": 2
   },
   {
@@ -84,7 +77,6 @@
       "min": 1,
       "max": 6
     },
-    "material_type": "weapons",
     "weight": 3
   },
   {
@@ -95,7 +87,6 @@
       "min": 1,
       "max": 6
     },
-    "material_type": "weapons",
     "weight": 3
   },
   {
@@ -106,7 +97,6 @@
       "min": 1,
       "max": 6
     },
-    "material_type": "weapons",
     "weight": 3
   },
   {
@@ -117,7 +107,6 @@
       "min": 1,
       "max": 6
     },
-    "material_type": "weapons",
     "weight": 2
   },
   {
@@ -128,7 +117,6 @@
       "min": 1,
       "max": 4
     },
-    "material_type": "weapons",
     "weight": 1
   },
   {
@@ -139,7 +127,6 @@
       "min": 1,
       "max": 4
     },
-    "material_type": "weapons",
     "weight": 1
   },
   {
@@ -150,7 +137,6 @@
       "min": 1,
       "max": 4
     },
-    "material_type": "weapons",
     "weight": 1
   },
   {
@@ -161,7 +147,6 @@
       "min": 1,
       "max": 4
     },
-    "material_type": "weapons",
     "weight": 1
   },
   {
@@ -172,7 +157,6 @@
       "min": 1,
       "max": 4
     },
-    "material_type": "weapons",
     "weight": 2
   },
   {
@@ -183,7 +167,6 @@
       "min": 1,
       "max": 4
     },
-    "material_type": "weapons",
     "weight": 3
   },
   {
@@ -194,7 +177,6 @@
       "min": 1,
       "max": 6
     },
-    "material_type": "weapons",
     "weight": 4
   },
   {
@@ -205,7 +187,6 @@
       "min": 1,
       "max": 6
     },
-    "material_type": "weapons",
     "weight": 4
   },
   {
@@ -216,7 +197,6 @@
       "min": 1,
       "max": 6
     },
-    "material_type": "weapons",
     "weight": 4
   },
   {
@@ -227,7 +207,6 @@
       "min": 1,
       "max": 6
     },
-    "material_type": "weapons",
     "weight": 4
   },
   {
@@ -238,7 +217,6 @@
       "min": 1,
       "max": 8
     },
-    "material_type": "weapons",
     "weight": 6
   },
   {
@@ -249,7 +227,6 @@
       "min": 1,
       "max": 8
     },
-    "material_type": "weapons",
     "weight": 6
   },
   {
@@ -260,7 +237,6 @@
       "min": 1,
       "max": 8
     },
-    "material_type": "weapons",
     "weight": 6
   },
   {
@@ -271,7 +247,6 @@
       "min": 1,
       "max": 8
     },
-    "material_type": "weapons",
     "weight": 6
   },
   {
@@ -282,7 +257,6 @@
       "min": 1,
       "max": 8
     },
-    "material_type": "weapons",
     "weight": 6
   },
   {
@@ -293,7 +267,6 @@
       "min": 1,
       "max": 6
     },
-    "material_type": "weapons",
     "weight": 3
   },
   {
@@ -304,7 +277,6 @@
       "min": 1,
       "max": 8
     },
-    "material_type": "weapons",
     "weight": 5
   },
   {
@@ -315,7 +287,6 @@
       "min": 1,
       "max": 8
     },
-    "material_type": "weapons",
     "weight": 5
   },
   {
@@ -326,7 +297,6 @@
       "min": 1,
       "max": 8
     },
-    "material_type": "weapons",
     "weight": 5
   },
   {
@@ -337,7 +307,6 @@
       "min": 1,
       "max": 4
     },
-    "material_type": "weapons",
     "weight": 1
   },
   {
@@ -348,7 +317,6 @@
       "min": 1,
       "max": 6
     },
-    "material_type": "weapons",
     "weight": 3
   },
   {
@@ -359,7 +327,6 @@
       "min": 1,
       "max": 8
     },
-    "material_type": "weapons",
     "weight": 4
   },
   {
@@ -370,7 +337,6 @@
       "min": 1,
       "max": 4
     },
-    "material_type": "weapons",
     "weight": 1
   },
   {
@@ -381,7 +347,6 @@
       "min": 1,
       "max": 8
     },
-    "material_type": "weapons",
     "weight": 5
   },
   {
@@ -392,7 +357,6 @@
       "min": 1,
       "max": 6
     },
-    "material_type": "weapons",
     "weight": 3
   },
   {
@@ -403,7 +367,6 @@
       "min": 1,
       "max": 8
     },
-    "material_type": "weapons",
     "weight": 5
   },
   {
@@ -414,7 +377,6 @@
       "min": 1,
       "max": 8
     },
-    "material_type": "weapons",
     "weight": 5
   },
   {
@@ -425,7 +387,6 @@
       "min": 1,
       "max": 8
     },
-    "material_type": "weapons",
     "weight": 5
   },
   {
@@ -436,7 +397,6 @@
       "min": 1,
       "max": 8
     },
-    "material_type": "weapons",
     "weight": 5
   },
   {
@@ -447,63 +407,76 @@
       "min": 1,
       "max": 8
     },
-    "material_type": "weapons",
     "weight": 5
   },
   {
     "name": "Flail",
     "type": "weapon",
     "body_part": "hands",
-    "damage": {"min": 1, "max": 6},
-    "material_type": "weapons",
+    "damage": {
+      "min": 1,
+      "max": 6
+    },
     "weight": 4
   },
   {
     "name": "Ogre Maul",
     "type": "weapon",
     "body_part": "hands",
-    "damage": {"min": 1, "max": 8},
-    "material_type": "weapons",
+    "damage": {
+      "min": 1,
+      "max": 8
+    },
     "weight": 6
   },
   {
     "name": "Poison Dagger",
     "type": "weapon",
     "body_part": "hands",
-    "damage": {"min": 1, "max": 4},
-    "material_type": "weapons",
+    "damage": {
+      "min": 1,
+      "max": 4
+    },
     "weight": 1
   },
   {
     "name": "Rusty Sword",
     "type": "weapon",
     "body_part": "hands",
-    "damage": {"min": 1, "max": 6},
-    "material_type": "weapons",
+    "damage": {
+      "min": 1,
+      "max": 6
+    },
     "weight": 3
   },
   {
     "name": "Short Sword",
     "type": "weapon",
     "body_part": "hands",
-    "damage": {"min": 1, "max": 6},
-    "material_type": "weapons",
+    "damage": {
+      "min": 1,
+      "max": 6
+    },
     "weight": 2
   },
   {
     "name": "Spear",
     "type": "weapon",
     "body_part": "hands",
-    "damage": {"min": 1, "max": 6},
-    "material_type": "weapons",
+    "damage": {
+      "min": 1,
+      "max": 6
+    },
     "weight": 3
   },
   {
     "name": "Shadow Blade",
     "type": "weapon",
     "body_part": "hands",
-    "damage": {"min": 1, "max": 8},
-    "material_type": "weapons",
+    "damage": {
+      "min": 1,
+      "max": 8
+    },
     "weight": 5
   }
 ]

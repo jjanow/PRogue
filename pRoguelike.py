@@ -334,10 +334,11 @@ if __name__ == "__main__":
             print("  2) Load Existing Save")
             print("  3) Manage Save Games")
             print("  4) Quit")
+            print("  5) Quick Start (Random Character)")
             print()
-            
+
             choice = get_single_key()
-            
+
             if choice == "1":
                 return "create"
             elif choice == "2":
@@ -346,6 +347,41 @@ if __name__ == "__main__":
                 return "manage"
             elif choice == "4":
                 return "quit"
+            elif choice == "5":
+                return "random"
+
+    def generate_random_character():
+        """Generate a fully randomized character without any prompts."""
+        _first_names = [
+            "Aric", "Bran", "Cael", "Dorn", "Eryn", "Fael", "Gorn", "Hael",
+            "Idris", "Jorn", "Kael", "Lorn", "Mira", "Nael", "Oren", "Pell",
+            "Rael", "Sera", "Tael", "Urik", "Vael", "Wren", "Xael", "Yorn",
+            "Zael", "Aldric", "Brynn", "Caius", "Delia", "Eamon",
+        ]
+        _sex_options = ["Male", "Female", "Other"]
+        _attributes = [
+            "strength", "dexterity", "constitution", "intelligence",
+            "willpower", "charisma", "appearance", "perception",
+        ]
+
+        name = random.choice(_first_names)
+        sex = random.choice(_sex_options)
+        gender = sex
+        race = random.choice(all_races)
+
+        base_stats = {attr: random.randint(1, 20) for attr in _attributes}
+        stats = {
+            attr: max(1, base_stats[attr] + race.bonuses.get(attr, 0))
+            for attr in _attributes
+        }
+
+        return {
+            "name": name,
+            "gender": gender,
+            "sex": sex,
+            "race": race.name,
+            "stats": stats,
+        }
     
     def show_load_menu():
         """Show menu to select a save slot to load."""
@@ -396,14 +432,13 @@ if __name__ == "__main__":
         """Show menu to manage save games (delete, view details)."""
         from classes.save_manager import SaveManager
         save_manager = SaveManager()
-        saves = save_manager.get_all_save_info()
-        
+
         while True:
+            saves = save_manager.get_all_save_info()
             clear_screen()
             print("=== Manage Save Games ===")
             print()
-            
-            # Show all save slots
+
             for save in saves:
                 if save['exists']:
                     print(f"  {save['slot']}) {save['character_name']} - Level {save['player_level']} (Dungeon {save['level']})")
@@ -413,14 +448,14 @@ if __name__ == "__main__":
                 else:
                     print(f"  {save['slot']}) Empty slot")
                     print()
-            
+
             print("Options:")
             print("  d) Delete a save game")
             print("  0) Return to main menu")
             print()
-            
+
             choice = get_single_key().lower()
-            
+
             if choice == "0":
                 return
             elif choice == "d":
@@ -584,12 +619,23 @@ if __name__ == "__main__":
     while True:
         choice = show_intro_menu()
         
-        if choice == "create":
-            char_data = character_creation_cli()
-            
+        if choice == "random":
+            char_data = generate_random_character()
+            print(f"Starting as {char_data['name']} the {char_data['race']}...")
+
             def run(stdscr):
                 main(stdscr, char_data)
-            
+
+            wrapper(run)
+            print("Thanks for playing!")
+            break
+
+        elif choice == "create":
+            char_data = character_creation_cli()
+
+            def run(stdscr):
+                main(stdscr, char_data)
+
             wrapper(run)
             print("Thanks for playing!")
             break

@@ -1,0 +1,22 @@
+[
+  {"name": "Crude",       "power": 1},
+  {"name": "Bone",        "power": 2},
+  {"name": "Flint",       "power": 3},
+  {"name": "Copper",      "power": 4},
+  {"name": "Hide",        "power": 5},
+  {"name": "Bronze",      "power": 6},
+  {"name": "Iron",        "power": 7},
+  {"name": "Hardwood",    "power": 8},
+  {"name": "Steel",       "power": 9},
+  {"name": "Dark Iron",   "power": 10},
+  {"name": "Silver",      "power": 11},
+  {"name": "Cold Iron",   "power": 12},
+  {"name": "Mithril",     "power": 13},
+  {"name": "Moonsilver",  "power": 14},
+  {"name": "Runic Steel", "power": 15},
+  {"name": "Starmetal",   "power": 16},
+  {"name": "Shadowsteel", "power": 17},
+  {"name": "Adamantine",  "power": 18},
+  {"name": "Dragonbone",  "power": 19},
+  {"name": "Ethereal",    "power": 20}
+]

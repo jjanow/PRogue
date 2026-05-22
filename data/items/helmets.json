@@ -4,7 +4,6 @@
     "type": "helmet",
     "body_part": "head",
     "ac": 1,
-    "material_type": "armor",
     "weight": 1
   },
   {
@@ -12,7 +11,6 @@
     "type": "helmet",
     "body_part": "head",
     "ac": 1,
-    "material_type": "armor",
     "weight": 2
   },
   {
@@ -20,7 +18,6 @@
     "type": "helmet",
     "body_part": "head",
     "ac": 1,
-    "material_type": "armor",
     "weight": 3
   },
   {
@@ -28,7 +25,6 @@
     "type": "helmet",
     "body_part": "head",
     "ac": 1,
-    "material_type": "armor",
     "weight": 1
   },
   {
@@ -36,7 +32,6 @@
     "type": "helmet",
     "body_part": "head",
     "ac": 1,
-    "material_type": "armor",
     "weight": 3
   },
   {
@@ -44,7 +39,6 @@
     "type": "helmet",
     "body_part": "head",
     "ac": 1,
-    "material_type": "armor",
     "weight": 2
   },
   {
@@ -52,7 +46,6 @@
     "type": "helmet",
     "body_part": "head",
     "ac": 1,
-    "material_type": "armor",
     "weight": 2
   },
   {
@@ -60,7 +53,6 @@
     "type": "helmet",
     "body_part": "head",
     "ac": 1,
-    "material_type": "armor",
     "weight": 2
   },
   {
@@ -68,7 +60,6 @@
     "type": "helmet",
     "body_part": "head",
     "ac": 1,
-    "material_type": "armor",
     "weight": 2
   },
   {
@@ -76,7 +67,6 @@
     "type": "helmet",
     "body_part": "head",
     "ac": 1,
-    "material_type": "armor",
     "weight": 2
   }
 ]

@@ -12,22 +12,10 @@ class Material:
 
 def load_materials():
     script_dir = os.path.dirname(os.path.abspath(__file__))
-    materials_dir = os.path.join(script_dir, '..', 'data', 'materials')
-    materials_by_type = {}
-    all_materials = []
-
-    for fname in os.listdir(materials_dir):
-        if not fname.endswith('.json'):
-            continue
-        category = os.path.splitext(fname)[0]
-        path = os.path.join(materials_dir, fname)
-        with open(path, 'r') as file:
-            material_data = json.load(file)
-        mats = [Material(m['name'], m['power']) for m in material_data]
-        materials_by_type[category] = mats
-        all_materials.extend(mats)
-
-    return materials_by_type, all_materials
+    materials_path = os.path.join(script_dir, '..', 'data', 'materials', 'materials.json')
+    with open(materials_path, 'r') as f:
+        material_data = json.load(f)
+    return [Material(m['name'], m['power']) for m in material_data]
 
 def load_items():
     script_dir = os.path.dirname(os.path.abspath(__file__))
@@ -37,7 +25,7 @@ def load_items():
     with open(consumables_path, 'r') as file:
         consumable_data = json.load(file)
 
-    materials_by_type, all_materials = load_materials()
+    all_materials = load_materials()
 
     consumables = []
     for item_data in consumable_data:
@@ -93,7 +81,7 @@ def load_items():
                 misc_items.append(item)
 
     all_items = consumables + equipment + misc_items
-    return consumables, equipment, misc_items, materials_by_type, all_materials, all_items
+    return consumables, equipment, misc_items, all_materials, all_items
 
 def create_effect(effect_type, value, duration):
     if effect_type == 'heal':
@@ -127,31 +115,10 @@ def create_effect(effect_type, value, duration):
     else:
         return lambda e: f"Unknown effect: {effect_type}"
 
-def get_effect_function(effect_name):
-    """Get an effect function by name for loading saved items."""
-    # For now, return a simple lambda that does nothing
-    # In a full implementation, you might want to store effect parameters
-    # and recreate the full effect function
-    if effect_name == 'heal':
-        return lambda e: e.heal(10)  # Default heal value
-    elif effect_name == 'restore_mana':
-        return lambda e: e.restore_mana(10)  # Default mana value
-    elif effect_name == 'cure_poison':
-        return lambda e: e.cure_poison()
-    elif effect_name == 'identify':
-        return lambda e: e.identify_item()
-    elif effect_name == 'detect_magic':
-        return lambda e: e.detect_magic()
-    elif effect_name == 'light':
-        return lambda e: e.cast_light()
-    else:
-        return lambda e: f"Unknown effect: {effect_name}"
-
 (
     all_consumables,
     all_equipment,
     all_misc,
-    materials_by_type,
     all_materials,
     all_items,
 ) = load_items()

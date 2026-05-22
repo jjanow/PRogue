@@ -4,7 +4,6 @@
     "type": "armor",
     "body_part": "torso",
     "ac": 1,
-    "material_type": "cloth",
     "weight": 1
   },
   {
@@ -12,7 +11,6 @@
     "type": "armor",
     "body_part": "torso",
     "ac": 5,
-    "material_type": "iron",
     "weight": 25
   },
   {
@@ -20,15 +18,13 @@
     "type": "armor",
     "body_part": "torso",
     "ac": 8,
-    "material_type": "steel",
     "weight": 45
   },
   {
-    "name": "Leather Armor",
+    "name": "Padded Armor",
     "type": "armor",
     "body_part": "torso",
     "ac": 2,
-    "material_type": "leather",
     "weight": 8
   },
   {
@@ -36,7 +32,6 @@
     "type": "armor",
     "body_part": "torso",
     "ac": 4,
-    "material_type": "bronze",
     "weight": 20
   },
   {
@@ -44,7 +39,6 @@
     "type": "armor",
     "body_part": "torso",
     "ac": 6,
-    "material_type": "steel",
     "weight": 35
   },
   {
@@ -52,7 +46,6 @@
     "type": "armor",
     "body_part": "torso",
     "ac": 5,
-    "material_type": "iron",
     "weight": 22
   },
   {
@@ -60,7 +53,6 @@
     "type": "armor",
     "body_part": "torso",
     "ac": 2,
-    "material_type": "cloth",
     "weight": 3
   },
   {
@@ -68,7 +60,6 @@
     "type": "armor",
     "body_part": "torso",
     "ac": 3,
-    "material_type": "iron",
     "weight": 18
   },
   {
@@ -76,15 +67,13 @@
     "type": "armor",
     "body_part": "torso",
     "ac": 6,
-    "material_type": "steel",
     "weight": 30
   },
   {
-    "name": "Bone Chestpiece",
+    "name": "Chestpiece",
     "type": "armor",
     "body_part": "torso",
     "ac": 3,
-    "material_type": "leather",
     "weight": 12
   }
 ]

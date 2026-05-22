@@ -328,74 +328,72 @@ class InputHandler:
         elif key == ord('w'):  # Decrease walk speed
             self.game.walk_speed = max(1, self.game.walk_speed - 1)
             self.game.messages.append(f"Walk speed decreased to {self.game.walk_speed} ms.")
-        elif key == ord('e'):  # Increase walk speed
+        elif key == ord('p'):  # Increase walk speed
             self.game.walk_speed = min(100, self.game.walk_speed + 1)
             self.game.messages.append(f"Walk speed increased to {self.game.walk_speed} ms.")
 
+    def _clear_save_mode(self, mode_attr):
+        setattr(self.game, mode_attr, False)
+        self.game.save_slot = None
+        self.game.save_info_cache = None
+
     def handle_save_input(self, key):
         """Handle input for save game mode."""
-        if key == 27:  # ESC key
-            self.game.save_mode = False
-            self.game.save_slot = None
+        if key == 27:
+            self._clear_save_mode('save_mode')
             return
-        
+
         if self.game.save_slot is None:
-            if 49 <= key <= 57:  # '1' to '9'
+            if 49 <= key <= 57:
                 self.game.save_slot = key - ord('0')
-            elif key == ord('0'):  # '0' for slot 10
+            elif key == ord('0'):
                 self.game.save_slot = 10
         else:
-            if key == ord('y') or key == ord('Y'):
+            if key in (ord('y'), ord('Y')):
                 try:
                     self.game.save_manager.save_game(self.game, self.game.save_slot)
                     self.game.messages.append(f"Game saved to slot {self.game.save_slot}.")
                 except Exception as e:
                     self.game.messages.append(f"Failed to save game: {e}")
-                self.game.save_mode = False
-                self.game.save_slot = None
-            elif key == ord('n') or key == ord('N') or key == 27:
-                self.game.save_mode = False
-                self.game.save_slot = None
+                self._clear_save_mode('save_mode')
+            elif key in (ord('n'), ord('N'), 27):
+                self._clear_save_mode('save_mode')
 
     def handle_load_input(self, key):
         """Handle input for load game mode."""
-        if key == 27:  # ESC key
-            self.game.load_mode = False
-            self.game.save_slot = None
+        if key == 27:
+            self._clear_save_mode('load_mode')
             return
-        
+
         if self.game.save_slot is None:
-            if 49 <= key <= 57:  # '1' to '9'
+            if 49 <= key <= 57:
                 self.game.save_slot = key - ord('0')
-            elif key == ord('0'):  # '0' for slot 10
+            elif key == ord('0'):
                 self.game.save_slot = 10
         else:
-            if key == ord('y') or key == ord('Y'):
+            if key in (ord('y'), ord('Y')):
                 try:
                     self.game.save_manager.load_game(self.game, self.game.save_slot)
                     self.game.messages.append(f"Game loaded from slot {self.game.save_slot}.")
                 except Exception as e:
                     self.game.messages.append(f"Failed to load game: {e}")
-                self.game.load_mode = False
-                self.game.save_slot = None
-            elif key == ord('n') or key == ord('N') or key == 27:
-                self.game.load_mode = False
-                self.game.save_slot = None
+                self._clear_save_mode('load_mode')
+            elif key in (ord('n'), ord('N'), 27):
+                self._clear_save_mode('load_mode')
 
     def handle_delete_input(self, key):
         """Handle input for delete save mode."""
-        if key == 27:  # ESC key
-            self.game.delete_mode = False
-            self.game.save_slot = None
+        if key == 27:
+            self._clear_save_mode('delete_mode')
             return
-        
+
         if self.game.save_slot is None:
-            if 49 <= key <= 57:  # '1' to '9'
+            if 49 <= key <= 57:
                 self.game.save_slot = key - ord('0')
-            elif key == ord('0'):  # '0' for slot 10
+            elif key == ord('0'):
                 self.game.save_slot = 10
         else:
-            if key == ord('y') or key == ord('Y'):
+            if key in (ord('y'), ord('Y')):
                 try:
                     if self.game.save_manager.delete_save(self.game.save_slot):
                         self.game.messages.append(f"Save slot {self.game.save_slot} deleted.")
@@ -403,11 +401,9 @@ class InputHandler:
                         self.game.messages.append(f"Save slot {self.game.save_slot} was already empty.")
                 except Exception as e:
                     self.game.messages.append(f"Failed to delete save: {e}")
-                self.game.delete_mode = False
-                self.game.save_slot = None
-            elif key == ord('n') or key == ord('N') or key == 27:
-                self.game.delete_mode = False
-                self.game.save_slot = None
+                self._clear_save_mode('delete_mode')
+            elif key in (ord('n'), ord('N'), 27):
+                self._clear_save_mode('delete_mode')
 
     def handle_save_load_menu_input(self, key):
         """Handle input for the save/load menu accessed by pressing ESC."""
@@ -418,14 +414,17 @@ class InputHandler:
         if key == ord('s'):
             self.game.save_mode = True
             self.game.save_load_menu_mode = False
+            self.game.save_info_cache = self.game.save_manager.get_all_save_info()
             return
-        
+
         if key == ord('l'):
             self.game.load_mode = True
             self.game.save_load_menu_mode = False
+            self.game.save_info_cache = self.game.save_manager.get_all_save_info()
             return
-        
+
         if key == ord('d'):
             self.game.delete_mode = True
             self.game.save_load_menu_mode = False
+            self.game.save_info_cache = self.game.save_manager.get_all_save_info()
             return

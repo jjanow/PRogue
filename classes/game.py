@@ -11,7 +11,6 @@ from classes.item_loader import (
     all_items,
     all_consumables,
     all_equipment,
-    materials_by_type,
     all_materials,
 )
 from curses import KEY_NPAGE, KEY_PPAGE
@@ -20,6 +19,9 @@ from classes.renderer import Renderer
 from classes.combat_system import CombatSystem
 from classes.monster_loader import all_monsters
 from classes.save_manager import SaveManager
+from classes.systems.ai_system import AISystem
+from classes.systems.status_system import StatusSystem
+from classes.systems.turn_system import TurnSystem
 
 class Game:
     def __init__(self, height, width, stdscr):
@@ -63,6 +65,9 @@ class Game:
         self.input_handler = InputHandler(self)
         self.renderer = Renderer(self)
         self.combat_system = CombatSystem()
+        self.ai_system = AISystem()
+        self.status_system = StatusSystem()
+        self.turn_system = TurnSystem(self.ai_system, self.status_system)
         self.spawn_items()
         self.time = 0
         self.selected_slot = None
@@ -82,9 +87,9 @@ class Game:
         self.delete_mode = False
         self.save_load_menu_mode = False
         self.save_slot = None
-        self.playtime = 0
+        self.save_info_cache = None
         self.start_time = time.time()
-        self.path_cache = {}  # Initialize path_cache to prevent AttributeError
+        self.path_cache = {}
 
     @classmethod
     def create_minimal(cls, height, width, stdscr):
@@ -144,15 +149,18 @@ class Game:
         game.delete_mode = False
         game.save_load_menu_mode = False
         game.save_slot = None
-        game.playtime = 0
+        game.save_info_cache = None
         game.start_time = time.time()
-        game.path_cache = {}  # Initialize path_cache to prevent AttributeError
+        game.path_cache = {}
         
         # Initialize systems
         game.input_handler = InputHandler(game)
         game.renderer = Renderer(game)
         game.combat_system = CombatSystem()
-        
+        game.ai_system = AISystem()
+        game.status_system = StatusSystem()
+        game.turn_system = TurnSystem(game.ai_system, game.status_system)
+
         return game
 
     def _serialize_rooms(self, rooms):
@@ -192,10 +200,7 @@ class Game:
         ground_loot_pool = all_consumables + all_equipment
         item_template = random.choice(ground_loot_pool)
         if isinstance(item_template, Equipment):
-            material_list = materials_by_type.get(
-                item_template.material_type, all_materials
-            )
-            material = random.choice(material_list)
+            material = random.choice(all_materials)
             name = f"{material.name} {item_template.name}"
             stat = material.power
             return Equipment(
@@ -207,7 +212,7 @@ class Game:
                 ac=item_template.ac,
                 accuracy_bonus=item_template.accuracy_bonus,
                 weight=item_template.weight,
-                material_type=item_template.material_type,
+                material_type=material.name,
                 gold_value=item_template.gold_value * material.value_multiplier,
             )
         else:
@@ -242,13 +247,7 @@ class Game:
             template = random.choice(pool)
 
         if isinstance(template, Equipment):
-            material_list = materials_by_type.get(
-                template.material_type, all_materials
-            )
-            if not material_list:
-                self.messages.append(f"Warning: No materials found for type '{template.material_type}', using default materials.")
-                material_list = all_materials
-            material = random.choice(material_list)
+            material = random.choice(all_materials)
             name = f"{material.name} {template.name}"
             stat = material.power
             return Equipment(
@@ -260,7 +259,7 @@ class Game:
                 ac=template.ac,
                 accuracy_bonus=template.accuracy_bonus,
                 weight=template.weight,
-                material_type=template.material_type,
+                material_type=material.name,
                 gold_value=template.gold_value * material.value_multiplier,
             )
         else:
@@ -386,7 +385,6 @@ class Game:
         self.update_fov()
         self.spawn_enemies(len(self.rooms))
         self.spawn_items()
-        self.compute_all_shortest_paths()
 
     def get_monster_template(self):
         min_cr = max(0.1, (self.dungeon_level - 1) * 0.5)
@@ -495,40 +493,8 @@ class Game:
         path.reverse()
         return path
 
-    def update_playtime(self):
-        """Update the playtime counter."""
-        current_time = time.time()
-        self.playtime = current_time - self.start_time
-
     def process_turn(self):
-        # Update playtime
-        self.update_playtime()
-        
-        # Remove any defeated enemies
-        self.enemies = [enemy for enemy in self.enemies if enemy.health > 0]
-        
-        self.move_enemies()
-        self.turn_count += 1
-        
-        if self.turn_count % 10 == 0:
-            heal_amount = min(self.player.max_health - self.player.health, 1)
-            self.player.health += heal_amount
-            if heal_amount > 0:
-                self.messages.append(f"You feel a bit better. (+{heal_amount} HP)")
-
-        if self.turn_count - self.last_spawn_turn >= 50:
-            self.spawn_enemies(1)
-            self.last_spawn_turn = self.turn_count
-        
-        # Check for items on the floor
-        for item in self.items:
-            if item.x == self.player.x and item.y == self.player.y:
-                message = f"Floor: {item.name}"
-                self.messages.append(message)
-
-        for msg in self.player.update_temporary_boosts():
-            self.messages.append(msg)
-        self.update_fov()
+        self.turn_system.process(self)
 
     def check_collisions(self):
         for item in self.items[:]:
@@ -536,16 +502,6 @@ class Game:
                 self.player.add_item(item)
                 self.items.remove(item)
                 self.messages.append(f"You picked up {item.name}.")
-
-    def move_enemies(self):
-        for enemy in self.enemies:
-            if self.distance(enemy, self.player) <= 1:
-                self.combat(enemy, self.player)
-            else:
-                path = self.find_path(enemy, self.player, consider_enemies=True)
-                if path and len(path) > 1:
-                    next_pos = path[1]
-                    enemy.x, enemy.y = next_pos
 
     def next_level(self):
         self.dungeon_level += 1
@@ -666,7 +622,7 @@ class Game:
             self.stdscr.nodelay(True)
 
         try:
-            for step in path[1:]:  # Skip the starting position
+            for step in path[1:]:
                 if check_keys:
                     key = self.stdscr.getch()
                     if key != -1:
@@ -679,6 +635,10 @@ class Game:
                 prev_x, prev_y = self.player.x, self.player.y
                 self.player_move_or_attack(dx, dy)
 
+                if self.quit:
+                    interrupted = True
+                    break
+
                 if any(self.visible[e.y][e.x] for e in self.enemies):
                     self.messages.append("Monster spotted!")
                     interrupted = True
@@ -688,12 +648,9 @@ class Game:
                     self.renderer.draw(self.stdscr)
                     time.sleep(self.walk_speed / 1000.0)
 
-                # Check if we actually moved or reached the target
                 if (self.player.x, self.player.y) == (prev_x, prev_y):
-                    # Player didn't move, might be blocked
                     break
                 if (self.player.x, self.player.y) == (x, y):
-                    # Reached the target
                     break
         finally:
             if check_keys:
@@ -760,6 +717,8 @@ class Game:
         max_attempts = 10  # Prevent infinite loops
         
         while self.auto_explore_mode and attempts_without_progress < max_attempts:
+            if self.quit:
+                break
             if any(self.visible[e.y][e.x] for e in self.enemies):
                 self.messages.append("Monster spotted!")
                 break
@@ -945,8 +904,9 @@ class Game:
                 continue
             if self.in_room(px, py):
                 if left_room:
-                    # We've entered another room; stop counting
-                    break
+                    # LOS passes through another room — treat as unreachable so
+                    # the player cannot see corridors on the far side of rooms.
+                    return float('inf')
             else:
                 if not left_room:
                     left_room = True
@@ -957,9 +917,21 @@ class Game:
 
     def has_line_of_sight(self, x1, y1, x2, y2):
         """Return True if there is a clear line of sight between two points."""
+        prev_x, prev_y = x1, y1
         for x, y in self.line(x1, y1, x2, y2):
-            if (x, y) != (x1, y1) and (x, y) != (x2, y2) and self.map[y][x] == '#':
+            if (x, y) == (x1, y1):
+                continue
+            # When the line steps diagonally through an intermediate tile, check
+            # both orthogonal neighbors. If both are walls the line is cutting
+            # through a tight corner and should be blocked. Skip this check for
+            # the destination tile itself — you can see a corner wall, just not
+            # through it.
+            if x != prev_x and y != prev_y and (x, y) != (x2, y2):
+                if self.map[prev_y][x] == '#' and self.map[y][prev_x] == '#':
+                    return False
+            if (x, y) != (x2, y2) and self.map[y][x] == '#':
                 return False
+            prev_x, prev_y = x, y
         return True
 
     def update_fov(self, radius=None):
