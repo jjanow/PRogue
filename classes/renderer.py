@@ -98,6 +98,10 @@ class Renderer:
                     stdscr.addch(y, x, cell, curses.color_pair(5) | attr)  # Walls
                 elif cell == '+':
                     stdscr.addch(y, x, cell, curses.color_pair(6) | attr)  # Doors
+                elif cell == 'T':
+                    stdscr.addch(y, x, cell, curses.color_pair(8) | attr)  # Trees
+                elif cell == '~':
+                    stdscr.addch(y, x, cell, curses.color_pair(9) | attr)  # Water
                 else:
                     stdscr.addch(y, x, cell, curses.color_pair(1) | attr)  # Default
 
@@ -127,7 +131,8 @@ class Renderer:
             0,
             f"Health: {self.game.player.health}/{self.game.player.max_health} | Damage: {self.game.player.damage:.1f} | Defense: {self.game.player.defense:.1f}",
         )
-        stdscr.addstr(height - 5, 0, f"Level: {self.game.player.level} | XP: {self.game.player.xp}/{self.game.player.xp_to_next_level} | Dungeon Level: {self.game.dungeon_level}")
+        location = "Millhaven (Town)" if self.game.in_town else f"Dungeon Level {self.game.dungeon_level}"
+        stdscr.addstr(height - 5, 0, f"Level: {self.game.player.level} | XP: {self.game.player.xp}/{self.game.player.xp_to_next_level} | Location: {location}")
 
         # Messages
         for i, message in enumerate(self.game.messages[-3:]):

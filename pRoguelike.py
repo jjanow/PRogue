@@ -241,13 +241,15 @@ def main(stdscr, char_data):
     # Windows). Guard the call so the game runs everywhere.
     if hasattr(curses, "set_escdelay"):
         curses.set_escdelay(25)
-    curses.init_pair(1, curses.COLOR_WHITE, curses.COLOR_BLACK)  # Default
-    curses.init_pair(2, curses.COLOR_RED, curses.COLOR_BLACK)    # Player
-    curses.init_pair(3, curses.COLOR_GREEN, curses.COLOR_BLACK)  # Monsters
-    curses.init_pair(4, curses.COLOR_YELLOW, curses.COLOR_BLACK) # Items
-    curses.init_pair(5, curses.COLOR_BLUE, curses.COLOR_BLACK)   # Walls
-    curses.init_pair(6, curses.COLOR_CYAN, curses.COLOR_BLACK)   # Doors
+    curses.init_pair(1, curses.COLOR_WHITE, curses.COLOR_BLACK)   # Default
+    curses.init_pair(2, curses.COLOR_RED, curses.COLOR_BLACK)     # Player
+    curses.init_pair(3, curses.COLOR_GREEN, curses.COLOR_BLACK)   # Monsters
+    curses.init_pair(4, curses.COLOR_YELLOW, curses.COLOR_BLACK)  # Items
+    curses.init_pair(5, curses.COLOR_BLUE, curses.COLOR_BLACK)    # Walls
+    curses.init_pair(6, curses.COLOR_CYAN, curses.COLOR_BLACK)    # Doors
     curses.init_pair(7, curses.COLOR_MAGENTA, curses.COLOR_BLACK) # Menu headers
+    curses.init_pair(8, curses.COLOR_GREEN, curses.COLOR_BLACK)   # Trees
+    curses.init_pair(9, curses.COLOR_CYAN, curses.COLOR_BLACK)    # Water
 
     # Initialize game
     height, width = stdscr.getmaxyx()

@@ -1,0 +1,36 @@
+{
+  "name": "Millhaven",
+  "fov_mode": "outdoor",
+  "tiles": [
+    "############################################################",
+    "#..........................................................#",
+    "#..#####....#####....TTT.................TTT...#####.......#",
+    "#..........................................................#",
+    "#..#####....#####.................................#####....#",
+    "#..........................................................#",
+    "#..........................................................#",
+    "#....TTT................@.....................TTT..........#",
+    "#....TTT............................................TTT....#",
+    "#..........................................................#",
+    "#..........................................................#",
+    "#..#######....########.........TTT.........................#",
+    "#..TTT........................................>............#",
+    "#..#######....########.....................................#",
+    "#..........................................................#",
+    "############################################################"
+  ],
+  "legend": {
+    "@": {"tile": ".", "tag": "player_start"},
+    ">": {"tile": ">", "tag": "dungeon_entrance"}
+  },
+  "notes": {
+    "size": "60x16",
+    "buildings": "top-left pair = Inn/Shop, top-right = Armory, bottom-left pair = Tavern/Magic Shop",
+    "dungeon_entrance": "column 46, row 12",
+    "player_start": "column 24, row 7",
+    "tile_chars": "# wall  . floor  + door  > down-stairs  < up-stairs  T tree  ~ water",
+    "adding_content": "Place any single char in tiles, add a legend entry mapping it to a tile char + optional tag. Example: 'S': {'tile': '.', 'tag': 'npc_shopkeeper'} places a shopkeeper spawn at that position.",
+    "adding_rooms": "For indoor FOV control set fov_mode to 'dungeon' and list room rects in a 'rooms' array: [[x,y,w,h], ...]",
+    "adding_new_tile_types": "Add the char to renderer.py draw() and make it passable in game.py is_valid_move() if walkable; otherwise it is automatically impassable."
+  }
+}

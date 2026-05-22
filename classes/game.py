@@ -4,9 +4,11 @@ import random
 import sys
 import time
 from collections import deque
+from pathlib import Path
 from classes.entity import Entity
 from classes.item import Item, Equipment
 from classes.map_generator import MapGenerator
+from classes.static_map_loader import StaticMapLoader
 from classes.item_loader import (
     all_items,
     all_consumables,
@@ -23,36 +25,40 @@ from classes.systems.ai_system import AISystem
 from classes.systems.status_system import StatusSystem
 from classes.systems.turn_system import TurnSystem
 
+_TOWN_MAP_PATH = Path(__file__).parent.parent / "data" / "maps" / "town.json"
+
 class Game:
     def __init__(self, height, width, stdscr):
         self.height = height
         self.width = width
         self.stdscr = stdscr
         self.screen_height, self.screen_width = stdscr.getmaxyx()
+        # MapGenerator is kept for random dungeon levels; not used in town.
         self.map_generator = MapGenerator(height, width, self.screen_height, self.screen_width)
-        self.map, self.rooms = self.map_generator.generate()
-        # Sync game dimensions with the actual map size generated
-        self.height = self.map_generator.height
-        self.width = self.map_generator.width
+        self.map = []
+        self.rooms = []
         # Player starts with no inherent damage or defense; stats and gear scale these
         self.player = Entity(width // 2, height // 2, '@', "Player", 100, 0, 0)
         self.player.initialize_player()
         self.enemies = []
         self.inventory_page = 0
-        self.items_per_page = 26  # Change this to 26 (a-z)
+        self.items_per_page = 26
         self.items = []
         self.messages = []
         self.turn_count = 0
         self.last_spawn_turn = 0
-        self.dungeon_level = 1
+        self.in_town = True   # start in the overworld town
+        self.dungeon_level = 0
         self.stairs_x = None
         self.stairs_y = None
         self.stairs_up_x = None
         self.stairs_up_y = None
+        self.visible = []
+        self.explored = []
+        # Town state preserved across dungeon trips
+        self._town_explored = None   # cached FOV exploration grid
+        self._town_items = []        # cached ground items left in town
         self.generate_level()
-        self.visible = [[False for _ in range(self.width)] for _ in range(self.height)]
-        self.explored = [[False for _ in range(self.width)] for _ in range(self.height)]
-        self.update_fov()
         self.inventory_page = 0
         self.inventory_mode = False
         self.character_screen_mode = False
@@ -68,7 +74,6 @@ class Game:
         self.ai_system = AISystem()
         self.status_system = StatusSystem()
         self.turn_system = TurnSystem(self.ai_system, self.status_system)
-        self.spawn_items()
         self.time = 0
         self.selected_slot = None
         self.debug_mode = False
@@ -116,7 +121,10 @@ class Game:
         # Initialize game state variables
         game.turn_count = 0
         game.last_spawn_turn = 0
+        game.in_town = False  # overwritten from save
         game.dungeon_level = 1
+        game._town_explored = None
+        game._town_items = []
         game.stairs_x = None
         game.stairs_y = None
         game.stairs_up_x = None
@@ -376,8 +384,36 @@ class Game:
         self.renderer.draw_drop_interface(stdscr)
 
     def generate_level(self):
-        self.map, self.rooms, self.stairs_up_x, self.stairs_up_y, self.stairs_x, self.stairs_y = self.map_generator.generate_level(self.player)
-        # Update dimensions in case the generator adjusted them
+        if self.in_town:
+            self._load_town_map()
+        else:
+            self._generate_random_level()
+
+    def _load_town_map(self):
+        loader = StaticMapLoader()
+        self.map, self.rooms, spawns, _meta = loader.load(_TOWN_MAP_PATH)
+        self.height = len(self.map)
+        self.width = len(self.map[0]) if self.map else 0
+
+        if "player_start" in spawns:
+            self.player.x, self.player.y = spawns["player_start"]
+
+        if "dungeon_entrance" in spawns:
+            self.stairs_x, self.stairs_y = spawns["dungeon_entrance"]
+        else:
+            self.stairs_x = self.stairs_y = None
+
+        self.stairs_up_x = None
+        self.stairs_up_y = None
+
+        self.visible = [[False for _ in range(self.width)] for _ in range(self.height)]
+        self.explored = [[False for _ in range(self.width)] for _ in range(self.height)]
+        self.update_fov()
+        # No enemies or items in town
+
+    def _generate_random_level(self):
+        self.map, self.rooms, self.stairs_up_x, self.stairs_up_y, self.stairs_x, self.stairs_y = \
+            self.map_generator.generate_level(self.player)
         self.height = len(self.map)
         self.width = len(self.map[0]) if self.map else 0
         self.visible = [[False for _ in range(self.width)] for _ in range(self.height)]
@@ -385,6 +421,36 @@ class Game:
         self.update_fov()
         self.spawn_enemies(len(self.rooms))
         self.spawn_items()
+
+    def enter_dungeon(self):
+        import copy
+        # Preserve town state so it is intact when the player returns.
+        self._town_explored = copy.deepcopy(self.explored)
+        self._town_items = list(self.items)
+        self.in_town = False
+        self.dungeon_level = 1
+        self.messages.append("You descend into the depths of the dungeon...")
+        self.enemies.clear()
+        self.items.clear()
+        self.generate_level()
+
+    def return_to_town(self):
+        self.in_town = True
+        self.dungeon_level = 0
+        self.messages.append("You climb out of the dungeon and return to Millhaven.")
+        self.enemies.clear()
+        self.items.clear()
+        self.generate_level()  # loads fresh town map + FOV
+        # Restore exploration and items from before the dungeon trip.
+        if self._town_explored is not None:
+            self.explored = self._town_explored
+            self._town_explored = None
+            self.update_fov()  # recalculate visible from restored explored
+        self.items = list(self._town_items)
+        self._town_items = []
+        # Place the player at the dungeon entrance (they climbed out from there).
+        if self.stairs_x is not None:
+            self.player.x, self.player.y = self.stairs_x, self.stairs_y
 
     def get_monster_template(self):
         min_cr = max(0.1, (self.dungeon_level - 1) * 0.5)
@@ -421,8 +487,8 @@ class Game:
         """Return coordinates of a random walkable tile or ``None`` if none are
         available."""
         for _ in range(max_attempts):
-            x = random.randint(0, self.map_generator.width - 1)
-            y = random.randint(0, self.map_generator.height - 1)
+            x = random.randint(0, self.width - 1)
+            y = random.randint(0, self.height - 1)
             if (
                 self.map[y][x] == '.'
                 and (x, y) != (self.player.x, self.player.y)
@@ -508,7 +574,7 @@ class Game:
         self.messages.append(f"You descend to dungeon level {self.dungeon_level}.")
         self.enemies.clear()
         self.items.clear()
-        self.generate_level()
+        self._generate_random_level()
     
     def open_inventory(self):
         self.inventory_mode = True
@@ -579,26 +645,20 @@ class Game:
         self.character_screen_mode = True
 
     def use_stairs(self, direction):
-        if direction == 'down' and self.player.x == self.stairs_x and self.player.y == self.stairs_y:
-            self.next_level()
-        elif direction == 'up' and self.player.x == self.stairs_up_x and self.player.y == self.stairs_up_y:
-            if self.dungeon_level > 1:
-                self.previous_level()
-            else:
-                self.messages.append("Are you sure you want to leave the dungeon? (Y/N)")
-                if self.stdscr:
-                    self.renderer.draw(self.stdscr)
-                    key = self.stdscr.getch()
+        if self.in_town:
+            if direction == 'down' and self.stairs_x is not None and \
+                    self.player.x == self.stairs_x and self.player.y == self.stairs_y:
+                self.enter_dungeon()
+            elif direction == 'up':
+                self.messages.append("There are no stairs leading up here.")
+        else:
+            if direction == 'down' and self.player.x == self.stairs_x and self.player.y == self.stairs_y:
+                self.next_level()
+            elif direction == 'up' and self.player.x == self.stairs_up_x and self.player.y == self.stairs_up_y:
+                if self.dungeon_level > 1:
+                    self.previous_level()
                 else:
-                    key = ord('n')
-
-                if key in (ord('Y'), ord('y')):
-                    self.messages.append("You ascend the stairs and leave the dungeon.")
-                    if self.stdscr:
-                        self.renderer.draw(self.stdscr)
-                    self.exit_game()
-                else:
-                    self.messages.pop()  # remove confirmation message
+                    self.return_to_town()
 
     def walk_to(self, x, y, animate=False):
         """Automatically walk the player to the given coordinates using pathfinding.
@@ -663,9 +723,13 @@ class Game:
 
     def walk_to_stairs(self, direction):
         if direction == 'up':
-            self.walk_to(self.stairs_up_x, self.stairs_up_y, animate=True)
+            if self.stairs_up_x is not None:
+                self.walk_to(self.stairs_up_x, self.stairs_up_y, animate=True)
+            else:
+                self.messages.append("There are no stairs leading up here.")
         elif direction == 'down':
-            self.walk_to(self.stairs_x, self.stairs_y, animate=True)
+            if self.stairs_x is not None:
+                self.walk_to(self.stairs_x, self.stairs_y, animate=True)
 
     def find_nearest_unexplored(self):
         """Return coordinates of the nearest tile that will reveal unexplored
@@ -785,7 +849,7 @@ class Game:
         self.messages.append(f"You ascend to dungeon level {self.dungeon_level}.")
         self.enemies.clear()
         self.items.clear()
-        self.generate_level()
+        self._generate_random_level()
         # Place the player on the down stairs of the previous level
         self.player.x, self.player.y = self.stairs_x, self.stairs_y
     

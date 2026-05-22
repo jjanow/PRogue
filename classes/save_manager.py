@@ -119,6 +119,7 @@ class SaveManager:
             'character_name': game.player.name,
             'player_level': game.player.level,
             'dungeon_level': game.dungeon_level,
+            'in_town': game.in_town,
             'timestamp': datetime.now().isoformat(),
             'playtime': time.time() - getattr(game, 'start_time', time.time()),
             'map_dimensions': {
@@ -173,6 +174,9 @@ class SaveManager:
                 'enemies': self._serialize_enemies(game.enemies),
                 'visible': self._serialize_2d_array(game.visible),
                 'explored': self._serialize_2d_array(game.explored),
+                'town_explored': self._serialize_2d_array(
+                    game._town_explored) if game._town_explored else None,
+                'town_items': self._serialize_items(game._town_items),
                 'stairs_x': game.stairs_x,
                 'stairs_y': game.stairs_y,
                 'stairs_up_x': game.stairs_up_x,
@@ -278,7 +282,21 @@ class SaveManager:
         game.last_spawn_turn = game_state['last_spawn_turn']
         game.messages = game_state['messages']
         game.dungeon_level = save_data['dungeon_level']
+        game.in_town = save_data.get('in_town', False)
         game.time = game_state.get('time', 0)
+
+        # Restore cached town state (may be absent in older saves).
+        # _town_explored has the town map's own dimensions, not the dungeon's,
+        # so infer width/height from the serialized rows instead of game.map.
+        raw_town_exp = game_state.get('town_explored')
+        if raw_town_exp:
+            te_rows = raw_town_exp.split('\n')
+            te_h = len(te_rows)
+            te_w = len(te_rows[0]) if te_rows else 0
+            game._town_explored = self._deserialize_2d_array(raw_town_exp, te_w, te_h)
+        else:
+            game._town_explored = None
+        game._town_items = self._deserialize_items(game_state.get('town_items', []))
         
         # Update game dimensions
         game.height = len(game.map)
