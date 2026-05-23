@@ -13,12 +13,14 @@
   "stairs_down":   [">"],
   "stairs_up":     ["<"],
   "walk_mode":     ["w"],
-  "auto_explore":  ["0"],
+  "auto_explore":  ["z"],
   "options":       ["="],
   "help":          ["?"],
   "character_stats": ["@"],
   "combat_stats":  ["CTRL_W"],
   "quit":          ["Q"],
   "debug":         ["!"],
-  "open_door":     ["o"]
+  "open_door":     ["o"],
+  "close_door":    ["c"],
+  "rest":          ["r"]
 }
