@@ -90,7 +90,7 @@ class TestLoadKeybindingsFromFile:
         assert ord(">") in kb.stairs_down
         assert ord("<") in kb.stairs_up
         assert ord("w") in kb.walk_mode
-        assert ord("0") in kb.auto_explore
+        assert ord("z") in kb.auto_explore
         assert ord("=") in kb.options
         assert ord("?") in kb.help
         assert ord("@") in kb.character_stats
