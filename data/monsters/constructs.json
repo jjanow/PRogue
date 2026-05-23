@@ -33,47 +33,47 @@
   },
   {
     "name": "Iron Golem",
-    "xp": 110,
-    "gold": 35,
+    "xp": 150,
+    "gold": 45,
     "items": ["Iron Core"],
     "challenge_rating": 3.0,
     "archetype": "construct"
   },
   {
     "name": "Arcane Sentinel",
-    "xp": 140,
-    "gold": 50,
+    "xp": 175,
+    "gold": 55,
     "items": ["Enchanted Lens"],
     "challenge_rating": 3.5,
     "archetype": "construct"
   },
   {
     "name": "Brass Guardian",
-    "xp": 160,
-    "gold": 55,
+    "xp": 210,
+    "gold": 65,
     "items": ["Brass Gear"],
     "challenge_rating": 4.0,
     "archetype": "construct"
   },
   {
     "name": "Automaton",
-    "xp": 180,
-    "gold": 60,
+    "xp": 230,
+    "gold": 70,
     "items": ["Power Crystal"],
     "challenge_rating": 4.5,
     "archetype": "construct"
   },
   {
     "name": "Warforged Scout",
-    "xp": 210,
-    "gold": 70,
+    "xp": 260,
+    "gold": 80,
     "items": ["Sensor Core"],
     "challenge_rating": 5.0,
     "archetype": "construct"
   },
   {
     "name": "Obsidian Colossus",
-    "xp": 260,
+    "xp": 320,
     "gold": 100,
     "items": ["Obsidian Shard"],
     "challenge_rating": 6.0,

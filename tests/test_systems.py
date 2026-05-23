@@ -117,38 +117,43 @@ class TestTurnSystem:
         minimal_game.turn_system.process(minimal_game)
         assert minimal_game.player.health == 100.0
 
-    def test_spawns_enemy_every_50_turns(self, minimal_game):
+    def test_spawns_enemy_when_interval_and_chance_met(self, minimal_game):
         initial = len(minimal_game.enemies)
-        minimal_game.turn_count = 49
+        minimal_game.turn_count = 99
         minimal_game.last_spawn_turn = 0
-        minimal_game.turn_system.process(minimal_game)
-        # After process: turn_count=50, 50-0=50 >= 50 → spawn
+        # Force random.random() to return 0.0, which is < _SPAWN_CHANCE (0.40)
+        with patch('classes.systems.turn_system.random.random', return_value=0.0):
+            minimal_game.turn_system.process(minimal_game)
+        # After process: turn_count=100, 100-0=100 >= 100 and chance met → spawn
         assert len(minimal_game.enemies) > initial
 
-    def test_does_not_spawn_before_50_turn_gap(self, minimal_game):
+    def test_does_not_spawn_before_100_turn_gap(self, minimal_game):
         initial = len(minimal_game.enemies)
-        minimal_game.turn_count = 20
-        minimal_game.last_spawn_turn = 15
+        minimal_game.turn_count = 50
+        minimal_game.last_spawn_turn = 0
         minimal_game.turn_system.process(minimal_game)
-        # After process: turn_count=21, 21-15=6 < 50 → no spawn
+        # After process: turn_count=51, 51-0=51 < 100 → no spawn regardless of chance
         assert len(minimal_game.enemies) == initial
 
     def test_no_ambient_spawn_when_flag_false(self, minimal_game):
         minimal_game.allow_enemy_spawning = False
         initial = len(minimal_game.enemies)
-        minimal_game.turn_count = 49
+        minimal_game.turn_count = 99
         minimal_game.last_spawn_turn = 0
-        minimal_game.turn_system.process(minimal_game)
-        # 50-turn threshold reached but spawning disabled → no spawn
+        with patch('classes.systems.turn_system.random.random', return_value=0.0):
+            minimal_game.turn_system.process(minimal_game)
+        # Interval reached and chance met but spawning disabled → no spawn
         assert len(minimal_game.enemies) == initial
 
-    def test_ambient_spawn_when_flag_true(self, minimal_game):
+    def test_no_spawn_when_chance_fails(self, minimal_game):
         minimal_game.allow_enemy_spawning = True
         initial = len(minimal_game.enemies)
-        minimal_game.turn_count = 49
+        minimal_game.turn_count = 99
         minimal_game.last_spawn_turn = 0
-        minimal_game.turn_system.process(minimal_game)
-        assert len(minimal_game.enemies) > initial
+        # Force random.random() to return 1.0, which is >= _SPAWN_CHANCE → no spawn
+        with patch('classes.systems.turn_system.random.random', return_value=1.0):
+            minimal_game.turn_system.process(minimal_game)
+        assert len(minimal_game.enemies) == initial
 
     def test_floor_items_at_player_position_messaged(self, minimal_game):
         from classes.item import Item

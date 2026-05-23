@@ -1,4 +1,9 @@
+import random
+
 from classes.ecs import ACTION_COST
+
+_SPAWN_CHECK_INTERVAL = 100
+_SPAWN_CHANCE = 0.40
 
 
 class TurnSystem:
@@ -29,9 +34,10 @@ class TurnSystem:
             if heal_amount > 0:
                 game.messages.append(f"You feel a bit better. (+{heal_amount} HP)")
 
-        if game.allow_enemy_spawning and game.turn_count - game.last_spawn_turn >= 50:
-            game.spawn_enemies(1)
+        if game.allow_enemy_spawning and game.turn_count - game.last_spawn_turn >= _SPAWN_CHECK_INTERVAL:
             game.last_spawn_turn = game.turn_count
+            if random.random() < _SPAWN_CHANCE:
+                game.spawn_enemies(1)
 
         for item in game.items:
             if item.x == game.player.x and item.y == game.player.y:

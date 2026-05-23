@@ -65,7 +65,7 @@
   },
   {
     "name": "Troll",
-    "xp": 150,
+    "xp": 180,
     "gold": 70,
     "items": ["Club"],
     "challenge_rating": 3.5,

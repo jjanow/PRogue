@@ -25,8 +25,8 @@
   },
   {
     "name": "Ghost",
-    "xp": 40,
-    "gold": 15,
+    "xp": 80,
+    "gold": 25,
     "items": ["Ectoplasm"],
     "challenge_rating": 1.5,
     "archetype": "undead"
@@ -41,39 +41,39 @@
   },
   {
     "name": "Banshee",
-    "xp": 70,
-    "gold": 35,
+    "xp": 125,
+    "gold": 40,
     "items": ["Wailing Essence"],
     "challenge_rating": 2.5,
     "archetype": "undead"
   },
   {
     "name": "Wraith",
-    "xp": 80,
-    "gold": 40,
+    "xp": 150,
+    "gold": 45,
     "items": ["Shadow Blade"],
     "challenge_rating": 3.0,
     "archetype": "undead"
   },
   {
     "name": "Bone Knight",
-    "xp": 95,
-    "gold": 50,
+    "xp": 175,
+    "gold": 55,
     "items": ["Bone Armor"],
     "challenge_rating": 3.5,
     "archetype": "undead"
   },
   {
     "name": "Vampire",
-    "xp": 120,
-    "gold": 60,
+    "xp": 210,
+    "gold": 65,
     "items": ["Vampire Fang"],
     "challenge_rating": 4.0,
     "archetype": "undead"
   },
   {
     "name": "Lich",
-    "xp": 200,
+    "xp": 260,
     "gold": 100,
     "items": ["Phylactery"],
     "challenge_rating": 5.0,

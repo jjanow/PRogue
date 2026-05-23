@@ -481,11 +481,11 @@ class Game:
                 break
             x, y = pos
             template = self.get_monster_template()
-            difficulty_factor = max(1, template.challenge_rating)
-            health = int((random.randint(20, 40) + self.dungeon_level * 5) * difficulty_factor)
+            difficulty_factor = template.challenge_rating
+            health = max(3, int((random.randint(20, 40) + self.dungeon_level * 5) * difficulty_factor))
             enemy = Entity(x, y, 'E', template.name, health, 0, 0)
 
-            raw_damage = int((random.randint(5, 10) + self.dungeon_level) * difficulty_factor)
+            raw_damage = max(1, int((random.randint(5, 10) + self.dungeon_level) * difficulty_factor))
             raw_defense = int((random.randint(0, 3) + self.dungeon_level // 2) * difficulty_factor)
 
             enemy.strength = raw_damage * 2
