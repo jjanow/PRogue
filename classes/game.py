@@ -522,7 +522,7 @@ class Game:
         px, py = self.player.x, self.player.y
         passable = {'.', '<', '>', '+', '/', '^'}
         dist = {(px, py): 0}
-        prev = {(px, py): None}
+        prev: dict[tuple[int, int], tuple[int, int] | None] = {(px, py): None}
         queue = deque([(px, py)])
         directions = [(0,1),(0,-1),(1,0),(-1,0),(1,1),(1,-1),(-1,1),(-1,-1)]
         while queue:
@@ -539,6 +539,7 @@ class Game:
     def get_flow_field(self):
         if self._flow_field is None:
             self._compute_flow_field()
+        assert self._flow_field is not None
         return self._flow_field
 
     def get_flow_next_step(self, enemy):

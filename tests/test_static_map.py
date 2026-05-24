@@ -362,6 +362,7 @@ class TestTownExploredCache:
         game.enter_dungeon()
         # Mutate the dungeon explored; the cache must not change.
         game.explored[3][3] = False
+        assert game._town_explored is not None
         assert game._town_explored[3][3] is True
 
     def test_explored_restored_on_return_to_town(self, mock_stdscr):
