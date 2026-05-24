@@ -20,6 +20,7 @@ class _GameLike(Protocol):
     turn_count: int
     last_spawn_turn: int
     allow_enemy_spawning: bool
+    noise_events: list[tuple[int, int, float]]
 
     def spawn_enemies(self, num_enemies: int) -> None: ...
     def update_fov(self, radius: int | None = None) -> None: ...
@@ -66,5 +67,6 @@ class TurnSystem:
             if item.x == game.player.x and item.y == game.player.y:
                 game.messages.append(f"Floor: {item.name}")
 
+        game.noise_events.clear()
         self.status_system.update(game.player, game.messages)
         game.update_fov()

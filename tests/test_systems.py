@@ -183,23 +183,22 @@ class TestTurnSystem:
 class TestAISystem:
     def test_attacks_when_adjacent_with_los(self, minimal_game: Game) -> None:
         ai = AISystem()
-        # Enemy directly adjacent to player (player at 5,4)
         enemy = make_entity(6, 4, 'Adjacent Goblin', health=30)
         enemy.strength = 10
+        enemy.ai_state.state = "alert"
         minimal_game.enemies.append(enemy)
-        with patch('random.random', return_value=0.0):    # always hit
+        with patch('random.random', return_value=0.0):
             with patch('random.randint', return_value=2):
                 ai.run_action(enemy, minimal_game)
         assert any('Goblin' in m for m in minimal_game.messages)
 
-    def test_moves_toward_player_when_not_adjacent(self, minimal_game: Game) -> None:
+    def test_alert_enemy_moves_toward_player(self, minimal_game: Game) -> None:
         ai = AISystem()
-        # Enemy far from player in the same room
         enemy = make_entity(10, 4, 'Distant Goblin', health=30)
+        enemy.ai_state.state = "alert"
         minimal_game.enemies.append(enemy)
         old_x, old_y = enemy.x, enemy.y
         ai.run_action(enemy, minimal_game)
-        # Should have moved closer (Chebyshev distance decreased)
         new_dist = minimal_game.distance(enemy, minimal_game.player)
         old_dist = max(abs(old_x - minimal_game.player.x),
                        abs(old_y - minimal_game.player.y))
@@ -207,7 +206,6 @@ class TestAISystem:
 
     def test_stationary_when_no_path(self, minimal_game: Game) -> None:
         ai = AISystem()
-        # Surround player with walls so pathfinding returns None
         px, py = minimal_game.player.x, minimal_game.player.y
         for ddx in range(-2, 3):
             for ddy in range(-2, 3):
@@ -216,9 +214,94 @@ class TestAISystem:
                     if (nx, ny) != (px, py):
                         minimal_game.map[ny][nx] = '#'
         enemy = make_entity(3, 3, 'Blocked', health=30)
-        # Also wall off the enemy's position so it can't see player
+        enemy.ai_state.state = "alert"
         minimal_game.map[3][4] = '#'
         minimal_game.map[4][3] = '#'
         ai.run_action(enemy, minimal_game)
-        # Enemy may or may not move; just confirm it doesn't crash
         assert True  # reached here without exception
+
+    def test_sleeping_enemy_does_not_act(self, minimal_game: Game) -> None:
+        ai = AISystem()
+        enemy = make_entity(6, 4, 'Sleeping Goblin', health=30)
+        enemy.ai_state.state = "asleep"
+        minimal_game.enemies.append(enemy)
+        old_x, old_y = enemy.x, enemy.y
+        ai.run_action(enemy, minimal_game)
+        assert enemy.x == old_x and enemy.y == old_y
+        assert not any('Goblin' in m for m in minimal_game.messages)
+
+    def test_sleeping_enemy_wakes_on_nearby_noise(self, minimal_game: Game) -> None:
+        ai = AISystem()
+        enemy = make_entity(6, 4, 'Sleeping Goblin', health=30)
+        enemy.ai_state.state = "asleep"
+        enemy.perception = 10
+        minimal_game.enemies.append(enemy)
+        # Footstep at distance 1 → hearing_range = 2 * 0.5 = 1 ≥ dist 1
+        minimal_game.noise_events.append((7, 4, 2.0))
+        ai.run_action(enemy, minimal_game)
+        assert enemy.ai_state.state == "idle"
+
+    def test_sleeping_enemy_stays_asleep_on_distant_noise(self, minimal_game: Game) -> None:
+        ai = AISystem()
+        enemy = make_entity(2, 2, 'Distant Sleeper', health=30)
+        enemy.ai_state.state = "asleep"
+        enemy.perception = 10
+        minimal_game.enemies.append(enemy)
+        # Footstep at distance 5 → hearing_range = 2 * 0.5 = 1 < dist 5
+        minimal_game.noise_events.append((7, 4, 2.0))
+        ai.run_action(enemy, minimal_game)
+        assert enemy.ai_state.state == "asleep"
+
+    def test_combat_noise_wakes_sleeping_enemy_to_alert(self, minimal_game: Game) -> None:
+        ai = AISystem()
+        enemy = make_entity(8, 4, 'Sleeping Goblin', health=30)
+        enemy.ai_state.state = "asleep"
+        enemy.perception = 10
+        minimal_game.enemies.append(enemy)
+        # Combat noise (10) at distance 3 → hearing_range = 10 * 0.5 = 5 ≥ dist 3
+        minimal_game.noise_events.append((5, 4, 10.0))
+        ai.run_action(enemy, minimal_game)
+        assert enemy.ai_state.state == "alert"
+
+    def test_idle_enemy_becomes_alert_on_player_sight(self, minimal_game: Game) -> None:
+        ai = AISystem()
+        # Player is at (5,4); put enemy close enough with LOS
+        enemy = make_entity(7, 4, 'Idle Goblin', health=30)
+        enemy.ai_state.state = "idle"
+        enemy.perception = 10
+        minimal_game.enemies.append(enemy)
+        minimal_game.update_fov()
+        ai.run_action(enemy, minimal_game)
+        assert enemy.ai_state.state == "alert"
+        assert any('spots you' in m for m in minimal_game.messages)
+
+    def test_idle_enemy_wanders(self, minimal_game: Game) -> None:
+        ai = AISystem()
+        # Place enemy far from player (distance > perception=10 is impossible in this map,
+        # so put them with no LOS by blocking sight)
+        enemy = make_entity(3, 6, 'Wandering Goblin', health=30)
+        enemy.ai_state.state = "idle"
+        enemy.perception = 1  # can only see 1 tile; player is far away
+        # Force a specific wander direction toward open floor
+        enemy.ai_state.wander_dx = 1
+        enemy.ai_state.wander_dy = 0
+        enemy.ai_state.wander_turns_left = 3
+        minimal_game.enemies.append(enemy)
+        old_x, old_y = enemy.x, enemy.y
+        ai.run_action(enemy, minimal_game)
+        # Enemy should have moved or at least not crashed
+        assert enemy.ai_state.state in ("idle", "alert")
+        # With wander_turns_left > 0, it moved in the wander direction (3,6)→(4,6) which is '.'
+        assert enemy.x == 4 and enemy.y == 6
+
+    def test_shout_propagates_to_nearby_sleeping_enemy(self, minimal_game: Game) -> None:
+        ai = AISystem()
+        sleeper = make_entity(9, 4, 'Sleeping Goblin', health=30)
+        sleeper.ai_state.state = "asleep"
+        sleeper.perception = 10
+        minimal_game.enemies.append(sleeper)
+        # Shout noise (8) at distance 2 → sleeping_range = 8 * 0.5 = 4 ≥ 2
+        minimal_game.noise_events.append((7, 4, 8.0))
+        ai.run_action(sleeper, minimal_game)
+        # Shout level 8 >= _ALERT_NOISE_THRESHOLD → wakes directly to alert
+        assert sleeper.ai_state.state == "alert"

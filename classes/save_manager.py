@@ -381,6 +381,12 @@ class SaveManager:
                 'gold_reward': enemy.gold_reward,
                 'inventory': self._serialize_inventory(enemy.inventory),
                 'equipment': self._serialize_equipment(enemy.equipment),
+                'ai_state': {
+                    'state': enemy.ai_state.state,
+                    'wander_dx': enemy.ai_state.wander_dx,
+                    'wander_dy': enemy.ai_state.wander_dy,
+                    'wander_turns_left': enemy.ai_state.wander_turns_left,
+                },
             }
             serialized.append(enemy_data)
         return serialized
@@ -399,11 +405,22 @@ class SaveManager:
                 enemy_data['base_damage'],
                 enemy_data['base_defense'],
             )
-            skip = {'x', 'y', 'char', 'name', 'max_health', 'base_damage', 'base_defense', 'inventory', 'equipment'}
+            skip = {'x', 'y', 'char', 'name', 'max_health', 'base_damage', 'base_defense', 'inventory', 'equipment', 'ai_state'}
             for key, value in enemy_data.items():
                 if key not in skip:
                     setattr(enemy, key, value)
             enemy.inventory = self._deserialize_inventory(enemy_data['inventory'])
             enemy.equipment = self._deserialize_equipment(enemy_data['equipment'])
+            ai_raw = enemy_data.get('ai_state')
+            if ai_raw:
+                from classes.ecs import AIStateComponent
+                enemy.ai_state = AIStateComponent(
+                    state=ai_raw.get('state', 'alert'),
+                    wander_dx=ai_raw.get('wander_dx', 0),
+                    wander_dy=ai_raw.get('wander_dy', 0),
+                    wander_turns_left=ai_raw.get('wander_turns_left', 0),
+                )
+            else:
+                enemy.ai_state.state = 'alert'
             enemies.append(enemy)
         return enemies

@@ -112,6 +112,7 @@ class Game:
         self.rest_mode: bool = False
         self.start_time: float = time.time()
         self._flow_field: _FlowField | None = None
+        self.noise_events: list[tuple[int, int, float]] = []
 
     @classmethod
     def create_minimal(cls, height: int, width: int, stdscr: curses.window | None) -> Game:
@@ -182,6 +183,7 @@ class Game:
         game.rest_mode = False
         game.start_time = time.time()
         game._flow_field = None
+        game.noise_events: list[tuple[int, int, float]] = []
 
         game.map_generator = MapGenerator(game.screen_height, game.screen_width)
         game.input_handler = InputHandler(game)
@@ -496,6 +498,7 @@ class Game:
         enemy.xp_reward = template.xp
         enemy.gold_reward = template.gold
         enemy.loot = template.create_loot()
+        self._init_ai_state(enemy)
         return enemy
 
     def _get_room_floor(
@@ -544,6 +547,7 @@ class Game:
             enemy.xp_reward = template.xp
             enemy.gold_reward = template.gold
             enemy.loot = template.create_loot()
+            self._init_ai_state(enemy)
             self.enemies.append(enemy)
 
     def _spawn_treasure(self, room: tuple[int, int, int, int]) -> None:
@@ -635,6 +639,7 @@ class Game:
             enemy.xp_reward = template.xp
             enemy.gold_reward = template.gold
             enemy.loot = template.create_loot()
+            self._init_ai_state(enemy)
             self.enemies.append(enemy)
 
     def get_random_floor(self, max_attempts: int = 1000) -> tuple[int, int] | None:
@@ -655,6 +660,16 @@ class Game:
 
     def invalidate_flow_field(self) -> None:
         self._flow_field = None
+
+    def emit_noise(self, x: int, y: int, level: float) -> None:
+        self.noise_events.append((x, y, level))
+
+    def _init_ai_state(self, enemy: Entity) -> None:
+        from classes.systems.ai_system import SLEEP_SPAWN_CHANCE
+        if random.random() < SLEEP_SPAWN_CHANCE:
+            enemy.ai_state.state = "asleep"
+        else:
+            enemy.ai_state.state = "idle"
 
     def _compute_flow_field(self) -> None:
         """BFS from the player outward; stores (distance, predecessor) per tile."""
@@ -1305,15 +1320,21 @@ class Game:
         enemy_at_position = next((e for e in self.enemies if e.x == new_x and e.y == new_y), None)
 
         if enemy_at_position:
+            from classes.systems.ai_system import COMBAT_NOISE
+            self.emit_noise(self.player.x, self.player.y, COMBAT_NOISE)
             self.combat(self.player, enemy_at_position)
         elif self.map[new_y][new_x] == '+':
+            from classes.systems.ai_system import DOOR_NOISE
             self.map[new_y][new_x] = '/'
             self.messages.append("You open the door.")
+            self.emit_noise(new_x, new_y, DOOR_NOISE)
             self.invalidate_flow_field()
             self.update_fov()
             self.process_turn()
         elif self.is_valid_move(new_x, new_y):
+            from classes.systems.ai_system import FOOTSTEP_NOISE
             self.player.x, self.player.y = new_x, new_y
+            self.emit_noise(new_x, new_y, FOOTSTEP_NOISE)
             self.invalidate_flow_field()
             if self.map[new_y][new_x] == '^':
                 dmg = random.randint(1, 6)
@@ -1328,8 +1349,10 @@ class Game:
             self.messages.append("There is no door there.")
             return
         if self.map[ty][tx] == '+':
+            from classes.systems.ai_system import DOOR_NOISE
             self.map[ty][tx] = '/'
             self.messages.append("You open the door.")
+            self.emit_noise(tx, ty, DOOR_NOISE)
             self.invalidate_flow_field()
             self.update_fov()
             self.process_turn()
@@ -1347,8 +1370,10 @@ class Game:
             if any(e.x == tx and e.y == ty for e in self.enemies):
                 self.messages.append("Something is blocking the door.")
                 return
+            from classes.systems.ai_system import DOOR_NOISE
             self.map[ty][tx] = '+'
             self.messages.append("You close the door.")
+            self.emit_noise(tx, ty, DOOR_NOISE)
             self.invalidate_flow_field()
             self.update_fov()
             self.process_turn()

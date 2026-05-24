@@ -151,7 +151,10 @@ class Renderer:
                 and 0 <= sx < vp_w
                 and self.game.visible[enemy.y][enemy.x]
             ):
-                stdscr.addch(sy, sx, enemy.char, curses.color_pair(3))
+                attr = curses.color_pair(3)
+                if enemy.ai_state.state == "asleep":
+                    attr |= curses.A_REVERSE
+                stdscr.addch(sy, sx, enemy.char, attr)
 
         py_s, px_s = self.game.player.y - cam_y, self.game.player.x - cam_x
         if 0 <= py_s < vp_h and 0 <= px_s < vp_w:

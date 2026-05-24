@@ -138,3 +138,11 @@ class StatusEffectsComponent:
     boosts: dict[str, BoostEffect] = field(default_factory=_empty_boosts)
     poisoned: bool = False
     hunger: int = 0
+
+
+@dataclass
+class AIStateComponent:
+    state: str = "idle"  # "asleep" | "idle" | "alert"
+    wander_dx: int = 0
+    wander_dy: int = 0
+    wander_turns_left: int = 0

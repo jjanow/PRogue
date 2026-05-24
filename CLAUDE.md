@@ -37,16 +37,18 @@ PRogue is a terminal roguelike (Python + `curses`). All game logic lives under `
 
 ### ECS Architecture
 
-`classes/ecs.py` defines pure-data component `@dataclass`es (`PositionComponent`, `HealthComponent`, `EnergyComponent`, `StatsComponent`, etc.). `Entity` (`classes/entity.py`) is a plain object that holds instances of every component — it represents both the player and all monsters.
+`classes/ecs.py` defines pure-data component `@dataclass`es (`PositionComponent`, `HealthComponent`, `EnergyComponent`, `StatsComponent`, `AIStateComponent`, etc.). `Entity` (`classes/entity.py`) is a plain object that holds instances of every component — it represents both the player and all monsters.
 
 Systems in `classes/systems/` operate on entities each turn:
-- **`TurnSystem`** — drives the energy-based turn loop. Each enemy accumulates `speed` energy per tick and acts once per `ACTION_COST` (100) of energy banked.
-- **`AISystem`** — decides enemy action each tick: attack if adjacent+LOS, else A* path toward player.
+- **`TurnSystem`** — drives the energy-based turn loop. Each enemy accumulates `speed` energy per tick and acts once per `ACTION_COST` (100) of energy banked. Clears `game.noise_events` at the end of each tick.
+- **`AISystem`** — three-state machine per enemy (`AIStateComponent.state`): **asleep** (skip action, wake on nearby noise), **idle** (random wander, become alert on LOS or loud noise), **alert** (A\* pursue and attack player). Enemies spawn asleep with 40 % probability. Becoming alert emits a shout that can chain-wake nearby sleepers.
 - **`StatusSystem`** — ticks temporary status effects (attribute boosts, poison, hunger).
 
 ### Game Object (`classes/game.py`)
 
-`Game` is the central state container: player, enemies list, items list, map grid, FOV/explored arrays, dungeon level, turn counter, and all UI mode flags (`inventory_mode`, `drop_mode`, `save_mode`, etc.). The main loop in `pRoguelike.py` checks these flags each frame to choose which renderer method to call.
+`Game` is the central state container: player, enemies list, items list, map grid, FOV/explored arrays, dungeon level, turn counter, `noise_events` list, and all UI mode flags (`inventory_mode`, `drop_mode`, `save_mode`, etc.). The main loop in `pRoguelike.py` checks these flags each frame to choose which renderer method to call.
+
+`noise_events` is a `list[tuple[int, int, float]]` (x, y, level) that accumulates noise emitted during a player turn. Player movement emits footstep noise (2), doors emit noise (5), and melee combat emits noise (10). The list is cleared by `TurnSystem` after all enemies have acted. Enemy `AISystem` reads this list to decide whether to wake or alert.
 
 After `generate_level`, `Game._generate_random_level` reads `map_generator.room_types` (a `dict[int, RoomType]`) to drive content spawning: monster dens get group-spawned same-type enemies, treasure rooms get pre-filled items, tension rooms get dense enemy fills and trigger a warning message, and special rooms have placeholder feature tiles placed by the generator (`A`=altar, `~`=fountain, `f`=forge, `b`=herb bush, `^`=trap cluster).
 

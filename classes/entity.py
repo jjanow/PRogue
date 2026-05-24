@@ -9,6 +9,7 @@ from classes.item_loader import (
     all_materials,
 )
 from classes.ecs import (
+    AIStateComponent,
     BoostEffect,
     EquipmentSlot,
     PositionComponent,
@@ -70,6 +71,7 @@ class Entity:
         self.money_comp = MoneyComponent()
         self.loot_comp = LootComponent()
         self.status_comp = StatusEffectsComponent()
+        self.ai_state = AIStateComponent()
 
     def get_component(self, comp_type: Any) -> Any:
         for v in vars(self).values():
