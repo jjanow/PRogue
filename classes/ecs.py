@@ -1,9 +1,39 @@
+from __future__ import annotations
 from dataclasses import dataclass, field
 from collections import Counter
-from typing import Dict, List
+from typing import Optional, TypedDict, TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from classes.item import Item, Equipment
 
 # Energy required for any entity to take one action.
 ACTION_COST = 100
+
+
+class EquipmentSlot(TypedDict):
+    name: str
+    item: Optional[Equipment]
+
+
+class BoostEffect(TypedDict):
+    value: float
+    duration: int
+
+
+def _empty_counter() -> Counter[Item]:
+    return Counter()
+
+
+def _empty_equipment_slots() -> dict[str, EquipmentSlot]:
+    return {}
+
+
+def _empty_loot() -> list[Item]:
+    return []
+
+
+def _empty_boosts() -> dict[str, BoostEffect]:
+    return {}
 
 
 @dataclass
@@ -52,12 +82,12 @@ class CombatStatsComponent:
 
 @dataclass
 class InventoryComponent:
-    items: Counter = field(default_factory=Counter)
+    items: Counter[Item] = field(default_factory=_empty_counter)
 
 
 @dataclass
 class EquipmentComponent:
-    slots: Dict = field(default_factory=dict)
+    slots: dict[str, EquipmentSlot] = field(default_factory=_empty_equipment_slots)
 
 
 @dataclass
@@ -100,11 +130,11 @@ class AITagComponent:
 class LootComponent:
     xp_reward: int = 0
     gold_reward: int = 0
-    loot: List = field(default_factory=list)
+    loot: list[Item] = field(default_factory=_empty_loot)
 
 
 @dataclass
 class StatusEffectsComponent:
-    boosts: Dict = field(default_factory=dict)
+    boosts: dict[str, BoostEffect] = field(default_factory=_empty_boosts)
     poisoned: bool = False
     hunger: int = 0

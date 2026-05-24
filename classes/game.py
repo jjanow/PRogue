@@ -1,16 +1,19 @@
+from __future__ import annotations
 import curses
 import heapq
 import random
 import sys
 import time
 from collections import deque
+from collections.abc import Iterator
 from pathlib import Path
+from typing import Any
+
 from classes.entity import Entity
 from classes.item import Item, Equipment
 from classes.map_generator import MapGenerator
 from classes.static_map_loader import StaticMapLoader
 from classes.item_loader import (
-    all_items,
     all_consumables,
     all_equipment,
     all_materials,
@@ -19,101 +22,113 @@ from curses import KEY_NPAGE, KEY_PPAGE
 from classes.input_handler import InputHandler
 from classes.renderer import Renderer
 from classes.combat_system import CombatSystem
-from classes.monster_loader import all_monsters
-from classes.save_manager import SaveManager
+from classes.monster_loader import MonsterTemplate, all_monsters
+from classes.save_manager import SaveManager, SaveInfo
 from classes.systems.ai_system import AISystem
 from classes.systems.status_system import StatusSystem
 from classes.systems.turn_system import TurnSystem
 
 _TOWN_MAP_PATH = Path(__file__).parent.parent / "data" / "maps" / "town.json"
 
+# Type alias for the flow field: (distance_map, predecessor_map)
+_FlowField = tuple[
+    dict[tuple[int, int], int],
+    dict[tuple[int, int], tuple[int, int] | None],
+]
+
+
 class Game:
-    def __init__(self, height, width, stdscr):
-        self.height = height
-        self.width = width
-        self.stdscr = stdscr
-        self.screen_height, self.screen_width = stdscr.getmaxyx()
-        # MapGenerator is kept for random dungeon levels; not used in town.
+    def __init__(self, height: int, width: int, stdscr: curses.window | None) -> None:
+        self.height: int = height
+        self.width: int = width
+        self.stdscr: curses.window | None = stdscr
+        if stdscr is not None:
+            self.screen_height: int
+            self.screen_width: int
+            self.screen_height, self.screen_width = stdscr.getmaxyx()
+        else:
+            self.screen_height = height
+            self.screen_width = width
         self.map_generator = MapGenerator(height, width, self.screen_height, self.screen_width)
-        self.map = []
-        self.rooms = []
-        # Player starts with no inherent damage or defense; stats and gear scale these
+        self.map: list[list[str]] = []
+        self.rooms: list[tuple[int, int, int, int]] = []
         self.player = Entity(width // 2, height // 2, '@', "Player", 100, 0, 0)
         self.player.initialize_player()
-        self.enemies = []
-        self.inventory_page = 0
-        self.items_per_page = 26
-        self.items = []
-        self.messages = []
-        self.turn_count = 0
-        self.last_spawn_turn = 0
-        self.in_town = True   # start in the overworld town
-        self.dungeon_level = 0
-        self.stairs_x = None
-        self.stairs_y = None
-        self.stairs_up_x = None
-        self.stairs_up_y = None
-        self.visible = []
-        self.explored = []
-        # Town state preserved across dungeon trips
-        self._town_explored = None   # cached FOV exploration grid
-        self._town_items = []        # cached ground items left in town
-        self.allow_enemy_spawning = True  # overwritten by map metadata on load
+        self.enemies: list[Entity] = []
+        self.inventory_page: int = 0
+        self.items_per_page: int = 26
+        self.items: list[Item] = []
+        self.messages: list[str] = []
+        self.turn_count: int = 0
+        self.last_spawn_turn: int = 0
+        self.in_town: bool = True
+        self.dungeon_level: int = 0
+        self.stairs_x: int | None = None
+        self.stairs_y: int | None = None
+        self.stairs_up_x: int | None = None
+        self.stairs_up_y: int | None = None
+        self.visible: list[list[bool]] = []
+        self.explored: list[list[bool]] = []
+        self._town_explored: list[list[bool]] | None = None
+        self._town_items: list[Item] = []
+        self.allow_enemy_spawning: bool = True
         self.generate_level()
         self.inventory_page = 0
-        self.inventory_mode = False
-        self.character_screen_mode = False
-        self.character_stats_mode = False
-        self.equipment_mode = False
-        self.equipment_slot = None
-        self.backpack_mode = False
-        self.backpack_page = 0
-        self.drop_mode = False
+        self.inventory_mode: bool = False
+        self.character_screen_mode: bool = False
+        self.character_stats_mode: bool = False
+        self.equipment_mode: bool = False
+        self.equipment_slot: str | None = None
+        self.backpack_mode: bool = False
+        self.backpack_page: int = 0
+        self.drop_mode: bool = False
         self.input_handler = InputHandler(self)
         self.renderer = Renderer(self)
         self.combat_system = CombatSystem()
         self.ai_system = AISystem()
         self.status_system = StatusSystem()
         self.turn_system = TurnSystem(self.ai_system, self.status_system)
-        self.time = 0
-        self.selected_slot = None
-        self.debug_mode = False
-        self.quit = False
-        self.game_over = False
-        self.walk_mode = False
-        self.auto_explore_mode = False
-        self.options_mode = False
-        self.walk_speed = 5  # milliseconds between auto-move steps
-        self.help_mode = False
-        self.speed_input = ""
-        self.combat_stats_mode = False
+        self.time: int = 0
+        self.selected_slot: int | None = None
+        self.debug_mode: bool = False
+        self.quit: bool = False
+        self.game_over: bool = False
+        self.walk_mode: bool = False
+        self.auto_explore_mode: bool = False
+        self.options_mode: bool = False
+        self.walk_speed: int = 5
+        self.help_mode: bool = False
+        self.speed_input: str = ""
+        self.combat_stats_mode: bool = False
         self.save_manager = SaveManager()
-        self.save_mode = False
-        self.load_mode = False
-        self.delete_mode = False
-        self.save_load_menu_mode = False
-        self.save_slot = None
-        self.save_info_cache = None
-        self.open_mode = False
-        self.close_mode = False
-        self.rest_mode = False
-        self.start_time = time.time()
-        self._flow_field = None
+        self.save_mode: bool = False
+        self.load_mode: bool = False
+        self.delete_mode: bool = False
+        self.save_load_menu_mode: bool = False
+        self.save_slot: int | None = None
+        self.save_info_cache: list[SaveInfo] | None = None
+        self.open_mode: bool = False
+        self.close_mode: bool = False
+        self.rest_mode: bool = False
+        self.start_time: float = time.time()
+        self._flow_field: _FlowField | None = None
 
     @classmethod
-    def create_minimal(cls, height, width, stdscr):
+    def create_minimal(cls, height: int, width: int, stdscr: curses.window | None) -> Game:
         """Create a minimal game instance for loading saves without generating content."""
         game = cls.__new__(cls)
         game.height = height
         game.width = width
         game.stdscr = stdscr
-        game.screen_height, game.screen_width = stdscr.getmaxyx()
-        
-        # Create minimal player (will be overwritten by save data)
+        if stdscr is not None:
+            game.screen_height, game.screen_width = stdscr.getmaxyx()
+        else:
+            game.screen_height = height
+            game.screen_width = width
+
         game.player = Entity(width // 2, height // 2, '@', "Player", 100, 0, 0)
         game.player.initialize_player()
-        
-        # Initialize empty containers
+
         game.enemies = []
         game.items = []
         game.messages = []
@@ -121,15 +136,14 @@ class Game:
         game.map = []
         game.visible = []
         game.explored = []
-        
-        # Initialize game state variables
+
         game.turn_count = 0
         game.last_spawn_turn = 0
-        game.in_town = False  # overwritten from save
+        game.in_town = False
         game.dungeon_level = 1
         game._town_explored = None
         game._town_items = []
-        game.allow_enemy_spawning = True  # overwritten from save
+        game.allow_enemy_spawning = True
         game.stairs_x = None
         game.stairs_y = None
         game.stairs_up_x = None
@@ -168,8 +182,8 @@ class Game:
         game.rest_mode = False
         game.start_time = time.time()
         game._flow_field = None
-        
-        # Initialize systems
+
+        game.map_generator = MapGenerator(height, width, game.screen_height, game.screen_width)
         game.input_handler = InputHandler(game)
         game.renderer = Renderer(game)
         game.combat_system = CombatSystem()
@@ -179,28 +193,28 @@ class Game:
 
         return game
 
-    def _serialize_rooms(self, rooms):
-        """Serialize rooms for saving."""
+    def _serialize_rooms(self, rooms: list[tuple[int, int, int, int]]) -> list[list[int]]:
         return [list(room) for room in rooms]
-    
-    def _deserialize_rooms(self, serialized_rooms):
-        """Deserialize rooms from save data."""
-        return [tuple(room) for room in serialized_rooms]
 
-    def open_character_stats_screen(self):
+    def _deserialize_rooms(self, serialized_rooms: list[list[int]]) -> list[tuple[int, int, int, int]]:
+        return [
+            (int(r[0]), int(r[1]), int(r[2]), int(r[3]))
+            for r in serialized_rooms
+        ]
+
+    def open_character_stats_screen(self) -> None:
         self.character_stats_mode = True
 
-    def open_combat_stats_screen(self):
+    def open_combat_stats_screen(self) -> None:
         self.combat_stats_mode = True
 
-    def spawn_item_in_inventory(self):
+    def spawn_item_in_inventory(self) -> None:
         item = self.create_random_item()
         self.player.add_item(item)
         self.messages.append(f"Spawned {item.name} in your inventory.")
 
-    def spawn_items(self, num_items=None):
+    def spawn_items(self, num_items: int | None = None) -> None:
         if num_items is None:
-            # Reduce the number of items spawned by 50%
             num_items = max(1, (5 + self.dungeon_level) // 2)
         for _ in range(num_items):
             pos = self.get_random_floor()
@@ -211,9 +225,8 @@ class Game:
             item.x, item.y = x, y
             self.items.append(item)
 
-    def create_random_item(self):
-        # Exclude misc items from ground loot - they should only drop from monsters
-        ground_loot_pool = all_consumables + all_equipment
+    def create_random_item(self) -> Item:
+        ground_loot_pool: list[Item | Equipment] = list(all_consumables) + list(all_equipment)
         item_template = random.choice(ground_loot_pool)
         if isinstance(item_template, Equipment):
             material = random.choice(all_materials)
@@ -242,23 +255,22 @@ class Game:
                 material_type=item_template.material_type,
             )
 
-    def create_specific_item(self, category):
+    def create_specific_item(self, category: str) -> Item | None:
         if category == 'potion':
             if not all_consumables:
                 self.messages.append("Error: No consumables available.")
                 return None
-            template = random.choice(all_consumables)
+            template: Item | Equipment = random.choice(all_consumables)
         else:
             if category == 'ring':
-                pool = [e for e in all_equipment if e.slot.startswith('ring')]
+                pool: list[Equipment] = [e for e in all_equipment if e.slot.startswith('ring')]
             else:
                 pool = [e for e in all_equipment if e.slot == category]
             if not pool:
-                # Fallback to all equipment if no specific category found
                 if not all_equipment:
                     self.messages.append(f"Error: No equipment available for category '{category}' and no equipment loaded.")
                     return None
-                pool = all_equipment
+                pool = list(all_equipment)
                 self.messages.append(f"Warning: No specific items found for '{category}', using random equipment.")
             template = random.choice(pool)
 
@@ -289,34 +301,32 @@ class Game:
                 material_type=template.material_type,
             )
 
-    def map_current_level(self):
+    def map_current_level(self) -> None:
         for y in range(self.height):
             for x in range(self.width):
                 self.explored[y][x] = True
         self.messages.append("The layout of the area reveals itself.")
 
-    def level_up_player(self):
+    def level_up_player(self) -> None:
         previous_level = self.player.level
         self.player.gain_xp(self.player.xp_to_next_level)
         if self.player.level > previous_level:
             self.messages.append(f"You reach level {self.player.level}!")
 
-    def combat(self, attacker, defender):
+    def combat(self, attacker: Entity, defender: Entity) -> bool:
         defeated = self.combat_system.combat(attacker, defender, self.messages)
 
         if defeated:
             if defender in self.enemies:
                 self.enemies.remove(defender)
 
-                dropped_items = []
+                dropped_items: list[Item] = []
                 if attacker == self.player:
                     dropped_items = self.combat_system.player_attack_enemy(attacker, defender, self.messages)
 
                 for item in dropped_items:
                     self.items.append(item)
-                    self.messages.append(
-                        f"{defender.name} dropped a {item.name}!"
-                    )
+                    self.messages.append(f"{defender.name} dropped a {item.name}!")
             elif defender == self.player:
                 self.handle_player_death()
 
@@ -325,7 +335,7 @@ class Game:
 
         return defeated
 
-    def handle_input(self, key):
+    def handle_input(self, key: int) -> bool:
         if self.inventory_mode:
             self.input_handler.handle_inventory_input(key)
         elif self.backpack_mode:
@@ -348,62 +358,62 @@ class Game:
             return self.input_handler.handle_quit()
         else:
             self.input_handler.handle_input(key)
-        return False  # Don't exit the game
+        return False
 
-    def handle_backpack_input(self, key):
+    def handle_backpack_input(self, key: int) -> None:
         inventory_items = self.player.get_inventory_items()
         max_pages = (len(inventory_items) - 1) // self.items_per_page
 
-        if key == 27:  # ESC key
+        if key == 27:
             self.backpack_mode = False
         elif key in [ord('+'), ord('='), KEY_NPAGE]:
             self.backpack_page = min(self.backpack_page + 1, max_pages)
         elif key in [ord('-'), KEY_PPAGE]:
             self.backpack_page = max(0, self.backpack_page - 1)
-        elif 97 <= key <= 122:  # a-z
+        elif 97 <= key <= 122:
             self.use_backpack_item(chr(key))
 
-    def handle_drop_input(self, key):
+    def handle_drop_input(self, key: int) -> None:
         inventory_items = self.player.get_inventory_items()
         max_pages = (len(inventory_items) - 1) // self.items_per_page
 
-        if key == 27:  # ESC key
+        if key == 27:
             self.drop_mode = False
         elif key in [ord('+'), ord('='), KEY_NPAGE]:
             self.backpack_page = min(self.backpack_page + 1, max_pages)
         elif key in [ord('-'), KEY_PPAGE]:
             self.backpack_page = max(0, self.backpack_page - 1)
-        elif 97 <= key <= 122:  # a-z
+        elif 97 <= key <= 122:
             self.drop_backpack_item(chr(key))
 
-    def draw(self, stdscr):
+    def draw(self, stdscr: curses.window) -> None:
         self.renderer.draw(stdscr)
 
-    def draw_inventory(self, stdscr):
+    def draw_inventory(self, stdscr: curses.window) -> None:
         self.renderer.draw_inventory(stdscr)
 
-    def draw_character_screen(self, stdscr):
+    def draw_character_screen(self, stdscr: curses.window) -> None:
         self.renderer.draw_character_screen(stdscr)
 
-    def draw_equipment_screen(self, stdscr):
+    def draw_equipment_screen(self, stdscr: curses.window) -> None:
         self.renderer.draw_equipment_screen(stdscr)
 
-    def draw_drop_interface(self, stdscr):
+    def draw_drop_interface(self, stdscr: curses.window) -> None:
         self.renderer.draw_drop_interface(stdscr)
 
-    def generate_level(self):
+    def generate_level(self) -> None:
         if self.in_town:
             self._load_town_map()
         else:
             self._generate_random_level()
 
-    def _load_town_map(self):
+    def _load_town_map(self) -> None:
         loader = StaticMapLoader()
         self.map, self.rooms, spawns, meta = loader.load(_TOWN_MAP_PATH)
         self.height = len(self.map)
         self.width = len(self.map[0]) if self.map else 0
 
-        self.allow_enemy_spawning = meta.get("enemy_spawning", True)
+        self.allow_enemy_spawning = bool(meta.get("enemy_spawning", True))
 
         if "player_start" in spawns:
             self.player.x, self.player.y = spawns["player_start"]
@@ -423,7 +433,7 @@ class Game:
         if self.allow_enemy_spawning:
             self.spawn_enemies(len(self.rooms))
 
-    def _generate_random_level(self):
+    def _generate_random_level(self) -> None:
         self.allow_enemy_spawning = True
         self.map, self.rooms, self.stairs_up_x, self.stairs_up_y, self.stairs_x, self.stairs_y = \
             self.map_generator.generate_level(self.player)
@@ -436,9 +446,8 @@ class Game:
         self.spawn_enemies(len(self.rooms))
         self.spawn_items()
 
-    def enter_dungeon(self):
+    def enter_dungeon(self) -> None:
         import copy
-        # Preserve town state so it is intact when the player returns.
         self._town_explored = copy.deepcopy(self.explored)
         self._town_items = list(self.items)
         self.in_town = False
@@ -448,33 +457,31 @@ class Game:
         self.items.clear()
         self.generate_level()
 
-    def return_to_town(self):
+    def return_to_town(self) -> None:
         self.in_town = True
         self.dungeon_level = 0
         self.messages.append("You climb out of the dungeon and return to Millhaven.")
         self.enemies.clear()
         self.items.clear()
-        self.generate_level()  # loads fresh town map + FOV
-        # Restore exploration and items from before the dungeon trip.
+        self.generate_level()
         if self._town_explored is not None:
             self.explored = self._town_explored
             self._town_explored = None
-            self.update_fov()  # recalculate visible from restored explored
+            self.update_fov()
         self.items = list(self._town_items)
         self._town_items = []
-        # Place the player at the dungeon entrance (they climbed out from there).
         if self.stairs_x is not None:
-            self.player.x, self.player.y = self.stairs_x, self.stairs_y
+            self.player.x, self.player.y = self.stairs_x, self.stairs_y  # type: ignore[assignment]
 
-    def get_monster_template(self):
+    def get_monster_template(self) -> MonsterTemplate:
         min_cr = max(0.1, (self.dungeon_level - 1) * 0.5)
         max_cr = self.dungeon_level * 0.5 + 0.5
         candidates = [m for m in all_monsters if min_cr <= m.challenge_rating <= max_cr]
         if not candidates:
-            candidates = all_monsters
+            candidates = list(all_monsters)
         return random.choice(candidates)
 
-    def spawn_enemies(self, num_enemies):
+    def spawn_enemies(self, num_enemies: int) -> None:
         for _ in range(num_enemies):
             pos = self.get_random_floor()
             if not pos:
@@ -497,9 +504,8 @@ class Game:
             enemy.loot = template.create_loot()
             self.enemies.append(enemy)
 
-    def get_random_floor(self, max_attempts=1000):
-        """Return coordinates of a random walkable tile or ``None`` if none are
-        available."""
+    def get_random_floor(self, max_attempts: int = 1000) -> tuple[int, int] | None:
+        """Return coordinates of a random walkable tile or ``None`` if none are available."""
         for _ in range(max_attempts):
             x = random.randint(0, self.width - 1)
             y = random.randint(0, self.height - 1)
@@ -511,20 +517,20 @@ class Game:
                 return x, y
         return None
 
-    def is_valid_move(self, x, y):
+    def is_valid_move(self, x: int, y: int) -> bool:
         return 0 <= x < self.width and 0 <= y < self.height and self.map[y][x] in ['.', '>', '<', '/', '^']
 
-    def invalidate_flow_field(self):
+    def invalidate_flow_field(self) -> None:
         self._flow_field = None
 
-    def _compute_flow_field(self):
+    def _compute_flow_field(self) -> None:
         """BFS from the player outward; stores (distance, predecessor) per tile."""
         px, py = self.player.x, self.player.y
         passable = {'.', '<', '>', '+', '/', '^'}
-        dist = {(px, py): 0}
+        dist: dict[tuple[int, int], int] = {(px, py): 0}
         prev: dict[tuple[int, int], tuple[int, int] | None] = {(px, py): None}
-        queue = deque([(px, py)])
-        directions = [(0,1),(0,-1),(1,0),(-1,0),(1,1),(1,-1),(-1,1),(-1,-1)]
+        queue: deque[tuple[int, int]] = deque([(px, py)])
+        directions = [(0, 1), (0, -1), (1, 0), (-1, 0), (1, 1), (1, -1), (-1, 1), (-1, -1)]
         while queue:
             x, y = queue.popleft()
             for dx, dy in directions:
@@ -536,52 +542,52 @@ class Game:
                         queue.append((nx, ny))
         self._flow_field = (dist, prev)
 
-    def get_flow_field(self):
+    def get_flow_field(self) -> _FlowField:
         if self._flow_field is None:
             self._compute_flow_field()
         assert self._flow_field is not None
         return self._flow_field
 
-    def get_flow_next_step(self, enemy):
+    def get_flow_next_step(self, enemy: Entity) -> tuple[int, int] | None:
         """Return the next tile the enemy should move to in order to approach the player."""
         dist, _ = self.get_flow_field()
         ex, ey = enemy.x, enemy.y
         occupied = {(e.x, e.y) for e in self.enemies if e is not enemy and e.health > 0}
-        directions = [(0,1),(0,-1),(1,0),(-1,0),(1,1),(1,-1),(-1,1),(-1,-1)]
-        current_dist = dist.get((ex, ey), float('inf'))
-        best = None
+        directions = [(0, 1), (0, -1), (1, 0), (-1, 0), (1, 1), (1, -1), (-1, 1), (-1, -1)]
+        current_dist: float = dist.get((ex, ey), float('inf'))
+        best: tuple[int, int] | None = None
         for dx, dy in directions:
             nx, ny = ex + dx, ey + dy
             if (nx, ny) in occupied:
                 continue
-            nd = dist.get((nx, ny), float('inf'))
+            nd: float = dist.get((nx, ny), float('inf'))
             if nd < current_dist:
                 current_dist = nd
                 best = (nx, ny)
         return best
 
-    def process_turn(self):
-        self.turn_system.process(self)
+    def process_turn(self) -> None:
+        self.turn_system.process(self)  # type: ignore[arg-type]
 
-    def check_collisions(self):
+    def check_collisions(self) -> None:
         for item in self.items[:]:
             if item.x == self.player.x and item.y == self.player.y:
                 self.player.add_item(item)
                 self.items.remove(item)
                 self.messages.append(f"You picked up {item.name}.")
 
-    def next_level(self):
+    def next_level(self) -> None:
         self.dungeon_level += 1
         self.messages.append(f"You descend to dungeon level {self.dungeon_level}.")
         self.enemies.clear()
         self.items.clear()
         self._generate_random_level()
-    
-    def open_inventory(self):
+
+    def open_inventory(self) -> None:
         self.inventory_mode = True
         self.inventory_page = 0
-    
-    def pickup_item(self):
+
+    def pickup_item(self) -> None:
         for item in self.items:
             if item.x == self.player.x and item.y == self.player.y:
                 self.player.add_item(item)
@@ -590,7 +596,7 @@ class Game:
                 return
         self.messages.append("There's nothing here to pick up.")
 
-    def use_backpack_item(self, item_key):
+    def use_backpack_item(self, item_key: str) -> None:
         inventory_items = self.player.get_inventory_items()
         index = ord(item_key) - ord('a') + self.backpack_page * self.items_per_page
         if 0 <= index < len(inventory_items):
@@ -602,26 +608,24 @@ class Game:
         else:
             self.messages.append("Invalid item.")
 
-    def drop_backpack_item(self, item_key):
+    def drop_backpack_item(self, item_key: str) -> None:
         inventory_items = self.player.get_inventory_items()
         index = ord(item_key) - ord('a') + self.backpack_page * self.items_per_page
         if 0 <= index < len(inventory_items):
             item, _ = inventory_items[index]
             self.player.remove_item(item)
             item.x, item.y = self.player.x, self.player.y
-            item.seen = True  # Player is aware of dropped items immediately
+            item.seen = True
             self.items.append(item)
             self.messages.append(f"You dropped {item.name}.")
             self.drop_mode = False
         else:
             self.messages.append("Invalid item.")
 
-    def get_key(self):
-        # This method should be implemented to get a key press from the user
-        # For now, we'll just return a placeholder value
+    def get_key(self) -> int:
         return ord('A')
 
-    def display_messages(self):
+    def display_messages(self) -> None:
         """Output queued messages to the standard screen and clear them."""
         if self.stdscr:
             for i, message in enumerate(self.messages[-3:]):
@@ -631,8 +635,8 @@ class Game:
             for message in self.messages:
                 print(message)
         self.messages.clear()
-    
-    def use_or_equip_item(self, key):
+
+    def use_or_equip_item(self, key: str) -> None:
         inventory_items = self.player.get_inventory_items()
         index = ord(key) - ord('a')
         if 0 <= index < len(inventory_items):
@@ -641,11 +645,11 @@ class Game:
                 self.equip_item(item)
             else:
                 self.use_item(item)
-    
-    def open_character_screen(self):
+
+    def open_character_screen(self) -> None:
         self.character_screen_mode = True
 
-    def use_stairs(self, direction):
+    def use_stairs(self, direction: str) -> None:
         if self.in_town:
             if direction == 'down' and self.stairs_x is not None and \
                     self.player.x == self.stairs_x and self.player.y == self.stairs_y:
@@ -661,7 +665,7 @@ class Game:
                 else:
                     self.return_to_town()
 
-    def walk_to(self, x, y, animate=False):
+    def walk_to(self, x: int, y: int, animate: bool = False) -> bool:
         """Automatically walk the player to the given coordinates using pathfinding.
 
         Returns True if the walk was interrupted by user input."""
@@ -669,41 +673,45 @@ class Game:
         player_pos = (self.player.x, self.player.y)
         dist, prev = self.get_flow_field()
 
+        path: list[tuple[int, int]]
         if target_pos not in dist:
             target = type('Target', (object,), {'x': x, 'y': y})()
-            path = self.find_path(self.player, target)
-            if not path or len(path) < 2:
+            raw_path = self.find_path(self.player, target)
+            if not raw_path or len(raw_path) < 2:
                 self.messages.append("No path to destination.")
                 return False
+            path = raw_path
         else:
             path = [target_pos]
-            current = target_pos
+            current_pos: tuple[int, int] = target_pos
             ok = True
-            while current != player_pos:
-                current = prev.get(current)
-                if current is None:
+            while current_pos != player_pos:
+                next_step = prev.get(current_pos)
+                if next_step is None:
                     ok = False
                     break
-                path.append(current)
+                path.append(next_step)
+                current_pos = next_step
             if ok:
                 path.reverse()
             else:
                 target = type('Target', (object,), {'x': x, 'y': y})()
-                path = self.find_path(self.player, target)
-                if not path or len(path) < 2:
+                raw_path = self.find_path(self.player, target)
+                if not raw_path or len(raw_path) < 2:
                     self.messages.append("No path to destination.")
                     return False
+                path = raw_path
 
         interrupted = False
-        draw_steps = animate and self.stdscr and self.walk_speed > 0
-        check_keys = animate and self.stdscr
+        draw_steps = animate and self.stdscr is not None and self.walk_speed > 0
+        check_keys = animate and self.stdscr is not None
 
-        if check_keys:
+        if check_keys and self.stdscr is not None:
             self.stdscr.nodelay(True)
 
         try:
             for step in path[1:]:
-                if check_keys:
+                if check_keys and self.stdscr is not None:
                     key = self.stdscr.getch()
                     if key != -1:
                         curses.ungetch(key)
@@ -724,7 +732,7 @@ class Game:
                     interrupted = True
                     break
 
-                if draw_steps:
+                if draw_steps and self.stdscr is not None:
                     self.renderer.draw(self.stdscr)
                     time.sleep(self.walk_speed / 1000.0)
 
@@ -733,49 +741,40 @@ class Game:
                 if (self.player.x, self.player.y) == (x, y):
                     break
         finally:
-            if check_keys:
+            if check_keys and self.stdscr is not None:
                 self.stdscr.nodelay(False)
 
-        if animate and not draw_steps and self.stdscr:
+        if animate and not draw_steps and self.stdscr is not None:
             self.renderer.draw(self.stdscr)
 
         return interrupted
 
-    def walk_to_stairs(self, direction):
+    def walk_to_stairs(self, direction: str) -> None:
         if direction == 'up':
             if self.stairs_up_x is not None:
-                self.walk_to(self.stairs_up_x, self.stairs_up_y, animate=True)
+                self.walk_to(self.stairs_up_x, self.stairs_up_y, animate=True)  # type: ignore[arg-type]
             else:
                 self.messages.append("There are no stairs leading up here.")
         elif direction == 'down':
             if self.stairs_x is not None:
-                self.walk_to(self.stairs_x, self.stairs_y, animate=True)
+                self.walk_to(self.stairs_x, self.stairs_y, animate=True)  # type: ignore[arg-type]
 
-    def find_nearest_unexplored(self):
-        """Return coordinates of the nearest tile that will reveal unexplored
-        areas when the player walks there."""
-        from heapq import heappush, heappop
-
+    def find_nearest_unexplored(self) -> tuple[int, int] | None:
+        """Return coordinates of the nearest tile that will reveal unexplored areas."""
         start = (self.player.x, self.player.y)
-        heap = [(0, start)]
-        visited = set()
+        heap: list[tuple[int, tuple[int, int]]] = [(0, start)]
+        visited: set[tuple[int, int]] = set()
 
         while heap:
-            dist, (x, y) = heappop(heap)
+            d, (x, y) = heapq.heappop(heap)
             if (x, y) in visited:
                 continue
             visited.add((x, y))
 
-            # Never target the starting tile; it won't reveal anything new if
-            # unexplored neighbors are blocked by walls or the map edge.
             if (x, y) != start:
-                # If this tile itself is unexplored, walking onto it will
-                # explore it
                 if not self.explored[y][x]:
                     return (x, y)
 
-                # If any adjacent tile is unexplored (including walls), moving
-                # here will reveal it via the field of view
                 for dx, dy in [
                     (-1, 0), (1, 0), (0, -1), (0, 1),
                     (-1, -1), (1, -1), (-1, 1), (1, 1)
@@ -785,21 +784,21 @@ class Game:
                         if not self.explored[ny][nx]:
                             return (x, y)
 
-            for dx, dy in [(-1,0), (1,0), (0,-1), (0,1),
-                           (-1,-1), (1,-1), (-1,1), (1,1)]:
+            for dx, dy in [(-1, 0), (1, 0), (0, -1), (0, 1),
+                           (-1, -1), (1, -1), (-1, 1), (1, 1)]:
                 nx, ny = x + dx, y + dy
                 if (0 <= nx < self.width and 0 <= ny < self.height and
                         self.map[ny][nx] in ['.', '<', '>', '+', '/', '^'] and
                         (nx, ny) not in visited):
-                    heappush(heap, (dist + 1, (nx, ny)))
+                    heapq.heappush(heap, (d + 1, (nx, ny)))
         return None
 
-    def auto_explore(self):
+    def auto_explore(self) -> None:
         """Automatically explore the dungeon until a monster is seen."""
         self.auto_explore_mode = True
         attempts_without_progress = 0
-        max_attempts = 10  # Prevent infinite loops
-        
+        max_attempts = 10
+
         while self.auto_explore_mode and attempts_without_progress < max_attempts:
             if self.quit:
                 break
@@ -812,28 +811,24 @@ class Game:
                 self.messages.append("Nothing left to explore.")
                 break
 
-            # Store current position to detect if we made progress
             start_x, start_y = self.player.x, self.player.y
-            
+
             interrupted = self.walk_to(target[0], target[1], animate=True)
             if interrupted:
                 break
-                
-            # Check if we actually moved
+
             if (self.player.x, self.player.y) == (start_x, start_y):
                 attempts_without_progress += 1
-                # Process a turn if we didn't move to update game state
                 self.process_turn()
             else:
                 attempts_without_progress = 0
-                # No need to process turn here as walk_to already did it
 
         if attempts_without_progress >= max_attempts:
             self.messages.append("Auto-explore stopped: no progress made.")
 
         self.auto_explore_mode = False
 
-    def rest_until_healed(self):
+    def rest_until_healed(self) -> None:
         p = self.player
         if p.health >= p.max_health and p.mana >= p.max_mana and p.psi >= p.max_psi:
             self.messages.append("You are already fully rested.")
@@ -854,7 +849,7 @@ class Game:
             last_mana = p.mana
             last_psi = p.psi
             last_msg_count = len(self.messages)
-            need_draw = True  # always draw once to show "You begin to rest..."
+            need_draw = True
 
             while True:
                 p = self.player
@@ -913,21 +908,25 @@ class Game:
             if self.stdscr:
                 self.stdscr.nodelay(False)
 
-    def exit_game(self):
+    def exit_game(self) -> None:
         try:
-            total_value = sum(item.stat_boost for item in self.player.inventory if isinstance(item, Equipment))
-            total_value += sum(slot['item'].stat_boost for slot in self.player.equipment.values() if slot['item'])
+            total_value: float = sum(
+                item.stat_boost for item in self.player.inventory if isinstance(item, Equipment)
+            )
+            total_value += sum(
+                slot['item'].stat_boost for slot in self.player.equipment.values() if slot['item']
+            )
             total_value += self.player.money
         except AttributeError as e:
             self.messages.append(f"Error calculating total value: {str(e)}")
-            total_value = 0  # fallback value
+            total_value = 0
 
         self.messages.append(f"Congratulations! You've escaped the dungeon with treasure worth {total_value} gold!")
         self.messages.append("Press any key to exit.")
         self.wait_for_key()
         sys.exit()
 
-    def wait_for_key(self):
+    def wait_for_key(self) -> None:
         if self.stdscr:
             self.stdscr.nodelay(False)
             self.stdscr.getch()
@@ -937,31 +936,37 @@ class Game:
             except EOFError:
                 pass
 
-    def handle_player_death(self):
+    def handle_player_death(self) -> None:
         """Handle player death by setting the quit flag and truncating health."""
         self.player.health = max(0, self.player.health)
         self.messages.append("Game Over! Press Enter to exit.")
         self.quit = True
         self.game_over = True
-    
-    def previous_level(self):
+
+    def previous_level(self) -> None:
         self.dungeon_level -= 1
         self.messages.append(f"You ascend to dungeon level {self.dungeon_level}.")
         self.enemies.clear()
         self.items.clear()
         self._generate_random_level()
-        # Place the player on the down stairs of the previous level
-        self.player.x, self.player.y = self.stairs_x, self.stairs_y
-    
-    def heuristic(self, a, b):
+        self.player.x, self.player.y = self.stairs_x, self.stairs_y  # type: ignore[assignment]
+
+    def heuristic(self, a: tuple[int, int], b: Any) -> int:
+        bx: int
+        by: int
         bx, by = (b.x, b.y) if hasattr(b, "x") else b
         return abs(bx - a[0]) + abs(by - a[1])
 
-    def find_path(self, start, goal, consider_enemies=False):
-        start_pos = (start.x, start.y) if hasattr(start, "x") else start
-        goal_pos = (goal.x, goal.y) if hasattr(goal, "x") else goal
+    def find_path(
+        self,
+        start: Any,
+        goal: Any,
+        consider_enemies: bool = False,
+    ) -> list[tuple[int, int]] | None:
+        start_pos: tuple[int, int] = (start.x, start.y) if hasattr(start, "x") else start
+        goal_pos: tuple[int, int] = (goal.x, goal.y) if hasattr(goal, "x") else goal
 
-        avoid = set()
+        avoid: set[tuple[int, int]] = set()
         if consider_enemies:
             avoid = {
                 (e.x, e.y)
@@ -969,18 +974,18 @@ class Game:
                 if (e.x, e.y) != start_pos and (e.x, e.y) != goal_pos and e.health > 0
             }
 
-        neighbors = [(0,1), (0,-1), (1,0), (-1,0), (1,1), (1,-1), (-1,1), (-1,-1)]
-        close_set = set()
-        came_from = {}
-        gscore = {start_pos: 0}
-        fscore = {start_pos: self.heuristic(start_pos, goal_pos)}
-        open_heap = []
+        neighbors = [(0, 1), (0, -1), (1, 0), (-1, 0), (1, 1), (1, -1), (-1, 1), (-1, -1)]
+        close_set: set[tuple[int, int]] = set()
+        came_from: dict[tuple[int, int], tuple[int, int]] = {}
+        gscore: dict[tuple[int, int], float] = {start_pos: 0}
+        fscore: dict[tuple[int, int], float] = {start_pos: self.heuristic(start_pos, goal_pos)}
+        open_heap: list[tuple[float, tuple[int, int]]] = []
         heapq.heappush(open_heap, (fscore[start_pos], start_pos))
 
         while open_heap:
             current = heapq.heappop(open_heap)[1]
             if current == goal_pos:
-                path = []
+                path: list[tuple[int, int]] = []
                 while current in came_from:
                     path.append(current)
                     current = came_from[current]
@@ -991,7 +996,7 @@ class Game:
             close_set.add(current)
 
             for i, j in neighbors:
-                neighbor = current[0] + i, current[1] + j
+                neighbor: tuple[int, int] = (current[0] + i, current[1] + j)
                 if 0 <= neighbor[0] < self.width and 0 <= neighbor[1] < self.height:
                     if self.map[neighbor[1]][neighbor[0]] in ['#', ' ']:
                         continue
@@ -1008,10 +1013,10 @@ class Game:
 
         return None
 
-    def distance(self, entity1, entity2):
+    def distance(self, entity1: Entity, entity2: Entity) -> int:
         return max(abs(entity1.x - entity2.x), abs(entity1.y - entity2.y))
 
-    def line(self, x1, y1, x2, y2):
+    def line(self, x1: int, y1: int, x2: int, y2: int) -> Iterator[tuple[int, int]]:
         """Yield points on a Bresenham line from (x1, y1) to (x2, y2)."""
         dx = abs(x2 - x1)
         dy = abs(y2 - y1)
@@ -1039,14 +1044,14 @@ class Game:
                 y += sy
         yield x2, y2
 
-    def in_room(self, x, y):
+    def in_room(self, x: int, y: int) -> bool:
         """Return True if the coordinates are inside any generated room."""
         for rx, ry, w, h in self.rooms:
             if rx <= x < rx + w and ry <= y < ry + h:
                 return True
         return False
 
-    def get_room(self, x, y):
+    def get_room(self, x: int, y: int) -> tuple[int, int, int, int] | None:
         """Return the room tuple containing (x, y) or None if not in a room."""
         for room in self.rooms:
             rx, ry, w, h = room
@@ -1054,19 +1059,15 @@ class Game:
                 return room
         return None
 
-    def corridor_distance(self, x1, y1, x2, y2):
-        """Return the number of corridor tiles between leaving the starting
-        room and reaching (x2, y2). Only meaningful if (x1, y1) is inside a
-        room and (x2, y2) is outside of it."""
-        distance = 0
+    def corridor_distance(self, x1: int, y1: int, x2: int, y2: int) -> float:
+        """Return the number of corridor tiles between leaving the starting room and reaching (x2, y2)."""
+        distance: float = 0
         left_room = False
         for px, py in self.line(x1, y1, x2, y2):
             if (px, py) == (x1, y1):
                 continue
             if self.in_room(px, py):
                 if left_room:
-                    # LOS passes through another room — treat as unreachable so
-                    # the player cannot see corridors on the far side of rooms.
                     return float('inf')
             else:
                 if not left_room:
@@ -1076,17 +1077,12 @@ class Game:
                 break
         return distance
 
-    def has_line_of_sight(self, x1, y1, x2, y2):
+    def has_line_of_sight(self, x1: int, y1: int, x2: int, y2: int) -> bool:
         """Return True if there is a clear line of sight between two points."""
         prev_x, prev_y = x1, y1
         for x, y in self.line(x1, y1, x2, y2):
             if (x, y) == (x1, y1):
                 continue
-            # When the line steps diagonally through an intermediate tile, check
-            # both orthogonal neighbors. If both are walls the line is cutting
-            # through a tight corner and should be blocked. Skip this check for
-            # the destination tile itself — you can see a corner wall, just not
-            # through it.
             if x != prev_x and y != prev_y and (x, y) != (x2, y2):
                 if self.map[prev_y][x] == '#' and self.map[y][prev_x] == '#':
                     return False
@@ -1095,18 +1091,13 @@ class Game:
             prev_x, prev_y = x, y
         return True
 
-    def update_fov(self, radius=None):
-        """Update which tiles are visible using line of sight and mark them as
-        explored. Vision down connecting corridors is limited to two tiles when
-        standing in a room, and overall sight is restricted to a 3 tile radius
-        when the player is in a hallway."""
-
+    def update_fov(self, radius: int | None = None) -> None:
+        """Update which tiles are visible using line of sight and mark them as explored."""
         px, py = self.player.x, self.player.y
         player_room = self.get_room(px, py)
         player_in_room = player_room is not None
 
         if radius is None:
-            # Unlimited radius in rooms, but only three tiles while in corridors
             radius = 3 if not player_in_room else max(self.width, self.height)
         else:
             if not player_in_room:
@@ -1134,52 +1125,47 @@ class Game:
                 self.visible[y][x] = True
                 self.explored[y][x] = True
 
-        # Mark any items within the current field of view as seen so they remain
-        # visible on explored tiles even after they leave the player's sight.
         for item in self.items:
-            if 0 <= item.y < self.height and 0 <= item.x < self.width:
-                if self.visible[item.y][item.x]:
+            if 0 <= item.y < self.height and 0 <= item.x < self.width:  # type: ignore[operator]
+                if self.visible[item.y][item.x]:  # type: ignore[index]
                     item.seen = True
-    
-    def open_equipment_screen(self):
+
+    def open_equipment_screen(self) -> None:
         self.equipment_mode = True
         self.equipment_slot = None
-    
-    def equip_item(self, item_key):
-        inventory_items = self.player.get_inventory_items()
-        
+
+    def equip_item(self, item_key: str | Equipment) -> None:
+        eq_item: Equipment
         if isinstance(item_key, str):
+            inventory_items = self.player.get_inventory_items()
             index = ord(item_key) - ord('a')
-            if 0 <= index < len(inventory_items):
-                item, _ = inventory_items[index]
-            else:
+            if not (0 <= index < len(inventory_items)):
                 self.messages.append("Invalid item.")
                 return
-        elif isinstance(item_key, Equipment):
-            item = item_key
+            raw_item, _ = inventory_items[index]
+            if not isinstance(raw_item, Equipment):
+                self.messages.append(f"{raw_item.name} is not equippable.")
+                return
+            eq_item = raw_item
         else:
-            self.messages.append("Invalid item key.")
-            return
+            eq_item = item_key
 
-        if isinstance(item, Equipment):
-            message = self.player.equip_item(item)
-            self.messages.append(message)
-        else:
-            self.messages.append(f"{item.name} is not equippable.")
+        message = self.player.equip_item(eq_item)
+        self.messages.append(message)
 
-    def unequip_item(self, slot_key):
+    def unequip_item(self, slot_key: str) -> None:
         message = self.player.unequip_item(slot_key)
         self.messages.append(message)
 
-    def use_item(self, item):
+    def use_item(self, item: Item) -> None:
         if item in self.player.inventory:
-            effect_result = item.effect(self.player)
+            effect_result = item.effect(self.player) if item.effect is not None else None
             self.player.remove_item(item)
             self.messages.append(f"You used {item.name}. {effect_result}")
         else:
             self.messages.append(f"You don't have {item.name}")
 
-    def player_move_or_attack(self, dx, dy):
+    def player_move_or_attack(self, dx: int, dy: int) -> None:
         new_x, new_y = self.player.x + dx, self.player.y + dy
         if not (0 <= new_x < self.width and 0 <= new_y < self.height):
             return
@@ -1200,10 +1186,10 @@ class Game:
                 dmg = random.randint(1, 6)
                 self.player.health -= dmg
                 self.messages.append(f"You triggered a trap! -{dmg} HP")
-                self.map[new_y][new_x] = '.'  # disarm after triggering
+                self.map[new_y][new_x] = '.'
             self.process_turn()
 
-    def open_door(self, dx, dy):
+    def open_door(self, dx: int, dy: int) -> None:
         tx, ty = self.player.x + dx, self.player.y + dy
         if not (0 <= tx < self.width and 0 <= ty < self.height):
             self.messages.append("There is no door there.")
@@ -1219,7 +1205,7 @@ class Game:
         else:
             self.messages.append("There is no door there.")
 
-    def close_door(self, dx, dy):
+    def close_door(self, dx: int, dy: int) -> None:
         tx, ty = self.player.x + dx, self.player.y + dy
         if not (0 <= tx < self.width and 0 <= ty < self.height):
             self.messages.append("There is no door there.")
@@ -1238,14 +1224,17 @@ class Game:
         else:
             self.messages.append("There is no door there.")
 
-    def handle_equipment_input(self, key):
+    def handle_equipment_input(self, key: int) -> None:
         if key in range(ord('a'), ord('m') + 1):
             slot_key = chr(key)
             slot = self.player.equipment[slot_key]
-            equippable_items = [item for item in self.player.inventory if isinstance(item, Equipment) and item.slot == slot['name']]
-            
+            equippable_items = [
+                item for item in self.player.inventory
+                if isinstance(item, Equipment) and item.slot == slot['name']
+            ]
+
             if equippable_items:
-                item_to_equip = equippable_items[0]  # Choose the first equippable item
+                item_to_equip = equippable_items[0]
                 result = self.player.equip(item_to_equip, slot_key)
                 self.messages.append(result)
             else:
@@ -1253,20 +1242,18 @@ class Game:
         elif key == ord('q'):
             self.equipment_mode = False
 
-
-    def gain_xp(self, amount):
+    def gain_xp(self, amount: int) -> None:
         self.player.gain_xp(amount)
 
-    def gain_gold(self, amount):
+    def gain_gold(self, amount: int) -> None:
         self.player.money += amount
-    
-    def game_loop(self):
+
+    def game_loop(self) -> None:
         while not self.quit:
             key = self.get_key()
             if self.handle_input(key):
                 self.quit = True
                 break
-            if hasattr(self, 'renderer') and hasattr(self, 'stdscr'):
+            if hasattr(self, 'renderer') and self.stdscr is not None:
                 self.renderer.draw(self.stdscr)
             self.display_messages()
-

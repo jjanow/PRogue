@@ -1,9 +1,10 @@
 """Tests for MapGenerator — size clamping, room layout invariants, connectivity."""
+from __future__ import annotations
+
 import random
 from collections import deque
 
-import pytest
-
+from classes.entity import Entity
 from classes.map_generator import MapGenerator
 
 
@@ -11,7 +12,9 @@ from classes.map_generator import MapGenerator
 SEEDS = [0, 1, 42, 99, 1337]
 
 
-def generate_with_seed(seed, h=20, w=40, sh=30, sw=50):
+def generate_with_seed(
+    seed: int, h: int = 20, w: int = 40, sh: int = 30, sw: int = 50
+) -> tuple[MapGenerator, list[list[str]], list[tuple[int, int, int, int]]]:
     random.seed(seed)
     gen = MapGenerator(h, w, sh, sw)
     map_data, rooms = gen.generate()
@@ -23,25 +26,25 @@ def generate_with_seed(seed, h=20, w=40, sh=30, sw=50):
 # ---------------------------------------------------------------------------
 
 class TestSizeClamping:
-    def test_height_clamps_to_minimum_10(self):
+    def test_height_clamps_to_minimum_10(self) -> None:
         gen = MapGenerator(5, 40, 30, 60)
         assert gen.height >= 10
 
-    def test_width_clamps_to_minimum_20(self):
+    def test_width_clamps_to_minimum_20(self) -> None:
         gen = MapGenerator(20, 10, 30, 30)
         assert gen.width >= 20
 
-    def test_height_clamped_by_screen_height(self):
+    def test_height_clamped_by_screen_height(self) -> None:
         gen = MapGenerator(100, 40, 20, 60)
         # Must be at most screen_height - 6
         assert gen.height <= 20 - 6
 
-    def test_width_clamped_by_screen_width(self):
+    def test_width_clamped_by_screen_width(self) -> None:
         gen = MapGenerator(20, 100, 30, 40)
         # Must be at most screen_width - 5
         assert gen.width <= 40 - 5
 
-    def test_sensible_medium_dimensions_preserved(self):
+    def test_sensible_medium_dimensions_preserved(self) -> None:
         gen = MapGenerator(20, 40, 30, 50)
         assert gen.height == 20
         assert gen.width == 40
@@ -52,19 +55,19 @@ class TestSizeClamping:
 # ---------------------------------------------------------------------------
 
 class TestMapOutput:
-    def test_map_has_correct_dimensions(self):
+    def test_map_has_correct_dimensions(self) -> None:
         for seed in SEEDS:
             gen, map_data, _ = generate_with_seed(seed)
             assert len(map_data) == gen.height, f"Seed {seed}: wrong row count"
             for row in map_data:
                 assert len(row) == gen.width, f"Seed {seed}: wrong col count"
 
-    def test_bottom_row_all_walls(self):
+    def test_bottom_row_all_walls(self) -> None:
         for seed in SEEDS:
-            gen, map_data, _ = generate_with_seed(seed)
+            _gen, map_data, _ = generate_with_seed(seed)
             assert all(c == '#' for c in map_data[-1]), f"Seed {seed}: bottom row has non-wall"
 
-    def test_map_contains_only_valid_tiles(self):
+    def test_map_contains_only_valid_tiles(self) -> None:
         valid = {'.', '#', '<', '>'}
         for seed in SEEDS:
             _, map_data, _ = generate_with_seed(seed)
@@ -78,23 +81,23 @@ class TestMapOutput:
 # ---------------------------------------------------------------------------
 
 class TestRoomLayout:
-    def test_rooms_within_map_bounds(self):
+    def test_rooms_within_map_bounds(self) -> None:
         for seed in SEEDS:
             gen, _, rooms = generate_with_seed(seed)
             for rx, ry, rw, rh in rooms:
-                assert rx >= 0 and rx + rw <= gen.width, f"Room x out of bounds"
-                assert ry >= 0 and ry + rh <= gen.height, f"Room y out of bounds"
+                assert rx >= 0 and rx + rw <= gen.width, "Room x out of bounds"
+                assert ry >= 0 and ry + rh <= gen.height, "Room y out of bounds"
 
-    def test_room_floor_tiles_exist_in_map(self):
+    def test_room_floor_tiles_exist_in_map(self) -> None:
         for seed in SEEDS:
-            gen, map_data, rooms = generate_with_seed(seed)
+            _gen, map_data, rooms = generate_with_seed(seed)
             for rx, ry, rw, rh in rooms:
                 cx = rx + rw // 2
                 cy = ry + rh // 2
                 assert map_data[cy][cx] in ('.', '<', '>'), \
                     f"Seed {seed}: room center ({cx},{cy}) is not floor"
 
-    def test_rooms_not_directly_adjacent(self):
+    def test_rooms_not_directly_adjacent(self) -> None:
         """Rooms must have at least 1 wall tile between them in every dimension."""
         for seed in SEEDS:
             _, _, rooms = generate_with_seed(seed)
@@ -115,9 +118,16 @@ class TestRoomLayout:
 # ---------------------------------------------------------------------------
 
 class TestConnectivity:
-    def _reachable_from(self, map_data, start_x, start_y, height, width):
-        visited = {(start_x, start_y)}
-        queue = deque([(start_x, start_y)])
+    def _reachable_from(
+        self,
+        map_data: list[list[str]],
+        start_x: int,
+        start_y: int,
+        height: int,
+        width: int,
+    ) -> set[tuple[int, int]]:
+        visited: set[tuple[int, int]] = {(start_x, start_y)}
+        queue: deque[tuple[int, int]] = deque([(start_x, start_y)])
         dirs = [(0,1),(0,-1),(1,0),(-1,0),(1,1),(1,-1),(-1,1),(-1,-1)]
         while queue:
             x, y = queue.popleft()
@@ -130,7 +140,7 @@ class TestConnectivity:
                     queue.append((nx, ny))
         return visited
 
-    def test_all_room_centers_reachable_from_first(self):
+    def test_all_room_centers_reachable_from_first(self) -> None:
         for seed in SEEDS:
             gen, map_data, rooms = generate_with_seed(seed)
             if len(rooms) < 2:
@@ -151,21 +161,19 @@ class TestConnectivity:
 # ---------------------------------------------------------------------------
 
 class TestGenerateLevel:
-    def test_places_stairs_on_floor_tiles(self):
+    def test_places_stairs_on_floor_tiles(self) -> None:
         for seed in SEEDS:
             random.seed(seed)
             gen = MapGenerator(20, 40, 30, 50)
-            from classes.entity import Entity
             player = Entity(0, 0, '@', 'P', 100, 0, 0)
-            map_data, rooms, ux, uy, dx, dy = gen.generate_level(player)
+            map_data, _rooms, ux, uy, dx, dy = gen.generate_level(player)
             assert map_data[uy][ux] == '<', f"Seed {seed}: stairs-up not '<'"
             assert map_data[dy][dx] == '>', f"Seed {seed}: stairs-down not '>'"
 
-    def test_player_placed_at_stairs_up(self):
+    def test_player_placed_at_stairs_up(self) -> None:
         random.seed(42)
         gen = MapGenerator(20, 40, 30, 50)
-        from classes.entity import Entity
         player = Entity(0, 0, '@', 'P', 100, 0, 0)
-        _, rooms, ux, uy, dx, dy = gen.generate_level(player)
+        _, _rooms, ux, uy, _dx, _dy = gen.generate_level(player)
         assert player.x == ux
         assert player.y == uy

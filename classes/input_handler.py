@@ -1,14 +1,21 @@
+from __future__ import annotations
+
 import curses
+from typing import TYPE_CHECKING
 
 from classes.item import Equipment
-from classes.keybindings_loader import load_keybindings
+from classes.keybindings_loader import Keybindings, load_keybindings
+
+if TYPE_CHECKING:
+    from classes.game import Game
+
 
 class InputHandler:
-    def __init__(self, game, keybindings=None):
+    def __init__(self, game: Game, keybindings: Keybindings | None = None) -> None:
         self.game = game
-        self.kb = keybindings if keybindings is not None else load_keybindings()
+        self.kb: Keybindings = keybindings if keybindings is not None else load_keybindings()
 
-    def handle_input(self, key):
+    def handle_input(self, key: int) -> bool:
         if self.game.debug_mode:
             self.handle_debug_input(key)
             return False  # Don't exit the game
@@ -62,11 +69,11 @@ class InputHandler:
             self.handle_main_game_input(key)
         return False  # Don't exit the game
 
-    def handle_main_game_input(self, key):
+    def handle_main_game_input(self, key: int) -> None:
         if self.game.open_mode:
             self.game.open_mode = False
             kb = self.kb
-            direction_keys = {}
+            direction_keys: dict[int, tuple[int, int]] = {}
             for k in kb.move_n:  direction_keys[k] = (0, -1)
             for k in kb.move_s:  direction_keys[k] = (0, 1)
             for k in kb.move_w:  direction_keys[k] = (-1, 0)
@@ -107,14 +114,18 @@ class InputHandler:
 
         if self.game.walk_mode:
             if key in self.kb.stairs_up:
-                if not self.game.explored[self.game.stairs_up_y][self.game.stairs_up_x]:
+                sup_y = self.game.stairs_up_y
+                sup_x = self.game.stairs_up_x
+                if sup_y is not None and sup_x is not None and not self.game.explored[sup_y][sup_x]:
                     self.game.messages.append("You don't know where the upstairs are.")
                 else:
                     self.game.walk_to_stairs('up')
                 self.game.walk_mode = False
                 return
             elif key in self.kb.stairs_down:
-                if not self.game.explored[self.game.stairs_y][self.game.stairs_x]:
+                sdn_y = self.game.stairs_y
+                sdn_x = self.game.stairs_x
+                if sdn_y is not None and sdn_x is not None and not self.game.explored[sdn_y][sdn_x]:
                     self.game.messages.append("You don't know where the downstairs are.")
                 else:
                     self.game.walk_to_stairs('down')
@@ -138,8 +149,14 @@ class InputHandler:
             return
 
         if key in self.kb.walk_mode:
-            if not (self.game.explored[self.game.stairs_y][self.game.stairs_x] or
-                    self.game.explored[self.game.stairs_up_y][self.game.stairs_up_x]):
+            sdn_y = self.game.stairs_y
+            sdn_x = self.game.stairs_x
+            sup_y = self.game.stairs_up_y
+            sup_x = self.game.stairs_up_x
+            if not (
+                (sdn_y is not None and sdn_x is not None and self.game.explored[sdn_y][sdn_x]) or
+                (sup_y is not None and sup_x is not None and self.game.explored[sup_y][sup_x])
+            ):
                 self.game.messages.append("You haven't found any stairs yet.")
             else:
                 self.game.walk_mode = True
@@ -161,8 +178,8 @@ class InputHandler:
             self.game.help_mode = True
             return
 
-        kb = self.kb
-        movement_keys = {}
+        kb: Keybindings = self.kb
+        movement_keys: dict[int, tuple[int, int]] = {}
         for k in kb.move_n:  movement_keys[k] = (0, -1)
         for k in kb.move_s:  movement_keys[k] = (0, 1)
         for k in kb.move_w:  movement_keys[k] = (-1, 0)
@@ -194,18 +211,20 @@ class InputHandler:
 
         self.game.process_turn()
 
-    def handle_quit(self):
+    def handle_quit(self) -> bool:
         self.game.messages.append("Are you sure you want to quit? Your character will be lost! (Y/N)")
-        self.game.renderer.draw(self.game.stdscr)  # Use the renderer to draw
+        stdscr = self.game.stdscr
+        assert stdscr is not None
+        self.game.renderer.draw(stdscr)  # Use the renderer to draw
         while True:
-            key = self.game.stdscr.getch()
+            key = stdscr.getch()
             if key in [ord('Y'), ord('y')]:
                 return True  # Signal to quit the game
             elif key in [ord('N'), ord('n'), 27]:  # 'N', 'n', or ESC
                 self.game.messages.pop()  # Remove the confirmation message
                 return False  # Don't quit, continue the game
 
-    def handle_inventory_input(self, key):
+    def handle_inventory_input(self, key: int) -> None:
         """Handle key presses while the inventory screen is open.
 
         Pressing the letter of an item will equip it if possible or use it
@@ -234,11 +253,11 @@ class InputHandler:
             else:
                 self.game.messages.append("Invalid item.")
 
-    def handle_character_screen_input(self, key):
+    def handle_character_screen_input(self, key: int) -> None:
         if key == 27:  # ESC key
             self.game.character_screen_mode = False
 
-    def handle_equipment_input(self, key):
+    def handle_equipment_input(self, key: int) -> None:
         if key == 27:  # ESC key
             self.game.equipment_mode = False
             self.game.equipment_slot = None
@@ -249,22 +268,24 @@ class InputHandler:
                 self.game.equipment_slot = chr(key)
         else:
             if key in [ord('+'), ord('=')]:
-                self.game.equipment_page += 1
+                eq_page: int = getattr(self.game, 'equipment_page', 0)
+                setattr(self.game, 'equipment_page', eq_page + 1)
             elif key == ord('-'):
-                self.game.equipment_page = max(0, self.game.equipment_page - 1)
+                eq_page = getattr(self.game, 'equipment_page', 0)
+                setattr(self.game, 'equipment_page', max(0, eq_page - 1))
             elif 97 <= key <= 122:  # 'a' to 'z'
                 self.game.equip_item(chr(key))
             self.game.equipment_slot = None
 
-    def handle_character_stats_input(self, key):
+    def handle_character_stats_input(self, key: int) -> None:
         if key == 27:  # ESC key
             self.game.character_stats_mode = False
 
-    def handle_combat_stats_input(self, key):
+    def handle_combat_stats_input(self, key: int) -> None:
         if key == 27:  # ESC key
             self.game.combat_stats_mode = False
 
-    def handle_backpack_input(self, key):
+    def handle_backpack_input(self, key: int) -> None:
         if key == 27:  # ESC key
             self.game.backpack_mode = False
         elif key in [ord('+'), ord('=')]:
@@ -274,7 +295,7 @@ class InputHandler:
         elif 97 <= key <= 122:  # a-z
             self.game.use_backpack_item(chr(key))
 
-    def handle_options_input(self, key):
+    def handle_options_input(self, key: int) -> None:
         if key == 27:  # ESC key
             self.game.options_mode = False
             self.game.speed_input = ""
@@ -300,11 +321,11 @@ class InputHandler:
         elif key == 8 or key == 127:  # Backspace
             self.game.speed_input = self.game.speed_input[:-1]
 
-    def handle_help_input(self, key):
+    def handle_help_input(self, key: int) -> None:
         if key in (27, ord('q')):
             self.game.help_mode = False
 
-    def handle_debug_input(self, key):
+    def handle_debug_input(self, key: int) -> None:
         # Handle debug menu options
         if key == 27:  # ESC key
             self.game.debug_mode = False
@@ -389,12 +410,12 @@ class InputHandler:
             self.game.walk_speed = min(100, self.game.walk_speed + 1)
             self.game.messages.append(f"Walk speed increased to {self.game.walk_speed} ms.")
 
-    def _clear_save_mode(self, mode_attr):
+    def _clear_save_mode(self, mode_attr: str) -> None:
         setattr(self.game, mode_attr, False)
         self.game.save_slot = None
         self.game.save_info_cache = None
 
-    def handle_save_input(self, key):
+    def handle_save_input(self, key: int) -> None:
         """Handle input for save game mode."""
         if key == 27:
             self._clear_save_mode('save_mode')
@@ -416,7 +437,7 @@ class InputHandler:
             elif key in (ord('n'), ord('N'), 27):
                 self._clear_save_mode('save_mode')
 
-    def handle_load_input(self, key):
+    def handle_load_input(self, key: int) -> None:
         """Handle input for load game mode."""
         if key == 27:
             self._clear_save_mode('load_mode')
@@ -438,7 +459,7 @@ class InputHandler:
             elif key in (ord('n'), ord('N'), 27):
                 self._clear_save_mode('load_mode')
 
-    def handle_delete_input(self, key):
+    def handle_delete_input(self, key: int) -> None:
         """Handle input for delete save mode."""
         if key == 27:
             self._clear_save_mode('delete_mode')
@@ -462,12 +483,12 @@ class InputHandler:
             elif key in (ord('n'), ord('N'), 27):
                 self._clear_save_mode('delete_mode')
 
-    def handle_save_load_menu_input(self, key):
+    def handle_save_load_menu_input(self, key: int) -> None:
         """Handle input for the save/load menu accessed by pressing ESC."""
         if key == 27:  # ESC key
             self.game.save_load_menu_mode = False
             return
-        
+
         if key == ord('s'):
             self.game.save_mode = True
             self.game.save_load_menu_mode = False

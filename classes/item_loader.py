@@ -1,33 +1,46 @@
+from __future__ import annotations
 import json
 import os
+from typing import Any, Callable, Optional, TYPE_CHECKING
 from classes.item import Item, Equipment
 
+if TYPE_CHECKING:
+    from classes.entity import Entity
+
+
 class Material:
-    def __init__(self, name, power):
+    def __init__(self, name: str, power: float) -> None:
         self.name = name
         self.power = power
         # Higher tier materials are worth more
-        self.value_multiplier = power
+        self.value_multiplier: float = power
 
 
-def load_materials():
+def load_materials() -> list[Material]:
     script_dir = os.path.dirname(os.path.abspath(__file__))
     materials_path = os.path.join(script_dir, '..', 'data', 'materials', 'materials.json')
     with open(materials_path, 'r') as f:
-        material_data = json.load(f)
+        material_data: list[dict[str, Any]] = json.load(f)
     return [Material(m['name'], m['power']) for m in material_data]
 
-def load_items():
+
+def load_items() -> tuple[
+    list[Item],
+    list[Equipment],
+    list[Item],
+    list[Material],
+    list[Item | Equipment],
+]:
     script_dir = os.path.dirname(os.path.abspath(__file__))
     items_dir = os.path.join(script_dir, '..', 'data', 'items')
 
     consumables_path = os.path.join(items_dir, 'consumables.json')
     with open(consumables_path, 'r') as file:
-        consumable_data = json.load(file)
+        consumable_data: list[dict[str, Any]] = json.load(file)
 
-    all_materials = load_materials()
+    all_mats = load_materials()
 
-    consumables = []
+    consumables: list[Item] = []
     for item_data in consumable_data:
         effect = create_effect(item_data['effect'], item_data['value'], item_data.get('duration', None))
         item = Item(
@@ -42,24 +55,23 @@ def load_items():
         )
         consumables.append(item)
 
-
-    equipment = []
-    misc_items = []
+    equipment: list[Equipment] = []
+    misc_items: list[Item] = []
     for fname in os.listdir(items_dir):
         if not fname.endswith('.json') or fname == 'consumables.json':
             continue
         path = os.path.join(items_dir, fname)
         with open(path, 'r') as file:
-            items = json.load(file)
+            items: list[dict[str, Any]] = json.load(file)
         for item_data in items:
-            accuracy = item_data.get('accuracy', 0)
-            material_type = item_data.get('material_type')
+            accuracy: float = item_data.get('accuracy', 0)
+            material_type: Optional[str] = item_data.get('material_type')
             # Check for either 'slot' or 'type' field to determine if it's equipment
-            slot = item_data.get('slot') or item_data.get('type')
+            slot: Optional[str] = item_data.get('slot') or item_data.get('type')
             if slot:
-                item = Equipment(
+                eq = Equipment(
                     item_data['name'],
-                    slot,  # Use the slot/type as the equipment slot
+                    slot,
                     item_data.get('body_part', 'unknown'),
                     0,
                     damage=item_data.get('damage'),
@@ -69,51 +81,60 @@ def load_items():
                     material_type=material_type,
                     gold_value=item_data.get('gold', 50),
                 )
-                equipment.append(item)
+                equipment.append(eq)
             else:
-                item = Item(
+                no_effect: Callable[[Entity], None] = lambda e: None
+                misc = Item(
                     item_data['name'],
-                    lambda e: None,
+                    no_effect,
                     weight=item_data.get('weight', 1),
                     gold_value=item_data.get('gold', 0),
                     material_type=material_type,
                 )
-                misc_items.append(item)
+                misc_items.append(misc)
 
-    all_items = consumables + equipment + misc_items
-    return consumables, equipment, misc_items, all_materials, all_items
+    all_items: list[Item | Equipment] = consumables + equipment + misc_items  # type: ignore[assignment]
+    return consumables, equipment, misc_items, all_mats, all_items
 
-def create_effect(effect_type, value, duration):
+
+def create_effect(
+    effect_type: str,
+    value: Any,
+    duration: Any,
+) -> Callable[[Entity], Any]:
+    fn: Callable[[Entity], Any]
     if effect_type == 'heal':
-        return lambda e: e.heal(value)
+        fn = lambda e: e.heal(value)
     elif effect_type == 'restore_mana':
-        return lambda e: e.restore_mana(value)
+        fn = lambda e: e.restore_mana(value)
     elif effect_type == 'boost_strength':
-        return lambda e: e.apply_temporary_boost('strength', value, duration)
+        fn = lambda e: e.apply_temporary_boost('strength', value, duration)
     elif effect_type == 'boost_dexterity':
-        return lambda e: e.apply_temporary_boost('dexterity', value, duration)
+        fn = lambda e: e.apply_temporary_boost('dexterity', value, duration)
     elif effect_type == 'boost_constitution':
-        return lambda e: e.apply_temporary_boost('constitution', value, duration)
+        fn = lambda e: e.apply_temporary_boost('constitution', value, duration)
     elif effect_type == 'boost_intelligence':
-        return lambda e: e.apply_temporary_boost('intelligence', value, duration)
+        fn = lambda e: e.apply_temporary_boost('intelligence', value, duration)
     elif effect_type == 'boost_speed':
-        return lambda e: e.apply_temporary_boost('speed', value, duration)
+        fn = lambda e: e.apply_temporary_boost('speed', value, duration)
     elif effect_type == 'boost_charisma':
-        return lambda e: e.apply_temporary_boost('charisma', value, duration)
+        fn = lambda e: e.apply_temporary_boost('charisma', value, duration)
     elif effect_type == 'cure_poison':
-        return lambda e: e.cure_poison()
+        fn = lambda e: e.cure_poison()
     elif effect_type == 'satiate':
-        return lambda e: e.satiate(value)
+        fn = lambda e: e.satiate(value)
     elif effect_type == 'identify':
-        return lambda e: e.identify_item()
+        fn = lambda e: e.identify_item()
     elif effect_type == 'detect_magic':
-        return lambda e: e.detect_magic()
+        fn = lambda e: e.detect_magic()
     elif effect_type == 'light':
-        return lambda e: e.cast_light()
+        fn = lambda e: e.cast_light()
     elif effect_type in ('poison', 'damage'):
-        return lambda e: e.take_damage(value)
+        fn = lambda e: e.take_damage(value)
     else:
-        return lambda e: f"Unknown effect: {effect_type}"
+        fn = lambda e: f"Unknown effect: {effect_type}"
+    return fn
+
 
 (
     all_consumables,

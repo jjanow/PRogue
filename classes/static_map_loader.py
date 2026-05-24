@@ -1,5 +1,8 @@
+from __future__ import annotations
+
 import json
 from pathlib import Path
+from typing import Any
 
 
 class StaticMapLoader:
@@ -32,7 +35,7 @@ class StaticMapLoader:
       "@": {"tile": ".", "tag": "player_start"}
     """
 
-    def load(self, path):
+    def load(self, path: str | Path) -> tuple[list[list[str]], list[tuple[int, int, int, int]], dict[str, tuple[int, int]], dict[str, Any]]:
         """Parse a static map file.
 
         Returns
@@ -48,21 +51,21 @@ class StaticMapLoader:
             "name" and "fov_mode" from the file header.
         """
         with open(path) as f:
-            data = json.load(f)
+            data: dict[str, Any] = json.load(f)
 
-        raw_rows = data.get("tiles", [])
-        legend = data.get("legend", {})
+        raw_rows: list[str] = data.get("tiles", [])
+        legend: dict[str, Any] = data.get("legend", {})
 
-        map_grid = []
-        spawns = {}
+        map_grid: list[list[str]] = []
+        spawns: dict[str, tuple[int, int]] = {}
 
         for y, row_str in enumerate(raw_rows):
-            map_row = []
+            map_row: list[str] = []
             for x, ch in enumerate(row_str):
                 entry = legend.get(ch)
                 if entry is not None:
-                    tile_char = entry.get("tile", ch)
-                    tag = entry.get("tag")
+                    tile_char: str = entry.get("tile", ch)
+                    tag: str | None = entry.get("tag")
                     if tag:
                         spawns[tag] = (x, y)
                 else:
@@ -77,8 +80,9 @@ class StaticMapLoader:
                 while len(row) < max_w:
                     row.append("#")
 
-        fov_mode = data.get("fov_mode", "dungeon")
+        fov_mode: str = data.get("fov_mode", "dungeon")
 
+        rooms: list[tuple[int, int, int, int]]
         if fov_mode == "outdoor" and map_grid:
             h = len(map_grid)
             w = len(map_grid[0]) if map_grid else 0
@@ -86,7 +90,10 @@ class StaticMapLoader:
             # grants full open-air visibility everywhere in town.
             rooms = [(1, 1, w - 2, h - 2)]
         else:
-            rooms = [tuple(r) for r in data.get("rooms", [])]
+            rooms = [
+                (int(r[0]), int(r[1]), int(r[2]), int(r[3]))
+                for r in data.get("rooms", [])
+            ]
 
         # Auto-register any untagged stair tiles so callers can find them.
         if "dungeon_entrance" not in spawns:
@@ -95,7 +102,7 @@ class StaticMapLoader:
                     if ch == ">":
                         spawns.setdefault("dungeon_entrance", (x, y))
 
-        metadata = {
+        metadata: dict[str, Any] = {
             "name": data.get("name", "Unknown"),
             "fov_mode": fov_mode,
             "enemy_spawning": data.get("enemy_spawning", True),

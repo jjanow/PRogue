@@ -1,3 +1,4 @@
+from __future__ import annotations
 import os
 
 try:
@@ -11,6 +12,7 @@ except ImportError as exc:
     raise
 import sys
 import random
+from typing import Any
 
 # Windows compatibility: use msvcrt for single key input
 if os.name == 'nt':
@@ -19,8 +21,7 @@ else:
     import tty
     import termios
 
-# Reduce the delay for detecting an isolated ESC key press. The default delay
-# can make exiting menus feel sluggish.
+# Reduce the delay for detecting an isolated ESC key press.
 os.environ.setdefault("ESCDELAY", "25")
 
 # Add the current directory to Python path to find the 'classes' package
@@ -28,20 +29,21 @@ sys.path.append(os.path.dirname(os.path.realpath(__file__)))
 
 from classes.game import Game
 from classes.item import Equipment
-from classes.race_loader import all_races
+from classes.race_loader import Race, all_races
+from classes.save_manager import SaveManager, SaveInfo
 from curses import KEY_NPAGE, KEY_PPAGE
 
 
-def clear_screen():
+def clear_screen() -> None:
     """Clear the terminal screen."""
     os.system('cls' if os.name == 'nt' else 'clear')
 
 
-def get_single_key():
+def get_single_key() -> str:
     """Wait for a single keypress and return the pressed character."""
     if os.name == 'nt':
         ch = msvcrt.getch()
-        if ch in b"\x00\xe0":  # Handle special keys
+        if ch in b"\x00\xe0":
             ch = msvcrt.getch()
         return ch.decode("utf-8", errors="ignore")
     else:
@@ -55,7 +57,7 @@ def get_single_key():
         return ch
 
 
-def choose_option_single_click(prompt, options):
+def choose_option_single_click(prompt: str, options: list[str]) -> str:
     """Display options and return the selected one using a single key press."""
     while True:
         clear_screen()
@@ -70,9 +72,14 @@ def choose_option_single_click(prompt, options):
                 return options[sel]
 
 
-def point_buy_curses(stdscr, stats, race_bonuses, total_points=20):
+def point_buy_curses(
+    stdscr: curses.window,
+    stats: dict[str, int],
+    race_bonuses: dict[str, int],
+    total_points: int = 20,
+) -> dict[str, int]:
     curses.curs_set(0)
-    attributes = list(stats.keys())
+    attributes: list[str] = list(stats.keys())
     selected = 0
     remaining = total_points
     while True:
@@ -80,14 +87,14 @@ def point_buy_curses(stdscr, stats, race_bonuses, total_points=20):
         stdscr.addstr(0, 0, "Point Buy - Arrows adjust, Enter to accept")
         for idx, attr in enumerate(attributes):
             marker = "->" if idx == selected else "  "
-            base = stats[attr]
-            bonus = race_bonuses.get(attr, 0)
-            total = max(1, base + bonus)
+            base: int = stats[attr]
+            bonus: int = race_bonuses.get(attr, 0)
+            total: int = max(1, base + bonus)
             stdscr.addstr(idx + 2, 0,
                           f"{marker} {attr.title():<12}: {base:2d} {bonus:+2d} = {total:2d}")
         stdscr.addstr(len(attributes) + 3, 0, f"Remaining Points: {remaining:2d}")
         stdscr.refresh()
-        key = stdscr.getch()
+        key: int = stdscr.getch()
         if key == curses.KEY_UP:
             selected = (selected - 1) % len(attributes)
         elif key == curses.KEY_DOWN:
@@ -104,7 +111,8 @@ def point_buy_curses(stdscr, stats, race_bonuses, total_points=20):
             break
     return stats
 
-def character_creation_cli():
+
+def character_creation_cli() -> dict[str, Any]:
     """Simple command line character creation before launching curses."""
     clear_screen()
     print("=== Character Creation ===")
@@ -112,16 +120,14 @@ def character_creation_cli():
     clear_screen()
     gender = input("Gender: ")
     clear_screen()
-    # Choose sex using single key input
     sex_options = ["Male", "Female", "Other"]
     sex = choose_option_single_click("Choose Sex:", sex_options)
     clear_screen()
 
-    # Choose race from data file
-    race = choose_option_single_click(
+    race_name = choose_option_single_click(
         "Choose Race:", [r.name for r in all_races]
     )
-    race = next(r for r in all_races if r.name == race)
+    race: Race = next(r for r in all_races if r.name == race_name)
     clear_screen()
 
     attributes = [
@@ -143,8 +149,8 @@ def character_creation_cli():
         method = get_single_key().lower()
         if method in ("r", "p"):
             break
-    
-    stats = {}
+
+    stats: dict[str, int] = {}
     if method.startswith("r"):
         while True:
             clear_screen()
@@ -166,7 +172,6 @@ def character_creation_cli():
         stats = {attr: 10 for attr in attributes}
         stats = wrapper(point_buy_curses, stats, race.bonuses, 20)
 
-        # Apply race bonuses directly without an extra screen
         for attr in attributes:
             stats[attr] = max(1, stats[attr] + race.bonuses.get(attr, 0))
 
@@ -178,14 +183,15 @@ def character_creation_cli():
         "stats": stats,
     }
 
-def draw(stdscr, game):
+
+def draw(stdscr: curses.window, game: Game) -> None:
     stdscr.clear()
     height, width = stdscr.getmaxyx()
     for y, row in enumerate(game.map):
         for x, cell in enumerate(row):
             stdscr.addch(y, x, cell)
 
-    icon_map = {
+    icon_map: dict[str, str] = {
         'weapon': '/',
         'missile weapon': '}',
         'helmet': '^',
@@ -205,14 +211,13 @@ def draw(stdscr, game):
             ch = icon_map.get(item.slot, '?')
         else:
             ch = '!'
-        stdscr.addch(item.y, item.x, ch)
+        stdscr.addch(item.y, item.x, ch)  # type: ignore[arg-type]
 
     for enemy in game.enemies:
         stdscr.addch(enemy.y, enemy.x, enemy.char)
 
     stdscr.addch(game.player.y, game.player.x, game.player.char)
 
-    # Status bar
     stdscr.addstr(
         height - 3,
         0,
@@ -220,53 +225,17 @@ def draw(stdscr, game):
     )
     stdscr.addstr(height - 2, 0, f"Level: {game.player.level} | XP: {game.player.xp}/{game.player.xp_to_next_level} | Dungeon Level: {game.dungeon_level}")
 
-    # Inventory
-    inv_str = ", ".join(item.name for item in game.player.inventory[:5])  # Show only first 5 items
-    if len(game.player.inventory) > 5:
-        inv_str += "..."
-    stdscr.addstr(height - 1, 0, f"Inventory: {inv_str[:width-12]}")  # Truncate if too long
+    inv_str = ", ".join(item.name for item in game.player.inventory)
+    stdscr.addstr(height - 1, 0, f"Inventory: {inv_str[:width-12]}")
 
-    # Messages
     for i, message in enumerate(game.messages[-3:]):
-        if message is not None:
-            stdscr.addstr(height - 1 + i, 0, str(message)[:width])  # Convert to string and truncate if too long
+        stdscr.addstr(height - 1 + i, 0, str(message)[:width])
 
     stdscr.refresh()
 
-def main(stdscr, char_data):
-    # Initialize curses
-    curses.start_color()
-    # Further reduce the ESC key delay inside curses itself. Not all curses
-    # implementations provide ``set_escdelay`` (e.g. ``windows-curses`` on
-    # Windows). Guard the call so the game runs everywhere.
-    if hasattr(curses, "set_escdelay"):
-        curses.set_escdelay(25)
-    curses.init_pair(1, curses.COLOR_WHITE, curses.COLOR_BLACK)   # Default
-    curses.init_pair(2, curses.COLOR_RED, curses.COLOR_BLACK)     # Player
-    curses.init_pair(3, curses.COLOR_GREEN, curses.COLOR_BLACK)   # Monsters
-    curses.init_pair(4, curses.COLOR_YELLOW, curses.COLOR_BLACK)  # Items
-    curses.init_pair(5, curses.COLOR_BLUE, curses.COLOR_BLACK)    # Walls
-    curses.init_pair(6, curses.COLOR_CYAN, curses.COLOR_BLACK)    # Doors
-    curses.init_pair(7, curses.COLOR_MAGENTA, curses.COLOR_BLACK) # Menu headers
-    curses.init_pair(8, curses.COLOR_GREEN, curses.COLOR_BLACK)   # Trees
-    curses.init_pair(9, curses.COLOR_CYAN, curses.COLOR_BLACK)    # Water
 
-    # Initialize game
-    height, width = stdscr.getmaxyx()
-    game = Game(height - 3, width, stdscr)
-    # Apply character creation choices
-    game.player.name = char_data.get("name", game.player.name)
-    game.player.gender = char_data.get("gender", "")
-    game.player.sex = char_data.get("sex", "")
-    game.player.race = char_data.get("race", "")
-    for stat, value in char_data.get("stats", {}).items():
-        if hasattr(game.player, stat):
-            setattr(game.player, stat, value)
-
-    # Recalculate derived attributes based on stats
-    game.player.max_health = 50 + game.player.constitution * 5
-    game.player.health = game.player.max_health
-
+def _run_main_loop(stdscr: curses.window, game: Game) -> None:
+    """Run the main game loop."""
     while True:
         if game.character_stats_mode:
             game.renderer.draw_character_stats_screen(stdscr)
@@ -298,13 +267,16 @@ def main(stdscr, char_data):
         if game.quit:
             break
 
-        key = stdscr.getch()
-        if game.debug_mode and key == 27:  # ESC key
+        key: int = stdscr.getch()
+        if game.debug_mode and key == 27:
             game.debug_mode = False
         elif game.inventory_mode:
-            if key in (ord('+'), ord('.'), KEY_NPAGE):  # Next page (+ key, . key, or PgDn)
-                game.inventory_page = min(game.inventory_page + 1, (len(game.player.inventory) - 1) // game.items_per_page)
-            elif key in (ord('-'), ord(','), KEY_PPAGE):  # Previous page (- key, , key, or PgUp)
+            if key in (ord('+'), ord('.'), KEY_NPAGE):
+                game.inventory_page = min(
+                    game.inventory_page + 1,
+                    (len(game.player.inventory) - 1) // game.items_per_page,
+                )
+            elif key in (ord('-'), ord(','), KEY_PPAGE):
                 game.inventory_page = max(0, game.inventory_page - 1)
             elif game.handle_input(key):
                 break
@@ -322,10 +294,39 @@ def main(stdscr, char_data):
             if key in (10, 13):
                 break
 
-    return
+
+def main(stdscr: curses.window, char_data: dict[str, Any]) -> None:
+    curses.start_color()
+    if hasattr(curses, "set_escdelay"):
+        curses.set_escdelay(25)
+    curses.init_pair(1, curses.COLOR_WHITE, curses.COLOR_BLACK)
+    curses.init_pair(2, curses.COLOR_RED, curses.COLOR_BLACK)
+    curses.init_pair(3, curses.COLOR_GREEN, curses.COLOR_BLACK)
+    curses.init_pair(4, curses.COLOR_YELLOW, curses.COLOR_BLACK)
+    curses.init_pair(5, curses.COLOR_BLUE, curses.COLOR_BLACK)
+    curses.init_pair(6, curses.COLOR_CYAN, curses.COLOR_BLACK)
+    curses.init_pair(7, curses.COLOR_MAGENTA, curses.COLOR_BLACK)
+    curses.init_pair(8, curses.COLOR_GREEN, curses.COLOR_BLACK)
+    curses.init_pair(9, curses.COLOR_CYAN, curses.COLOR_BLACK)
+
+    height, width = stdscr.getmaxyx()
+    game = Game(height - 3, width, stdscr)
+    game.player.name = char_data.get("name", game.player.name)
+    game.player.gender = char_data.get("gender", "")
+    game.player.sex = char_data.get("sex", "")
+    game.player.race = char_data.get("race", "")
+    for stat, value in char_data.get("stats", {}).items():
+        if hasattr(game.player, stat):
+            setattr(game.player, stat, value)
+
+    game.player.max_health = 50 + game.player.constitution * 5
+    game.player.health = game.player.max_health
+
+    _run_main_loop(stdscr, game)
+
 
 if __name__ == "__main__":
-    def show_intro_menu():
+    def show_intro_menu() -> str:
         """Show the main intro menu with options to create, load, or manage saves."""
         while True:
             clear_screen()
@@ -352,16 +353,16 @@ if __name__ == "__main__":
             elif choice == "5":
                 return "random"
 
-    def generate_random_character():
+    def generate_random_character() -> dict[str, Any]:
         """Generate a fully randomized character without any prompts."""
-        _first_names = [
+        _first_names: list[str] = [
             "Aric", "Bran", "Cael", "Dorn", "Eryn", "Fael", "Gorn", "Hael",
             "Idris", "Jorn", "Kael", "Lorn", "Mira", "Nael", "Oren", "Pell",
             "Rael", "Sera", "Tael", "Urik", "Vael", "Wren", "Xael", "Yorn",
             "Zael", "Aldric", "Brynn", "Caius", "Delia", "Eamon",
         ]
-        _sex_options = ["Male", "Female", "Other"]
-        _attributes = [
+        _sex_options: list[str] = ["Male", "Female", "Other"]
+        _attributes: list[str] = [
             "strength", "dexterity", "constitution", "intelligence",
             "willpower", "charisma", "appearance", "perception",
         ]
@@ -369,10 +370,10 @@ if __name__ == "__main__":
         name = random.choice(_first_names)
         sex = random.choice(_sex_options)
         gender = sex
-        race = random.choice(all_races)
+        race: Race = random.choice(all_races)
 
-        base_stats = {attr: random.randint(1, 20) for attr in _attributes}
-        stats = {
+        base_stats: dict[str, int] = {attr: random.randint(1, 20) for attr in _attributes}
+        stats: dict[str, int] = {
             attr: max(1, base_stats[attr] + race.bonuses.get(attr, 0))
             for attr in _attributes
         }
@@ -384,55 +385,52 @@ if __name__ == "__main__":
             "race": race.name,
             "stats": stats,
         }
-    
-    def show_load_menu():
+
+    def show_load_menu() -> int | None:
         """Show menu to select a save slot to load."""
-        from classes.save_manager import SaveManager
         save_manager = SaveManager()
         saves = save_manager.get_all_save_info()
-        
+
         while True:
             clear_screen()
             print("=== Load Game ===")
             print()
-            
-            # Show available saves
-            available_saves = []
+
+            available_saves: list[SaveInfo] = []
             for save in saves:
                 if save['exists']:
                     available_saves.append(save)
                     print(f"  {save['slot']}) {save['character_name']} - Level {save['player_level']} (Dungeon {save['level']})")
                     print(f"      Last played: {save['timestamp']}")
                     print()
-            
+
             if not available_saves:
                 print("  No save games found.")
                 print()
                 print("Press any key to return to main menu...")
                 get_single_key()
                 return None
-            
+
             print("  0) Return to main menu")
             print()
             print("Select a save slot to load:")
-            
+
             choice = get_single_key()
             if choice == "0":
                 return None
-            
+
             if choice.isdigit():
                 slot = int(choice)
                 if 1 <= slot <= 10:
                     save_info = save_manager.get_save_info(slot)
                     if save_info['exists']:
                         return slot
-            
+
             print("Invalid selection. Press any key to continue...")
             get_single_key()
-    
-    def show_manage_menu():
+
+    def show_manage_menu() -> None:
         """Show menu to manage save games (delete, view details)."""
-        from classes.save_manager import SaveManager
         save_manager = SaveManager()
 
         while True:
@@ -462,42 +460,40 @@ if __name__ == "__main__":
                 return
             elif choice == "d":
                 show_delete_menu(save_manager, saves)
-    
-    def show_delete_menu(save_manager, saves):
+
+    def show_delete_menu(save_manager: SaveManager, saves: list[SaveInfo]) -> None:
         """Show menu to delete a save game."""
         while True:
             clear_screen()
             print("=== Delete Save Game ===")
             print()
-            
-            # Show only existing saves
+
             existing_saves = [save for save in saves if save['exists']]
-            
+
             if not existing_saves:
                 print("No save games to delete.")
                 print()
                 print("Press any key to continue...")
                 get_single_key()
                 return
-            
+
             for save in existing_saves:
                 print(f"  {save['slot']}) {save['character_name']} - Level {save['player_level']}")
-            
+
             print()
             print("  0) Cancel")
             print()
             print("Select a save to delete:")
-            
+
             choice = get_single_key()
             if choice == "0":
                 return
-            
+
             if choice.isdigit():
                 slot = int(choice)
                 if 1 <= slot <= 10:
                     save_info = save_manager.get_save_info(slot)
                     if save_info['exists']:
-                        # Confirm deletion
                         clear_screen()
                         print(f"Are you sure you want to delete {save_info['character_name']}?")
                         print("This action cannot be undone!")
@@ -505,7 +501,7 @@ if __name__ == "__main__":
                         print("  y) Yes, delete")
                         print("  n) No, cancel")
                         print()
-                        
+
                         confirm = get_single_key().lower()
                         if confirm == "y":
                             try:
@@ -517,19 +513,13 @@ if __name__ == "__main__":
                             print("Press any key to continue...")
                             get_single_key()
                         return
-            
+
             print("Invalid selection. Press any key to continue...")
             get_single_key()
-    
-    def load_existing_game(slot):
+
+    def load_existing_game(slot: int) -> None:
         """Load an existing game from a save slot."""
-        from classes.game import Game
-        from classes.save_manager import SaveManager
-        import curses
-        from curses import wrapper
-        
-        def run_loaded_game(stdscr):
-            # Initialize curses
+        def run_loaded_game(stdscr: curses.window) -> None:
             curses.start_color()
             if hasattr(curses, "set_escdelay"):
                 curses.set_escdelay(25)
@@ -540,92 +530,33 @@ if __name__ == "__main__":
             curses.init_pair(5, curses.COLOR_BLUE, curses.COLOR_BLACK)
             curses.init_pair(6, curses.COLOR_CYAN, curses.COLOR_BLACK)
             curses.init_pair(7, curses.COLOR_MAGENTA, curses.COLOR_BLACK)
-            
-            # Initialize game with minimal setup (no map generation or item spawning)
+
             height, width = stdscr.getmaxyx()
             game = Game.create_minimal(height - 3, width, stdscr)
-            
-            # Load the save
+
             save_manager = SaveManager()
             try:
                 save_manager.load_game(game, slot)
-                game.save_slot = slot  # Set the current save slot
-                
-                # Main game loop
-                while True:
-                    if game.character_stats_mode:
-                        game.renderer.draw_character_stats_screen(stdscr)
-                    elif game.combat_stats_mode:
-                        game.renderer.draw_combat_stats_screen(stdscr)
-                    elif game.inventory_mode:
-                        game.renderer.draw_inventory(stdscr)
-                    elif game.backpack_mode:
-                        game.renderer.draw_backpack(stdscr)
-                    elif game.drop_mode:
-                        game.renderer.draw_drop_interface(stdscr)
-                    elif game.options_mode:
-                        game.renderer.draw_options_menu(stdscr)
-                    elif game.save_load_menu_mode:
-                        game.renderer.draw_save_load_menu(stdscr)
-                    elif game.help_mode:
-                        game.renderer.draw_help_menu(stdscr)
-                    elif game.debug_mode:
-                        game.renderer.draw_debug_menu(stdscr)
-                    elif game.save_mode:
-                        game.renderer.draw_save_screen(stdscr)
-                    elif game.load_mode:
-                        game.renderer.draw_load_screen(stdscr)
-                    elif game.delete_mode:
-                        game.renderer.draw_delete_screen(stdscr)
-                    else:
-                        game.renderer.draw(stdscr)
-
-                    if game.quit:
-                        break
-
-                    key = stdscr.getch()
-                    if game.debug_mode and key == 27:  # ESC key
-                        game.debug_mode = False
-                    elif game.inventory_mode:
-                        if key in (ord('+'), ord('.'), KEY_NPAGE):
-                            game.inventory_page = min(game.inventory_page + 1, (len(game.player.inventory) - 1) // game.items_per_page)
-                        elif key in (ord('-'), ord(','), KEY_PPAGE):
-                            game.inventory_page = max(0, game.inventory_page - 1)
-                        elif game.handle_input(key):
-                            break
-                    elif game.handle_input(key):
-                        break
-
-                    if game.quit:
-                        break
-
-                if game.game_over:
-                    game.renderer.draw(stdscr)
-                    stdscr.nodelay(False)
-                    while True:
-                        key = stdscr.getch()
-                        if key in (10, 13):
-                            break
-                            
+                game.save_slot = slot
+                _run_main_loop(stdscr, game)
             except Exception as e:
-                # If loading fails, show error and return to main menu
                 stdscr.clear()
                 stdscr.addstr(0, 0, f"Error loading save: {e}")
                 stdscr.addstr(2, 0, "Press any key to return to main menu...")
                 stdscr.refresh()
                 stdscr.getch()
-        
+
         wrapper(run_loaded_game)
 
     # Main program loop
     while True:
         choice = show_intro_menu()
-        
+
         if choice == "random":
             char_data = generate_random_character()
             print(f"Starting as {char_data['name']} the {char_data['race']}...")
 
-            def run(stdscr):
+            def run(stdscr: curses.window) -> None:
                 main(stdscr, char_data)
 
             wrapper(run)
@@ -635,23 +566,21 @@ if __name__ == "__main__":
         elif choice == "create":
             char_data = character_creation_cli()
 
-            def run(stdscr):
+            def run(stdscr: curses.window) -> None:
                 main(stdscr, char_data)
 
             wrapper(run)
             print("Thanks for playing!")
             break
-            
+
         elif choice == "load":
             slot = show_load_menu()
             if slot is not None:
                 load_existing_game(slot)
-            # If slot is None, user cancelled, so continue to main menu
-            
+
         elif choice == "manage":
             show_manage_menu()
-            # Return to main menu after managing saves
-            
+
         elif choice == "quit":
             print("Thanks for playing!")
             break

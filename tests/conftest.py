@@ -1,4 +1,6 @@
 """Shared fixtures for all test modules."""
+from __future__ import annotations
+from typing import Any
 import pytest
 from unittest.mock import MagicMock
 
@@ -8,19 +10,19 @@ from classes.map_generator import MapGenerator
 
 
 @pytest.fixture
-def mock_stdscr():
+def mock_stdscr() -> MagicMock:
     mock = MagicMock()
     mock.getmaxyx.return_value = (24, 80)
     return mock
 
 
 @pytest.fixture
-def bare_player():
+def bare_player() -> Entity:
     """Entity with default stats and no items."""
     return Entity(5, 5, '@', 'TestPlayer', 100, 0, 0)
 
 
-def _apply_minimal_map(game):
+def _apply_minimal_map(game: Game) -> None:
     """Populate a game instance with a deterministic 10×20 map containing one room."""
     h, w = 10, 20
     game.map = [['#'] * w for _ in range(h)]
@@ -42,7 +44,7 @@ def _apply_minimal_map(game):
 
 
 @pytest.fixture
-def minimal_game(mock_stdscr):
+def minimal_game(mock_stdscr: Any) -> Game:
     """Minimal Game instance with a hand-crafted map — no curses rendering."""
     game = Game.create_minimal(24, 80, mock_stdscr)
     _apply_minimal_map(game)

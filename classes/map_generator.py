@@ -1,12 +1,21 @@
+from __future__ import annotations
+
 import random
+from collections.abc import Iterator
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from classes.entity import Entity
 
 
 class MapGenerator:
-    def __init__(self, height, width, screen_height, screen_width):
+    def __init__(self, height: int, width: int, screen_height: int, screen_width: int) -> None:
         self.height = max(10, min(height, screen_height - 6))
         self.width = max(20, min(width, screen_width - 5))
+        self.map: list[list[str]] = []
+        self.rooms: list[tuple[int, int, int, int]] = []
 
-    def generate(self):
+    def generate(self) -> tuple[list[list[str]], list[tuple[int, int, int, int]]]:
         self.map, self.rooms = self._generate_map_and_rooms()
         return self.map, self.rooms
 
@@ -14,9 +23,9 @@ class MapGenerator:
     # Map construction
     # ------------------------------------------------------------------
 
-    def _generate_map_and_rooms(self, _attempt=0):
+    def _generate_map_and_rooms(self, _attempt: int = 0) -> tuple[list[list[str]], list[tuple[int, int, int, int]]]:
         self.map = [['#' for _ in range(self.width)] for _ in range(self.height)]
-        rooms = []
+        rooms: list[tuple[int, int, int, int]] = []
 
         target = random.randint(4, 8)
         room_h_max = max(3, min(8, (self.height - 2) // 3))
@@ -52,13 +61,13 @@ class MapGenerator:
         self._connect_rooms(rooms)
         return self.map, rooms
 
-    def _rooms_overlap(self, x, y, w, h, room):
+    def _rooms_overlap(self, x: int, y: int, w: int, h: int, room: tuple[int, int, int, int]) -> bool:
         # Enforces a 1-tile gap: rooms must not share a border tile.
         rx, ry, rw, rh = room
         return (x <= rx + rw and x + w >= rx and
                 y <= ry + rh and y + h >= ry)
 
-    def _create_room(self, x, y, w, h):
+    def _create_room(self, x: int, y: int, w: int, h: int) -> None:
         for row in range(y, y + h):
             for col in range(x, x + w):
                 self.map[row][col] = '.'
@@ -67,13 +76,13 @@ class MapGenerator:
     # Corridor connection (Prim's spanning tree)
     # ------------------------------------------------------------------
 
-    def _connect_rooms(self, rooms):
+    def _connect_rooms(self, rooms: list[tuple[int, int, int, int]]) -> None:
         """Connect all rooms via a minimum spanning tree of L-shaped corridors.
 
         Prefers orientations that avoid traversing a third room's interior.
         Falls back to force-carving if no clean path exists for a given edge."""
-        connected = [rooms[0]]
-        unconnected = list(rooms[1:])
+        connected: list[tuple[int, int, int, int]] = [rooms[0]]
+        unconnected: list[tuple[int, int, int, int]] = list(rooms[1:])
 
         while unconnected:
             _, rc, ru = min(
@@ -93,12 +102,12 @@ class MapGenerator:
             connected.append(ru)
             unconnected.remove(ru)
 
-    def _center_dist(self, r1, r2):
+    def _center_dist(self, r1: tuple[int, int, int, int], r2: tuple[int, int, int, int]) -> int:
         cx1, cy1 = r1[0] + r1[2] // 2, r1[1] + r1[3] // 2
         cx2, cy2 = r2[0] + r2[2] // 2, r2[1] + r2[3] // 2
         return abs(cx1 - cx2) + abs(cy1 - cy2)
 
-    def _in_other_room(self, x, y, room_a, room_b, rooms):
+    def _in_other_room(self, x: int, y: int, room_a: tuple[int, int, int, int], room_b: tuple[int, int, int, int], rooms: list[tuple[int, int, int, int]]) -> bool:
         """True if (x, y) falls inside any room that is not room_a or room_b."""
         for r in rooms:
             if r == room_a or r == room_b:
@@ -108,7 +117,7 @@ class MapGenerator:
                 return True
         return False
 
-    def _carve_corridor(self, room1, room2, all_rooms):
+    def _carve_corridor(self, room1: tuple[int, int, int, int], room2: tuple[int, int, int, int], all_rooms: list[tuple[int, int, int, int]]) -> bool:
         """Try H-then-V and V-then-H; carve the first orientation that avoids
         all third rooms.  Returns True if carved, False if both orientations fail."""
         cx1 = room1[0] + room1[2] // 2
@@ -127,7 +136,7 @@ class MapGenerator:
                 return True
         return False
 
-    def _force_carve(self, room1, room2):
+    def _force_carve(self, room1: tuple[int, int, int, int], room2: tuple[int, int, int, int]) -> None:
         """Unconditionally carve H-then-V from room1 center to room2 center."""
         cx1 = room1[0] + room1[2] // 2
         cy1 = room1[1] + room1[3] // 2
@@ -140,14 +149,14 @@ class MapGenerator:
     # Path helpers
     # ------------------------------------------------------------------
 
-    def _l_tiles(self, x1, y1, x2, y2, h_first):
+    def _l_tiles(self, x1: int, y1: int, x2: int, y2: int, h_first: bool) -> list[tuple[int, int]]:
         """All tiles on an L-shaped path; corner tile not duplicated."""
         tx, ty = (x2, y1) if h_first else (x1, y2)
         seg1 = list(self._straight(x1, y1, tx, ty))
         seg2 = list(self._straight(tx, ty, x2, y2))
         return seg1 + seg2[1:]
 
-    def _straight(self, x1, y1, x2, y2):
+    def _straight(self, x1: int, y1: int, x2: int, y2: int) -> Iterator[tuple[int, int]]:
         """Yield tiles along a purely horizontal or vertical line."""
         if x1 == x2:
             step = 1 if y2 >= y1 else -1
@@ -162,11 +171,11 @@ class MapGenerator:
     # Sparse feature placement
     # ------------------------------------------------------------------
 
-    def _in_room(self, x, y, rooms):
+    def _in_room(self, x: int, y: int, rooms: list[tuple[int, int, int, int]]) -> bool:
         return any(rx <= x < rx + rw and ry <= y < ry + rh
                    for rx, ry, rw, rh in rooms)
 
-    def _place_doors(self, rooms):
+    def _place_doors(self, rooms: list[tuple[int, int, int, int]]) -> None:
         """Place '+' doors at corridor tiles immediately adjacent to room interiors
         with ~50 % probability each."""
         for y in range(1, self.height - 1):
@@ -182,7 +191,7 @@ class MapGenerator:
                 if adj_room and random.random() < 0.5:
                     self.map[y][x] = '+'
 
-    def _place_traps(self, rooms):
+    def _place_traps(self, rooms: list[tuple[int, int, int, int]]) -> None:
         """Scatter 1–3 trap tiles ('^') on random floor tiles."""
         candidates = [
             (x, y)
@@ -198,7 +207,7 @@ class MapGenerator:
     # Public entry point
     # ------------------------------------------------------------------
 
-    def generate_level(self, player):
+    def generate_level(self, player: Entity) -> tuple[list[list[str]], list[tuple[int, int, int, int]], int, int, int, int]:
         self.map, self.rooms = self.generate()
 
         # Reinforce outer border as solid wall.

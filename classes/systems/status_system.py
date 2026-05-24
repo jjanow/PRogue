@@ -1,5 +1,13 @@
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from classes.entity import Entity
+
+
 class StatusSystem:
-    def update(self, entity, messages):
+    def update(self, entity: Entity, messages: list[str]) -> None:
         boosts = entity.status_comp.boosts
         for stat, boost in list(boosts.items()):
             boost['duration'] -= 1

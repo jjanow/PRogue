@@ -1,6 +1,14 @@
-import curses
+from __future__ import annotations
 
-from classes.item import Equipment
+import curses
+from typing import TYPE_CHECKING
+
+from classes.item import Equipment, Item
+from classes.save_manager import SaveInfo
+
+if TYPE_CHECKING:
+    from classes.game import Game
+
 
 ITEM_ICONS = {
     'weapon': '/',
@@ -19,19 +27,19 @@ ITEM_ICONS = {
 }
 
 class Renderer:
-    def __init__(self, game):
+    def __init__(self, game: Game) -> None:
         self.game = game
 
-    def _icon_for(self, item):
+    def _icon_for(self, item: Item) -> str:
         if isinstance(item, Equipment):
             return ITEM_ICONS.get(item.slot, '?')
         return '!'
 
-    def _format_item_stats(self, item):
-        info = []
+    def _format_item_stats(self, item: Item) -> str:
+        info: list[str] = []
         if isinstance(item, Equipment):
-            equipped = None
-            for slot_key, slot in self.game.player.equipment.items():
+            equipped: Equipment | None = None
+            for _slot_key, slot in self.game.player.equipment.items():
                 if slot['name'] == item.slot:
                     equipped = slot['item']
                     break
@@ -50,8 +58,8 @@ class Renderer:
                     info.append(f"DMG {eqd}->{dmg}")
                 else:
                     info.append(f"DMG {dmg}")
-            if item.ac is not None:
-                if equipped and equipped.ac is not None:
+            if item.ac:
+                if equipped and equipped.ac:
                     info.append(f"AC {equipped.ac}->{item.ac}")
                 else:
                     info.append(f"AC {item.ac}")
@@ -71,20 +79,20 @@ class Renderer:
                 info.append(f"Heal {item.value}")
             elif getattr(item, 'effect_type', None) == 'restore_mana':
                 info.append(f"Mana {item.value}")
-            else_effect = getattr(item, 'effect_type', '') or ''
+            else_effect: str = getattr(item, 'effect_type', '') or ''
             if else_effect.startswith('boost_'):
                 stat = else_effect.split('_', 1)[1].title()
                 info.append(f"+{item.value} {stat}")
             info.append(f"WT {item.weight}")
         return ' '.join(info)
 
-    def draw(self, stdscr):
+    def draw(self, stdscr: curses.window) -> None:
         stdscr.clear()
         height, width = stdscr.getmaxyx()
-        
+
         # Adjust the height to reserve 3 lines for the message log and 3 lines for the status bar
         dungeon_height = height - 6
-        
+
         for y, row in enumerate(self.game.map[:dungeon_height]):
             for x, cell in enumerate(row[:width]):  # Ensure we don't exceed the screen width
                 if not self.game.explored[y][x]:
@@ -108,17 +116,19 @@ class Renderer:
                     stdscr.addch(y, x, cell, curses.color_pair(1) | attr)  # Default
 
         for item in self.game.items:
-            if item.y < dungeon_height and (
-                self.game.visible[item.y][item.x]
-                or (item.seen and self.game.explored[item.y][item.x])
+            iy = item.y
+            ix = item.x
+            if iy is not None and ix is not None and iy < dungeon_height and (
+                self.game.visible[iy][ix]
+                or (item.seen and self.game.explored[iy][ix])
             ):
                 icon = self._icon_for(item)
                 attr = (
                     curses.A_NORMAL
-                    if self.game.visible[item.y][item.x]
+                    if self.game.visible[iy][ix]
                     else curses.A_DIM
                 )
-                stdscr.addch(item.y, item.x, icon, curses.color_pair(4) | attr)
+                stdscr.addch(iy, ix, icon, curses.color_pair(4) | attr)
 
         for enemy in self.game.enemies:
             if enemy.y < dungeon_height and self.game.visible[enemy.y][enemy.x]:
@@ -141,12 +151,12 @@ class Renderer:
 
         # Messages
         for i, message in enumerate(self.game.messages[-3:]):
-            if message is not None and height - 3 + i < height:  # Ensure we don't write outside the window height
+            if height - 3 + i < height:  # Ensure we don't write outside the window height
                 stdscr.addstr(height - 3 + i, 0, str(message)[:width])  # Convert to string and truncate if too long
 
         stdscr.refresh()
 
-    def draw_inventory(self, stdscr):
+    def draw_inventory(self, stdscr: curses.window) -> None:
         stdscr.clear()
         height, width = stdscr.getmaxyx()
 
@@ -177,15 +187,15 @@ class Renderer:
 
         stdscr.refresh()
 
-    def draw_character_screen(self, stdscr):
+    def draw_character_screen(self, stdscr: curses.window) -> None:
         stdscr.clear()
         height, width = stdscr.getmaxyx()
-        
+
         header = "Character Information (press escape to exit)"
         stdscr.addstr(0, 0, header[:width-1], curses.color_pair(7))
 
         # Left column: Basic Info
-        left_column = [
+        left_column: list[str] = [
             f"Name: {self.game.player.name.title()}",
             f"Level: {self.game.player.level}",
             f"XP: {self.game.player.xp}/{self.game.player.xp_to_next_level}",
@@ -203,7 +213,7 @@ class Renderer:
         ]
 
         # Right column: ADOM-style stats
-        right_column = [
+        right_column: list[str] = [
             f"Strength: {self.game.player.strength}",
             f"Dexterity: {self.game.player.dexterity}",
             f"Constitution: {self.game.player.constitution}",
@@ -242,10 +252,10 @@ class Renderer:
 
         stdscr.refresh()
 
-    def draw_backpack(self, stdscr):
+    def draw_backpack(self, stdscr: curses.window) -> None:
         stdscr.clear()
         height, width = stdscr.getmaxyx()
-        
+
         header = "Backpack Items (press '+' for next page, '-' for previous page, escape to exit)"
         stdscr.addstr(0, 0, header[:width-1], curses.color_pair(7))
 
@@ -265,10 +275,10 @@ class Renderer:
 
         stdscr.refresh()
 
-    def draw_drop_interface(self, stdscr):
+    def draw_drop_interface(self, stdscr: curses.window) -> None:
         stdscr.clear()
         height, width = stdscr.getmaxyx()
-        
+
         header = "Drop Items (press '+' for next page, '-' for previous page, escape to exit)"
         stdscr.addstr(0, 0, header[:width-1], curses.color_pair(7))
 
@@ -289,9 +299,9 @@ class Renderer:
         stdscr.refresh()
 
 
-    def draw_equipment_screen(self, stdscr):
+    def draw_equipment_screen(self, stdscr: curses.window) -> None:
         stdscr.clear()
-        height, width = stdscr.getmaxyx()
+        height, _width = stdscr.getmaxyx()
 
         stdscr.addstr(0, 0, "Equipment:", curses.color_pair(7))
         for i, (key, slot) in enumerate(self.game.player.equipment.items()):
@@ -300,14 +310,14 @@ class Renderer:
             stdscr.addstr(i + 2, 0, f"{key}: {slot['name']}: {item_name}")
 
             # Display equippable items for each slot
-            equippable_items = [item for item in self.game.player.inventory if isinstance(item, Equipment) and item.slot == slot['name']]
+            equippable_items: list[Equipment] = [item for item in self.game.player.inventory if isinstance(item, Equipment) and item.slot == slot['name']]
             if equippable_items:
                 stdscr.addstr(i + 2, 40, f"Equippable: {', '.join(item.name for item in equippable_items)}")
 
         stdscr.addstr(height - 1, 0, "Press the letter of a slot to equip an item, or 'q' to exit", curses.color_pair(7))
         stdscr.refresh()
 
-    def draw_character_stats_screen(self, stdscr):
+    def draw_character_stats_screen(self, stdscr: curses.window) -> None:
         stdscr.clear()
         height, width = stdscr.getmaxyx()
 
@@ -315,7 +325,7 @@ class Renderer:
         stdscr.addstr(0, 0, header[:width-1], curses.color_pair(7))
 
         # Attribute Scores
-        attributes = [
+        attributes: list[str] = [
             f"Strength: {self.game.player.strength}",
             f"Learning: {self.game.player.intelligence}",
             f"Willpower: {self.game.player.willpower}",
@@ -328,7 +338,7 @@ class Renderer:
         ]
 
         # Miscellaneous Data
-        misc_data = [
+        misc_data: list[str] = [
             f"Name: {self.game.player.name.title()}",
             f"Gender: {getattr(self.game.player, 'gender', 'Unknown').title()}",
             f"Sex: {getattr(self.game.player, 'sex', 'Unknown')}",
@@ -340,12 +350,12 @@ class Renderer:
         ]
 
         # Equipment Data
-        equipment_lines = [
+        equipment_lines: list[str] = [
             f"{slot['name'].title()}: {slot['item'].name if slot['item'] else 'Empty'}"
             for slot in self.game.player.equipment.values()
         ]
 
-        left_lines = attributes + [""] + misc_data
+        left_lines: list[str] = attributes + [""] + misc_data
         left_width = width // 2 - 2
 
         for i, line in enumerate(left_lines, start=2):
@@ -362,16 +372,16 @@ class Renderer:
 
         stdscr.refresh()
 
-    def draw_debug_menu(self, stdscr):
+    def draw_debug_menu(self, stdscr: curses.window) -> None:
         stdscr.clear()
         height, width = stdscr.getmaxyx()
 
-        menu_text = [
+        menu_text: list[str] = [
             "Debug Menu (press escape to exit):",
             "",
             "Item Creation:",
             "a) Create weapon",
-            "b) Create missile weapon", 
+            "b) Create missile weapon",
             "c) Create helmet",
             "d) Create amulet",
             "e) Create shield",
@@ -405,11 +415,11 @@ class Renderer:
 
         stdscr.refresh()
 
-    def draw_options_menu(self, stdscr):
+    def draw_options_menu(self, stdscr: curses.window) -> None:
         stdscr.clear()
-        height, width = stdscr.getmaxyx()
+        _height, width = stdscr.getmaxyx()
 
-        lines = [
+        lines: list[str] = [
             "Options (press escape to exit):",
             f"Walking speed: {self.game.walk_speed} ms (enter 0-1000)",
             "",
@@ -425,22 +435,29 @@ class Renderer:
 
         stdscr.refresh()
 
-    def draw_save_screen(self, stdscr):
+    def draw_save_screen(self, stdscr: curses.window) -> None:
         """Draw the save game screen."""
         stdscr.clear()
-        height, width = stdscr.getmaxyx()
+        _height, width = stdscr.getmaxyx()
 
         header = "Save Game (press escape to exit)"
         stdscr.addstr(0, 0, header[:width-1], curses.color_pair(7))
 
         if self.game.save_slot is None:
-            saves = self.game.save_info_cache or self.game.save_manager.get_all_save_info()
+            saves: list[SaveInfo] = self.game.save_info_cache or self.game.save_manager.get_all_save_info()
             stdscr.addstr(2, 0, "Select a save slot (1-0):", curses.color_pair(4))
 
             for i, save in enumerate(saves, 1):
-                if save['exists']:
-                    timestamp = save['timestamp'][:19] if save['timestamp'] != 'Unknown' else 'Unknown'
-                    line = f"{i}) {save['character_name']} - Level {save['player_level']} (Dungeon {save['level']}) - {timestamp}"
+                exists = save['exists']
+                assert isinstance(exists, bool)
+                if exists:
+                    timestamp = save['timestamp']
+                    assert isinstance(timestamp, str)
+                    timestamp = timestamp[:19] if timestamp != 'Unknown' else 'Unknown'
+                    character_name = save['character_name']
+                    player_level = save['player_level']
+                    level = save['level']
+                    line = f"{i}) {character_name} - Level {player_level} (Dungeon {level}) - {timestamp}"
                 else:
                     line = f"{i}) Empty slot"
 
@@ -452,33 +469,42 @@ class Renderer:
         else:
             # Confirm save
             save_info = self.game.save_manager.get_save_info(self.game.save_slot)
-            if save_info['exists']:
+            exists = save_info['exists']
+            assert isinstance(exists, bool)
+            if exists:
                 stdscr.addstr(2, 0, f"Overwrite save slot {self.game.save_slot}?", curses.color_pair(4))
                 stdscr.addstr(3, 0, f"Character: {save_info['character_name']}", curses.color_pair(4))
                 stdscr.addstr(4, 0, f"Level: {save_info['player_level']} (Dungeon {save_info['level']})", curses.color_pair(4))
             else:
                 stdscr.addstr(2, 0, f"Save to slot {self.game.save_slot}?", curses.color_pair(4))
-            
+
             stdscr.addstr(6, 0, "Press Y to confirm, N to cancel", curses.color_pair(4))
 
         stdscr.refresh()
 
-    def draw_load_screen(self, stdscr):
+    def draw_load_screen(self, stdscr: curses.window) -> None:
         """Draw the load game screen."""
         stdscr.clear()
-        height, width = stdscr.getmaxyx()
+        _height, width = stdscr.getmaxyx()
 
         header = "Load Game (press escape to exit)"
         stdscr.addstr(0, 0, header[:width-1], curses.color_pair(7))
 
         if self.game.save_slot is None:
-            saves = self.game.save_info_cache or self.game.save_manager.get_all_save_info()
+            saves: list[SaveInfo] = self.game.save_info_cache or self.game.save_manager.get_all_save_info()
             stdscr.addstr(2, 0, "Select a save slot to load (1-0):", curses.color_pair(4))
 
             for i, save in enumerate(saves, 1):
-                if save['exists']:
-                    timestamp = save['timestamp'][:19] if save['timestamp'] != 'Unknown' else 'Unknown'
-                    line = f"{i}) {save['character_name']} - Level {save['player_level']} (Dungeon {save['level']}) - {timestamp}"
+                exists = save['exists']
+                assert isinstance(exists, bool)
+                if exists:
+                    timestamp = save['timestamp']
+                    assert isinstance(timestamp, str)
+                    timestamp = timestamp[:19] if timestamp != 'Unknown' else 'Unknown'
+                    character_name = save['character_name']
+                    player_level = save['player_level']
+                    level = save['level']
+                    line = f"{i}) {character_name} - Level {player_level} (Dungeon {level}) - {timestamp}"
                     color = curses.color_pair(4)
                 else:
                     line = f"{i}) Empty slot"
@@ -491,7 +517,9 @@ class Renderer:
         else:
             # Confirm load
             save_info = self.game.save_manager.get_save_info(self.game.save_slot)
-            if save_info['exists']:
+            exists = save_info['exists']
+            assert isinstance(exists, bool)
+            if exists:
                 stdscr.addstr(2, 0, f"Load save slot {self.game.save_slot}?", curses.color_pair(4))
                 stdscr.addstr(3, 0, f"Character: {save_info['character_name']}", curses.color_pair(4))
                 stdscr.addstr(4, 0, f"Level: {save_info['player_level']} (Dungeon {save_info['level']})", curses.color_pair(4))
@@ -502,22 +530,29 @@ class Renderer:
 
         stdscr.refresh()
 
-    def draw_delete_screen(self, stdscr):
+    def draw_delete_screen(self, stdscr: curses.window) -> None:
         """Draw the delete save screen."""
         stdscr.clear()
-        height, width = stdscr.getmaxyx()
+        _height, width = stdscr.getmaxyx()
 
         header = "Delete Save (press escape to exit)"
         stdscr.addstr(0, 0, header[:width-1], curses.color_pair(7))
 
         if self.game.save_slot is None:
-            saves = self.game.save_info_cache or self.game.save_manager.get_all_save_info()
+            saves: list[SaveInfo] = self.game.save_info_cache or self.game.save_manager.get_all_save_info()
             stdscr.addstr(2, 0, "Select a save slot to delete (1-0):", curses.color_pair(4))
 
             for i, save in enumerate(saves, 1):
-                if save['exists']:
-                    timestamp = save['timestamp'][:19] if save['timestamp'] != 'Unknown' else 'Unknown'
-                    line = f"{i}) {save['character_name']} - Level {save['player_level']} (Dungeon {save['level']}) - {timestamp}"
+                exists = save['exists']
+                assert isinstance(exists, bool)
+                if exists:
+                    timestamp = save['timestamp']
+                    assert isinstance(timestamp, str)
+                    timestamp = timestamp[:19] if timestamp != 'Unknown' else 'Unknown'
+                    character_name = save['character_name']
+                    player_level = save['player_level']
+                    level = save['level']
+                    line = f"{i}) {character_name} - Level {player_level} (Dungeon {level}) - {timestamp}"
                     color = curses.color_pair(4)
                 else:
                     line = f"{i}) Empty slot"
@@ -530,7 +565,9 @@ class Renderer:
         else:
             # Confirm delete
             save_info = self.game.save_manager.get_save_info(self.game.save_slot)
-            if save_info['exists']:
+            exists = save_info['exists']
+            assert isinstance(exists, bool)
+            if exists:
                 stdscr.addstr(2, 0, f"Delete save slot {self.game.save_slot}?", curses.color_pair(3))
                 stdscr.addstr(3, 0, f"Character: {save_info['character_name']}", curses.color_pair(4))
                 stdscr.addstr(4, 0, f"Level: {save_info['player_level']} (Dungeon {save_info['level']})", curses.color_pair(4))
@@ -541,18 +578,18 @@ class Renderer:
 
         stdscr.refresh()
 
-    def draw_save_load_menu(self, stdscr):
+    def draw_save_load_menu(self, stdscr: curses.window) -> None:
         """Draw the save/load menu accessed by pressing ESC."""
         stdscr.clear()
         height, width = stdscr.getmaxyx()
 
         header = "Save/Load Menu (press escape to exit)"
         stdscr.addstr(0, 0, header[:width-1], curses.color_pair(7))
-        
-        lines = [
+
+        lines: list[str] = [
             "",
             "s) Save game",
-            "l) Load game", 
+            "l) Load game",
             "d) Delete save",
             "",
             "Press the letter of your choice or ESC to exit."
@@ -566,11 +603,11 @@ class Renderer:
 
         stdscr.refresh()
 
-    def draw_help_menu(self, stdscr):
+    def draw_help_menu(self, stdscr: curses.window) -> None:
         stdscr.clear()
         height, width = stdscr.getmaxyx()
 
-        lines = [
+        lines: list[str] = [
             "Help (press escape to exit):",
             "Movement: hjkl or arrow keys; diagonals yubn",
             "Wait: 5",
@@ -597,21 +634,21 @@ class Renderer:
 
         stdscr.refresh()
 
-    def draw_combat_stats_screen(self, stdscr):
+    def draw_combat_stats_screen(self, stdscr: curses.window) -> None:
         stdscr.clear()
         height, width = stdscr.getmaxyx()
 
-        dmg_lines = ["Combat Stats (press escape to exit):", "", "Damage Breakdown:"]
+        dmg_lines: list[str] = ["Combat Stats (press escape to exit):", "", "Damage Breakdown:"]
         for src, val in self.game.player.damage_breakdown():
             dmg_lines.append(f"  {src}: {val:.1f}")
         dmg_lines.append(f"  Total Damage: {self.game.player.damage:.1f}")
 
-        def_lines = ["", "Defense Breakdown:"]
+        def_lines: list[str] = ["", "Defense Breakdown:"]
         for src, val in self.game.player.defense_breakdown():
             def_lines.append(f"  {src}: {val:.1f}")
         def_lines.append(f"  Total Defense: {self.game.player.defense:.1f}")
 
-        lines = dmg_lines + def_lines
+        lines: list[str] = dmg_lines + def_lines
 
         for i, line in enumerate(lines):
             if i >= height:

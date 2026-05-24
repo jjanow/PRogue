@@ -1,10 +1,12 @@
+from __future__ import annotations
+
 import curses
 import json
 import os
 from dataclasses import dataclass, field
 
 # Named special keys that can be referenced in keybindings.json
-_NAMED_KEYS = {
+_NAMED_KEYS: dict[str, int] = {
     "KEY_UP":    curses.KEY_UP,
     "KEY_DOWN":  curses.KEY_DOWN,
     "KEY_LEFT":  curses.KEY_LEFT,
@@ -24,7 +26,7 @@ _NAMED_KEYS = {
     "DEL":       127,
 }
 
-_DEFAULTS = {
+_DEFAULTS: dict[str, list[str]] = {
     "move_n":        ["k", "8", "KEY_UP"],
     "move_s":        ["j", "2", "KEY_DOWN"],
     "move_w":        ["h", "4", "KEY_LEFT"],
@@ -52,37 +54,41 @@ _DEFAULTS = {
 }
 
 
+def _empty_frozenset() -> frozenset[int]:
+    return frozenset()
+
+
 @dataclass
 class Keybindings:
-    move_n: frozenset = field(default_factory=frozenset)
-    move_s: frozenset = field(default_factory=frozenset)
-    move_w: frozenset = field(default_factory=frozenset)
-    move_e: frozenset = field(default_factory=frozenset)
-    move_nw: frozenset = field(default_factory=frozenset)
-    move_ne: frozenset = field(default_factory=frozenset)
-    move_sw: frozenset = field(default_factory=frozenset)
-    move_se: frozenset = field(default_factory=frozenset)
-    wait: frozenset = field(default_factory=frozenset)
-    inventory: frozenset = field(default_factory=frozenset)
-    pickup: frozenset = field(default_factory=frozenset)
-    stairs_down: frozenset = field(default_factory=frozenset)
-    stairs_up: frozenset = field(default_factory=frozenset)
-    walk_mode: frozenset = field(default_factory=frozenset)
-    auto_explore: frozenset = field(default_factory=frozenset)
-    options: frozenset = field(default_factory=frozenset)
-    help: frozenset = field(default_factory=frozenset)
-    character_stats: frozenset = field(default_factory=frozenset)
-    combat_stats: frozenset = field(default_factory=frozenset)
-    quit: frozenset = field(default_factory=frozenset)
-    debug: frozenset = field(default_factory=frozenset)
-    open_door: frozenset = field(default_factory=frozenset)
-    close_door: frozenset = field(default_factory=frozenset)
-    rest: frozenset = field(default_factory=frozenset)
+    move_n: frozenset[int] = field(default_factory=_empty_frozenset)
+    move_s: frozenset[int] = field(default_factory=_empty_frozenset)
+    move_w: frozenset[int] = field(default_factory=_empty_frozenset)
+    move_e: frozenset[int] = field(default_factory=_empty_frozenset)
+    move_nw: frozenset[int] = field(default_factory=_empty_frozenset)
+    move_ne: frozenset[int] = field(default_factory=_empty_frozenset)
+    move_sw: frozenset[int] = field(default_factory=_empty_frozenset)
+    move_se: frozenset[int] = field(default_factory=_empty_frozenset)
+    wait: frozenset[int] = field(default_factory=_empty_frozenset)
+    inventory: frozenset[int] = field(default_factory=_empty_frozenset)
+    pickup: frozenset[int] = field(default_factory=_empty_frozenset)
+    stairs_down: frozenset[int] = field(default_factory=_empty_frozenset)
+    stairs_up: frozenset[int] = field(default_factory=_empty_frozenset)
+    walk_mode: frozenset[int] = field(default_factory=_empty_frozenset)
+    auto_explore: frozenset[int] = field(default_factory=_empty_frozenset)
+    options: frozenset[int] = field(default_factory=_empty_frozenset)
+    help: frozenset[int] = field(default_factory=_empty_frozenset)
+    character_stats: frozenset[int] = field(default_factory=_empty_frozenset)
+    combat_stats: frozenset[int] = field(default_factory=_empty_frozenset)
+    quit: frozenset[int] = field(default_factory=_empty_frozenset)
+    debug: frozenset[int] = field(default_factory=_empty_frozenset)
+    open_door: frozenset[int] = field(default_factory=_empty_frozenset)
+    close_door: frozenset[int] = field(default_factory=_empty_frozenset)
+    rest: frozenset[int] = field(default_factory=_empty_frozenset)
 
 
-def _parse_key(s):
+def _parse_key(s: str) -> int:
     """Convert a key string from JSON to an integer key code."""
-    if not isinstance(s, str):
+    if not isinstance(s, str):  # type: ignore[unnecessary-isinstance]
         raise ValueError(f"Key entry must be a string, got {type(s).__name__!r}: {s!r}")
     if s in _NAMED_KEYS:
         return _NAMED_KEYS[s]
@@ -94,21 +100,21 @@ def _parse_key(s):
     )
 
 
-def _build_keybindings(raw):
+def _build_keybindings(raw: dict[str, list[str]]) -> Keybindings:
     """Build a Keybindings instance from a dict of action -> list[str]."""
-    merged = dict(_DEFAULTS)
+    merged: dict[str, list[str]] = dict(_DEFAULTS)
     merged.update(raw)
-    kwargs = {}
+    kwargs: dict[str, frozenset[int]] = {}
     for action in _DEFAULTS:
         key_strings = merged.get(action, _DEFAULTS[action])
-        if not isinstance(key_strings, list):
+        if not isinstance(key_strings, list):  # type: ignore[unnecessary-isinstance]
             raise ValueError(f"Binding for {action!r} must be a list, got {type(key_strings).__name__!r}")
-        codes = frozenset(_parse_key(s) for s in key_strings)
+        codes: frozenset[int] = frozenset(_parse_key(s) for s in key_strings)
         kwargs[action] = codes
 
     # Detect keys assigned to more than one action
-    seen = {}  # key_code -> first action name
-    conflicts = []
+    seen: dict[int, str] = {}  # key_code -> first action name
+    conflicts: list[str] = []
     for action, codes in kwargs.items():
         for code in codes:
             if code in seen:
@@ -122,7 +128,7 @@ def _build_keybindings(raw):
     return Keybindings(**kwargs)
 
 
-def load_keybindings(path=None):
+def load_keybindings(path: str | None = None) -> Keybindings:
     """Load keybindings from a JSON file, falling back to built-in defaults."""
     if path is None:
         script_dir = os.path.dirname(os.path.abspath(__file__))
@@ -132,9 +138,10 @@ def load_keybindings(path=None):
         return _build_keybindings({})
 
     with open(path, 'r') as f:
-        raw = json.load(f)
+        raw: object = json.load(f)
 
     if not isinstance(raw, dict):
         raise ValueError("keybindings.json must contain a JSON object")
 
-    return _build_keybindings(raw)
+    # raw is dict[str, list[str]] after validation
+    return _build_keybindings(raw)  # type: ignore[arg-type]

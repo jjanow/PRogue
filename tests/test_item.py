@@ -1,14 +1,16 @@
 """Tests for Item and Equipment classes in classes/item.py."""
-import pytest
+from __future__ import annotations
+from typing import Callable
 
+from classes.entity import Entity
 from classes.item import Equipment, Item
 
 
-def _make_item(name='Health Potion', effect_type='heal', value=20):
-    effect = lambda e: e.heal(value)
+def _make_item(name: str = 'Health Potion', effect_type: str = 'heal', value: float = 20) -> Item:
+    fn: Callable[[Entity], str] = lambda e: e.heal(value)
     return Item(
         name=name,
-        effect=effect,
+        effect=fn,
         duration=None,
         value=value,
         weight=1,
@@ -18,7 +20,7 @@ def _make_item(name='Health Potion', effect_type='heal', value=20):
     )
 
 
-def _make_weapon(name='Iron Dagger', stat_boost=5):
+def _make_weapon(name: str = 'Iron Dagger', stat_boost: float = 5) -> Equipment:
     return Equipment(
         name=name,
         slot='weapon',
@@ -33,7 +35,7 @@ def _make_weapon(name='Iron Dagger', stat_boost=5):
     )
 
 
-def _make_armor(name='Iron Breastplate', stat_boost=4, ac=3):
+def _make_armor(name: str = 'Iron Breastplate', stat_boost: float = 4, ac: int = 3) -> Equipment:
     return Equipment(
         name=name,
         slot='armor',
@@ -49,42 +51,42 @@ def _make_armor(name='Iron Breastplate', stat_boost=4, ac=3):
 
 
 class TestItemEquality:
-    def test_items_equal_by_name(self):
+    def test_items_equal_by_name(self) -> None:
         a = _make_item('Health Potion')
         b = _make_item('Health Potion')
         assert a == b
 
-    def test_items_unequal_different_name(self):
+    def test_items_unequal_different_name(self) -> None:
         a = _make_item('Health Potion')
         b = _make_item('Mana Potion')
         assert a != b
 
-    def test_hash_consistent_with_name(self):
+    def test_hash_consistent_with_name(self) -> None:
         a = _make_item('Health Potion')
         b = _make_item('Health Potion')
         assert hash(a) == hash(b)
 
-    def test_inequality_with_non_item(self):
+    def test_inequality_with_non_item(self) -> None:
         item = _make_item()
         assert item != 'Health Potion'
         assert item != 42
 
 
 class TestItemAttributes:
-    def test_default_position_is_none(self):
+    def test_default_position_is_none(self) -> None:
         item = _make_item()
         assert item.x is None
         assert item.y is None
 
-    def test_default_quantity_is_one(self):
+    def test_default_quantity_is_one(self) -> None:
         item = _make_item()
         assert item.quantity == 1
 
-    def test_default_seen_is_false(self):
+    def test_default_seen_is_false(self) -> None:
         item = _make_item()
         assert item.seen is False
 
-    def test_stores_all_fields(self):
+    def test_stores_all_fields(self) -> None:
         item = _make_item('Elixir', 'heal', 50)
         assert item.name == 'Elixir'
         assert item.value == 50
@@ -95,30 +97,30 @@ class TestItemAttributes:
 
 
 class TestItemSerialization:
-    def test_to_dict_contains_expected_keys(self):
+    def test_to_dict_contains_expected_keys(self) -> None:
         item = _make_item()
         d = item.to_dict()
         for key in ('name', 'duration', 'value', 'weight', 'effect_type',
                     'gold_value', 'material_type', 'x', 'y', 'quantity', 'seen'):
             assert key in d, f"Missing key: {key}"
 
-    def test_to_dict_name(self):
+    def test_to_dict_name(self) -> None:
         item = _make_item('Super Potion')
         assert item.to_dict()['name'] == 'Super Potion'
 
-    def test_to_dict_preserves_position(self):
+    def test_to_dict_preserves_position(self) -> None:
         item = _make_item()
         item.x, item.y = 10, 15
         d = item.to_dict()
         assert d['x'] == 10
         assert d['y'] == 15
 
-    def test_to_dict_preserves_seen(self):
+    def test_to_dict_preserves_seen(self) -> None:
         item = _make_item()
         item.seen = True
         assert item.to_dict()['seen'] is True
 
-    def test_from_dict_round_trip(self):
+    def test_from_dict_round_trip(self) -> None:
         item = _make_item('Round Potion', 'heal', 30)
         item.x, item.y = 7, 3
         item.seen = True
@@ -130,7 +132,7 @@ class TestItemSerialization:
         assert restored.y == item.y
         assert restored.seen is True
 
-    def test_from_dict_effect_type_produces_callable(self):
+    def test_from_dict_effect_type_produces_callable(self) -> None:
         item = _make_item('Healable', 'heal', 20)
         d = item.to_dict()
         restored = Item.from_dict(d)
@@ -138,48 +140,48 @@ class TestItemSerialization:
 
 
 class TestEquipmentSlotBonuses:
-    def test_weapon_slot_damage_bonus_equals_stat_boost(self):
+    def test_weapon_slot_damage_bonus_equals_stat_boost(self) -> None:
         w = _make_weapon(stat_boost=7)
         assert w.damage_bonus == 7
         assert w.defense_bonus == 0
 
-    def test_missile_weapon_slot_also_damage_bonus(self):
+    def test_missile_weapon_slot_also_damage_bonus(self) -> None:
         bow = Equipment('Iron Bow', 'missile weapon', 'hands', 6, damage={'min': 1, 'max': 6})
         assert bow.damage_bonus == 6
         assert bow.defense_bonus == 0
 
-    def test_armor_slot_defense_bonus_equals_stat_boost(self):
+    def test_armor_slot_defense_bonus_equals_stat_boost(self) -> None:
         a = _make_armor(stat_boost=4)
         assert a.defense_bonus == 4
         assert a.damage_bonus == 0
 
-    def test_helmet_slot_defense_bonus(self):
+    def test_helmet_slot_defense_bonus(self) -> None:
         helm = Equipment('Iron Helm', 'helmet', 'head', 3, ac=1)
         assert helm.defense_bonus == 3
         assert helm.damage_bonus == 0
 
-    def test_ac_stored_correctly(self):
+    def test_ac_stored_correctly(self) -> None:
         a = _make_armor(ac=5)
         assert a.ac == 5
 
-    def test_ac_defaults_to_zero_when_none(self):
+    def test_ac_defaults_to_zero_when_none(self) -> None:
         w = Equipment('Iron Sword', 'weapon', 'hands', 4, ac=None)
         assert w.ac == 0
 
-    def test_accuracy_bonus_stored(self):
+    def test_accuracy_bonus_stored(self) -> None:
         w = _make_weapon()
         assert w.accuracy_bonus == 2
 
 
 class TestEquipmentSerialization:
-    def test_to_dict_includes_equipment_fields(self):
+    def test_to_dict_includes_equipment_fields(self) -> None:
         w = _make_weapon()
         d = w.to_dict()
         for key in ('slot', 'body_part', 'damage', 'ac', 'stat_boost',
                     'damage_bonus', 'defense_bonus', 'accuracy_bonus'):
             assert key in d, f"Missing key: {key}"
 
-    def test_to_dict_round_trip_weapon(self):
+    def test_to_dict_round_trip_weapon(self) -> None:
         w = _make_weapon('Crude Dagger', stat_boost=1)
         w.x, w.y = 3, 8
         d = w.to_dict()
@@ -193,7 +195,7 @@ class TestEquipmentSerialization:
         assert restored.x == w.x
         assert restored.y == w.y
 
-    def test_to_dict_round_trip_armor(self):
+    def test_to_dict_round_trip_armor(self) -> None:
         a = _make_armor('Steel Plate', stat_boost=8, ac=4)
         d = a.to_dict()
         restored = Equipment.from_dict(d)
