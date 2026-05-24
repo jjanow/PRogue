@@ -90,52 +90,72 @@ class Renderer:
         stdscr.clear()
         height, width = stdscr.getmaxyx()
 
-        # Adjust the height to reserve 3 lines for the message log and 3 lines for the status bar
-        dungeon_height = height - 6
+        # Rows available for the map viewport (6 rows reserved for status + messages)
+        vp_h = max(1, height - 6)
+        vp_w = max(1, width)
 
-        for y, row in enumerate(self.game.map[:dungeon_height]):
-            for x, cell in enumerate(row[:width]):  # Ensure we don't exceed the screen width
-                if not self.game.explored[y][x]:
-                    stdscr.addch(y, x, ' ')
+        map_grid = self.game.map
+        map_h = len(map_grid)
+        map_w = len(map_grid[0]) if map_grid else 0
+
+        # Camera: keep player centred, clamped to map bounds
+        px, py = self.game.player.x, self.game.player.y
+        cam_x = max(0, min(px - vp_w // 2, map_w - vp_w)) if map_w > vp_w else 0
+        cam_y = max(0, min(py - vp_h // 2, map_h - vp_h)) if map_h > vp_h else 0
+
+        for sy in range(min(vp_h, map_h)):
+            my = sy + cam_y
+            for sx in range(min(vp_w, map_w)):
+                mx = sx + cam_x
+                if not self.game.explored[my][mx]:
+                    stdscr.addch(sy, sx, ' ')
                     continue
 
-                visible = self.game.visible[y][x]
+                visible = self.game.visible[my][mx]
                 attr = curses.A_NORMAL if visible else curses.A_DIM
+                cell = map_grid[my][mx]
 
                 if cell == '#':
-                    stdscr.addch(y, x, cell, curses.color_pair(5) | attr)  # Walls
-                elif cell == '+':
-                    stdscr.addch(y, x, cell, curses.color_pair(6) | attr)  # Closed door
+                    stdscr.addch(sy, sx, cell, curses.color_pair(5) | attr)
+                elif cell in ('+',):
+                    stdscr.addch(sy, sx, cell, curses.color_pair(6) | attr)
                 elif cell == '/':
-                    stdscr.addch(y, x, cell, curses.color_pair(6) | attr)  # Open door
+                    stdscr.addch(sy, sx, cell, curses.color_pair(6) | attr)
                 elif cell == 'T':
-                    stdscr.addch(y, x, cell, curses.color_pair(8) | attr)  # Trees
+                    stdscr.addch(sy, sx, cell, curses.color_pair(8) | attr)
                 elif cell == '~':
-                    stdscr.addch(y, x, cell, curses.color_pair(9) | attr)  # Water
+                    stdscr.addch(sy, sx, cell, curses.color_pair(9) | attr)
                 else:
-                    stdscr.addch(y, x, cell, curses.color_pair(1) | attr)  # Default
+                    stdscr.addch(sy, sx, cell, curses.color_pair(1) | attr)
 
         for item in self.game.items:
-            iy = item.y
-            ix = item.x
-            if iy is not None and ix is not None and iy < dungeon_height and (
+            iy, ix = item.y, item.x
+            if iy is None or ix is None:
+                continue
+            sy, sx = iy - cam_y, ix - cam_x
+            if not (0 <= sy < vp_h and 0 <= sx < vp_w):
+                continue
+            if not (
                 self.game.visible[iy][ix]
                 or (item.seen and self.game.explored[iy][ix])
             ):
-                icon = self._icon_for(item)
-                attr = (
-                    curses.A_NORMAL
-                    if self.game.visible[iy][ix]
-                    else curses.A_DIM
-                )
-                stdscr.addch(iy, ix, icon, curses.color_pair(4) | attr)
+                continue
+            icon = self._icon_for(item)
+            attr = curses.A_NORMAL if self.game.visible[iy][ix] else curses.A_DIM
+            stdscr.addch(sy, sx, icon, curses.color_pair(4) | attr)
 
         for enemy in self.game.enemies:
-            if enemy.y < dungeon_height and self.game.visible[enemy.y][enemy.x]:
-                stdscr.addch(enemy.y, enemy.x, enemy.char, curses.color_pair(3))  # Monsters
+            sy, sx = enemy.y - cam_y, enemy.x - cam_x
+            if (
+                0 <= sy < vp_h
+                and 0 <= sx < vp_w
+                and self.game.visible[enemy.y][enemy.x]
+            ):
+                stdscr.addch(sy, sx, enemy.char, curses.color_pair(3))
 
-        if self.game.player.y < dungeon_height:
-            stdscr.addch(self.game.player.y, self.game.player.x, self.game.player.char, curses.color_pair(2))  # Player
+        py_s, px_s = self.game.player.y - cam_y, self.game.player.x - cam_x
+        if 0 <= py_s < vp_h and 0 <= px_s < vp_w:
+            stdscr.addch(py_s, px_s, self.game.player.char, curses.color_pair(2))
 
         # Status bar
         stdscr.addstr(
@@ -147,12 +167,11 @@ class Renderer:
         stdscr.addstr(height - 5, 0, f"Level: {self.game.player.level} | XP: {self.game.player.xp}/{self.game.player.xp_to_next_level} | Location: {location}")
 
         if self.game.rest_mode:
-            stdscr.addstr(height - 4, 0, "Resting..."[:width-1], curses.color_pair(6))
+            stdscr.addstr(height - 4, 0, "Resting..."[:width - 1], curses.color_pair(6))
 
-        # Messages
         for i, message in enumerate(self.game.messages[-3:]):
-            if height - 3 + i < height:  # Ensure we don't write outside the window height
-                stdscr.addstr(height - 3 + i, 0, str(message)[:width])  # Convert to string and truncate if too long
+            if height - 3 + i < height:
+                stdscr.addstr(height - 3 + i, 0, str(message)[:width])
 
         stdscr.refresh()
 

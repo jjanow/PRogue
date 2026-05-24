@@ -36,7 +36,7 @@ def _apply_minimal_map(game: Game) -> None:
     game.stairs_x, game.stairs_y = 10, 4
     game.player.x, game.player.y = 5, 4
     from classes.map_generator import MapGenerator
-    mg = MapGenerator(h, w, 24, 80)
+    mg = MapGenerator(24, 80)
     mg.height = h
     mg.width = w
     game.map_generator = mg

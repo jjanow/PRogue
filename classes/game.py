@@ -11,7 +11,7 @@ from typing import Any
 
 from classes.entity import Entity
 from classes.item import Item, Equipment
-from classes.map_generator import MapGenerator
+from classes.map_generator import MapGenerator, RoomType
 from classes.static_map_loader import StaticMapLoader
 from classes.item_loader import (
     all_consumables,
@@ -49,7 +49,7 @@ class Game:
         else:
             self.screen_height = height
             self.screen_width = width
-        self.map_generator = MapGenerator(height, width, self.screen_height, self.screen_width)
+        self.map_generator = MapGenerator(self.screen_height, self.screen_width)
         self.map: list[list[str]] = []
         self.rooms: list[tuple[int, int, int, int]] = []
         self.player = Entity(width // 2, height // 2, '@', "Player", 100, 0, 0)
@@ -183,7 +183,7 @@ class Game:
         game.start_time = time.time()
         game._flow_field = None
 
-        game.map_generator = MapGenerator(height, width, game.screen_height, game.screen_width)
+        game.map_generator = MapGenerator(game.screen_height, game.screen_width)
         game.input_handler = InputHandler(game)
         game.renderer = Renderer(game)
         game.combat_system = CombatSystem()
@@ -436,15 +436,15 @@ class Game:
     def _generate_random_level(self) -> None:
         self.allow_enemy_spawning = True
         self.map, self.rooms, self.stairs_up_x, self.stairs_up_y, self.stairs_x, self.stairs_y = \
-            self.map_generator.generate_level(self.player)
+            self.map_generator.generate_level(self.player, self.dungeon_level)
         self.height = len(self.map)
         self.width = len(self.map[0]) if self.map else 0
         self.visible = [[False for _ in range(self.width)] for _ in range(self.height)]
         self.explored = [[False for _ in range(self.width)] for _ in range(self.height)]
         self.invalidate_flow_field()
         self.update_fov()
-        self.spawn_enemies(len(self.rooms))
-        self.spawn_items()
+        self._spawn_by_content_types()
+        self._spawn_ambient()
 
     def enter_dungeon(self) -> None:
         import copy
@@ -480,6 +480,139 @@ class Game:
         if not candidates:
             candidates = list(all_monsters)
         return random.choice(candidates)
+
+    def _make_enemy(self, x: int, y: int) -> Entity:
+        """Create a level-appropriate enemy at (x, y)."""
+        template = self.get_monster_template()
+        df = template.challenge_rating
+        health = max(3, int((random.randint(20, 40) + self.dungeon_level * 5) * df))
+        enemy = Entity(x, y, 'E', template.name, health, 0, 0)
+        raw_dmg = max(1, int((random.randint(5, 10) + self.dungeon_level) * df))
+        raw_def = int((random.randint(0, 3) + self.dungeon_level // 2) * df)
+        enemy.strength = raw_dmg * 2
+        enemy.dexterity = max(1, raw_def * 3)
+        enemy.constitution = max(1, raw_def * 2)
+        enemy.level = max(1, round(template.challenge_rating * 2))
+        enemy.xp_reward = template.xp
+        enemy.gold_reward = template.gold
+        enemy.loot = template.create_loot()
+        return enemy
+
+    def _get_room_floor(
+        self, room: tuple[int, int, int, int]
+    ) -> list[tuple[int, int]]:
+        rx, ry, rw, rh = room
+        return [
+            (rx + dx, ry + dy)
+            for dy in range(rh)
+            for dx in range(rw)
+            if self.map[ry + dy][rx + dx] == '.'
+            and not any(e.x == rx + dx and e.y == ry + dy for e in self.enemies)
+            and (rx + dx, ry + dy) != (self.player.x, self.player.y)
+        ]
+
+    def _spawn_by_content_types(self) -> None:
+        mg = self.map_generator
+        tension_warned = False
+        for idx, rtype in mg.room_types.items():
+            room = self.rooms[idx]
+            if rtype == RoomType.MONSTER_DEN:
+                self._spawn_den(room)
+            elif rtype == RoomType.TREASURE:
+                self._spawn_treasure(room)
+            elif rtype == RoomType.TENSION:
+                self._spawn_tension(room)
+                if not tension_warned:
+                    self.messages.append("You sense a certain tension.")
+                    tension_warned = True
+
+    def _spawn_den(self, room: tuple[int, int, int, int]) -> None:
+        template = self.get_monster_template()
+        df = template.challenge_rating
+        count = random.randint(2, 6)
+        tiles = self._get_room_floor(room)
+        random.shuffle(tiles)
+        for x, y in tiles[:count]:
+            health = max(3, int((random.randint(20, 40) + self.dungeon_level * 5) * df))
+            enemy = Entity(x, y, 'E', template.name, health, 0, 0)
+            raw_dmg = max(1, int((random.randint(5, 10) + self.dungeon_level) * df))
+            raw_def = int((random.randint(0, 3) + self.dungeon_level // 2) * df)
+            enemy.strength = raw_dmg * 2
+            enemy.dexterity = max(1, raw_def * 3)
+            enemy.constitution = max(1, raw_def * 2)
+            enemy.level = max(1, round(template.challenge_rating * 2))
+            enemy.xp_reward = template.xp
+            enemy.gold_reward = template.gold
+            enemy.loot = template.create_loot()
+            self.enemies.append(enemy)
+
+    def _spawn_treasure(self, room: tuple[int, int, int, int]) -> None:
+        tiles = self._get_room_floor(room)
+        random.shuffle(tiles)
+        for x, y in tiles[:random.randint(2, 4)]:
+            item = self.create_random_item()
+            item.x, item.y = x, y
+            self.items.append(item)
+
+    def _spawn_tension(self, room: tuple[int, int, int, int]) -> None:
+        tiles = self._get_room_floor(room)
+        random.shuffle(tiles)
+        count = max(1, len(tiles) // 2)
+        for x, y in tiles[:count]:
+            self.enemies.append(self._make_enemy(x, y))
+
+    def _spawn_ambient(self) -> None:
+        """Ambient monster and item spawning outside content rooms."""
+        mg = self.map_generator
+        content_room_indices = {
+            idx for idx, t in mg.room_types.items()
+            if t in (RoomType.MONSTER_DEN, RoomType.TENSION, RoomType.TREASURE, RoomType.SHOP)
+        }
+        content_room_tiles = {
+            (rx + dx, ry + dy)
+            for idx in content_room_indices
+            for rx, ry, rw, rh in [self.rooms[idx]]
+            for dy in range(rh)
+            for dx in range(rw)
+        }
+
+        # Count traversable tiles for monster budget
+        traversable = [
+            (x, y)
+            for y in range(self.height)
+            for x in range(self.width)
+            if self.map[y][x] in ('.', '+', '<', '>', '^', 'A', '~', 'f', 'b', '/')
+        ]
+        monster_budget = len(traversable) // 20
+        item_budget = len(traversable) // 35
+
+        # Corridor tiles + empty/special room tiles for monsters
+        monster_tiles = [
+            (x, y) for (x, y) in traversable
+            if self.map[y][x] == '.'
+            and (x, y) not in content_room_tiles
+            and not any(e.x == x and e.y == y for e in self.enemies)
+            and (x, y) != (self.player.x, self.player.y)
+        ]
+        random.shuffle(monster_tiles)
+        for x, y in monster_tiles[:monster_budget]:
+            self.enemies.append(self._make_enemy(x, y))
+
+        # Room interior tiles (non-content rooms) for items
+        room_tiles = [
+            (x, y)
+            for idx, (rx, ry, rw, rh) in enumerate(self.rooms)
+            if idx not in content_room_indices
+            for dy in range(rh)
+            for dx in range(rw)
+            for x, y in [(rx + dx, ry + dy)]
+            if self.map[y][x] == '.'
+        ]
+        random.shuffle(room_tiles)
+        for x, y in room_tiles[:item_budget]:
+            item = self.create_random_item()
+            item.x, item.y = x, y
+            self.items.append(item)
 
     def spawn_enemies(self, num_enemies: int) -> None:
         for _ in range(num_enemies):
@@ -518,7 +651,7 @@ class Game:
         return None
 
     def is_valid_move(self, x: int, y: int) -> bool:
-        return 0 <= x < self.width and 0 <= y < self.height and self.map[y][x] in ['.', '>', '<', '/', '^']
+        return 0 <= x < self.width and 0 <= y < self.height and self.map[y][x] in ['.', '>', '<', '/', '^', 'A', '~', 'f', 'b']
 
     def invalidate_flow_field(self) -> None:
         self._flow_field = None
@@ -526,7 +659,7 @@ class Game:
     def _compute_flow_field(self) -> None:
         """BFS from the player outward; stores (distance, predecessor) per tile."""
         px, py = self.player.x, self.player.y
-        passable = {'.', '<', '>', '+', '/', '^'}
+        passable = {'.', '<', '>', '+', '/', '^', 'A', '~', 'f', 'b'}
         dist: dict[tuple[int, int], int] = {(px, py): 0}
         prev: dict[tuple[int, int], tuple[int, int] | None] = {(px, py): None}
         queue: deque[tuple[int, int]] = deque([(px, py)])
@@ -788,7 +921,7 @@ class Game:
                            (-1, -1), (1, -1), (-1, 1), (1, 1)]:
                 nx, ny = x + dx, y + dy
                 if (0 <= nx < self.width and 0 <= ny < self.height and
-                        self.map[ny][nx] in ['.', '<', '>', '+', '/', '^'] and
+                        self.map[ny][nx] in ['.', '<', '>', '+', '/', '^', 'A', '~', 'f', 'b'] and
                         (nx, ny) not in visited):
                     heapq.heappush(heap, (d + 1, (nx, ny)))
         return None

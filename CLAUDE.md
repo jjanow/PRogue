@@ -8,7 +8,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 python pRoguelike.py
 ```
 
-Requires a terminal that supports `curses` and is at least 80 columns wide. On Windows, `pip install windows-curses` first. There is no linter configured.
+Requires a terminal that supports `curses` and is at least 80 columns wide (29+ rows recommended). The dungeon map is a fixed 80×23 grid; the renderer scrolls the viewport when the terminal is smaller. On Windows, `pip install windows-curses` first. There is no linter configured.
 
 ## Tests and Documentation Maintenance
 
@@ -48,6 +48,8 @@ Systems in `classes/systems/` operate on entities each turn:
 
 `Game` is the central state container: player, enemies list, items list, map grid, FOV/explored arrays, dungeon level, turn counter, and all UI mode flags (`inventory_mode`, `drop_mode`, `save_mode`, etc.). The main loop in `pRoguelike.py` checks these flags each frame to choose which renderer method to call.
 
+After `generate_level`, `Game._generate_random_level` reads `map_generator.room_types` (a `dict[int, RoomType]`) to drive content spawning: monster dens get group-spawned same-type enemies, treasure rooms get pre-filled items, tension rooms get dense enemy fills and trigger a warning message, and special rooms have placeholder feature tiles placed by the generator (`A`=altar, `~`=fountain, `f`=forge, `b`=herb bush, `^`=trap cluster).
+
 ### Other Key Classes
 
 | File | Responsibility |
@@ -55,7 +57,7 @@ Systems in `classes/systems/` operate on entities each turn:
 | `classes/renderer.py` | All curses drawing — map, HUD, every menu/screen |
 | `classes/input_handler.py` | Key-to-action dispatch; delegates to `Game` methods |
 | `classes/combat_system.py` | Hit probability (logistic function) and damage calculation |
-| `classes/map_generator.py` | Procedural room + corridor generation; staircase placement |
+| `classes/map_generator.py` | BSP dungeon generation (fixed 80×23 map); room content types (`RoomType`, `SpecialFeature`); tile-budget and connectivity validation; viewport scrolling in renderer |
 | `classes/item.py` | `Item` and `Equipment` data classes with dict serialization |
 | `classes/item_loader.py` | Loads all item JSON; combines templates + materials; builds consumable effect lambdas |
 | `classes/monster_loader.py` | Loads monster JSON; builds loot lists |
