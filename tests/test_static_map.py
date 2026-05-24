@@ -235,6 +235,11 @@ class TestTownMapFile:
         _grid, rooms, _s, _m = StaticMapLoader().load(_TOWN_PATH)
         assert len(rooms) == 1
 
+    def test_town_map_matches_dungeon_dimensions(self) -> None:
+        grid, _r, _s, _m = StaticMapLoader().load(_TOWN_PATH)
+        assert len(grid) == 23
+        assert len(grid[0]) == 80
+
 
 # ---------------------------------------------------------------------------
 # Game initialisation — starts in town

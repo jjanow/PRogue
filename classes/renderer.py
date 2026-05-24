@@ -103,12 +103,16 @@ class Renderer:
         cam_x = max(0, min(px - vp_w // 2, map_w - vp_w)) if map_w > vp_w else 0
         cam_y = max(0, min(py - vp_h // 2, map_h - vp_h)) if map_h > vp_h else 0
 
+        # Centre the map in the viewport when it is smaller than the terminal
+        off_x = (vp_w - map_w) // 2 if map_w < vp_w else 0
+        off_y = (vp_h - map_h) // 2 if map_h < vp_h else 0
+
         for sy in range(min(vp_h, map_h)):
             my = sy + cam_y
             for sx in range(min(vp_w, map_w)):
                 mx = sx + cam_x
                 if not self.game.explored[my][mx]:
-                    stdscr.addch(sy, sx, ' ')
+                    stdscr.addch(sy + off_y, sx + off_x, ' ')
                     continue
 
                 visible = self.game.visible[my][mx]
@@ -116,17 +120,17 @@ class Renderer:
                 cell = map_grid[my][mx]
 
                 if cell == '#':
-                    stdscr.addch(sy, sx, cell, curses.color_pair(5) | attr)
+                    stdscr.addch(sy + off_y, sx + off_x, cell, curses.color_pair(5) | attr)
                 elif cell in ('+',):
-                    stdscr.addch(sy, sx, cell, curses.color_pair(6) | attr)
+                    stdscr.addch(sy + off_y, sx + off_x, cell, curses.color_pair(6) | attr)
                 elif cell == '/':
-                    stdscr.addch(sy, sx, cell, curses.color_pair(6) | attr)
+                    stdscr.addch(sy + off_y, sx + off_x, cell, curses.color_pair(6) | attr)
                 elif cell == 'T':
-                    stdscr.addch(sy, sx, cell, curses.color_pair(8) | attr)
+                    stdscr.addch(sy + off_y, sx + off_x, cell, curses.color_pair(8) | attr)
                 elif cell == '~':
-                    stdscr.addch(sy, sx, cell, curses.color_pair(9) | attr)
+                    stdscr.addch(sy + off_y, sx + off_x, cell, curses.color_pair(9) | attr)
                 else:
-                    stdscr.addch(sy, sx, cell, curses.color_pair(1) | attr)
+                    stdscr.addch(sy + off_y, sx + off_x, cell, curses.color_pair(1) | attr)
 
         for item in self.game.items:
             iy, ix = item.y, item.x
@@ -142,7 +146,7 @@ class Renderer:
                 continue
             icon = self._icon_for(item)
             attr = curses.A_NORMAL if self.game.visible[iy][ix] else curses.A_DIM
-            stdscr.addch(sy, sx, icon, curses.color_pair(4) | attr)
+            stdscr.addch(sy + off_y, sx + off_x, icon, curses.color_pair(4) | attr)
 
         for enemy in self.game.enemies:
             sy, sx = enemy.y - cam_y, enemy.x - cam_x
@@ -154,11 +158,11 @@ class Renderer:
                 attr = curses.color_pair(3)
                 if enemy.ai_state.state == "asleep":
                     attr |= curses.A_REVERSE
-                stdscr.addch(sy, sx, enemy.char, attr)
+                stdscr.addch(sy + off_y, sx + off_x, enemy.char, attr)
 
         py_s, px_s = self.game.player.y - cam_y, self.game.player.x - cam_x
         if 0 <= py_s < vp_h and 0 <= px_s < vp_w:
-            stdscr.addch(py_s, px_s, self.game.player.char, curses.color_pair(2))
+            stdscr.addch(py_s + off_y, px_s + off_x, self.game.player.char, curses.color_pair(2))
 
         # Status bar
         stdscr.addstr(
