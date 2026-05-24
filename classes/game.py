@@ -529,7 +529,7 @@ class Game:
     def _spawn_den(self, room: tuple[int, int, int, int]) -> None:
         template = self.get_monster_template()
         df = template.challenge_rating
-        count = random.randint(2, 6)
+        count = random.randint(2, 4)
         tiles = self._get_room_floor(room)
         random.shuffle(tiles)
         for x, y in tiles[:count]:
@@ -557,7 +557,7 @@ class Game:
     def _spawn_tension(self, room: tuple[int, int, int, int]) -> None:
         tiles = self._get_room_floor(room)
         random.shuffle(tiles)
-        count = max(1, len(tiles) // 2)
+        count = max(2, min(5, len(tiles) // 5))
         for x, y in tiles[:count]:
             self.enemies.append(self._make_enemy(x, y))
 
@@ -583,7 +583,7 @@ class Game:
             for x in range(self.width)
             if self.map[y][x] in ('.', '+', '<', '>', '^', 'A', '~', 'f', 'b', '/')
         ]
-        monster_budget = len(traversable) // 20
+        monster_budget = len(traversable) // 45
         item_budget = len(traversable) // 35
 
         # Corridor tiles + empty/special room tiles for monsters
